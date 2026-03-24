@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 10 – Cloud Security</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a14;
+    --card: #11111f;
+    --card2: #181830;
+    --accent1: #7c3aff;
+    --accent2: #e040fb;
+    --accent3: #00e5ff;
+    --accent4: #ff6b6b;
+    --accent5: #43e97b;
+    --text: #e8e8f0;
+    --muted: #8888aa;
+    --border: rgba(124,58,255,0.25);
+    --glow: 0 0 32px rgba(124,58,255,0.25);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRID BG */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(124,58,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,58,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px 80px; position: relative; z-index: 1; }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 70px 20px 40px;
+    position: relative;
+  }
+  .hero .badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    padding: 6px 20px;
+    border-radius: 50px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 0%, var(--accent3) 50%, var(--accent1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero p {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 560px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+  .range-pill {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 8px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent3);
+  }
+
+  /* TOC */
+  .toc {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 50px 0;
+  }
+  .toc-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+  .toc-item:hover {
+    border-color: var(--accent1);
+    background: var(--card2);
+    transform: translateY(-2px);
+    box-shadow: var(--glow);
+  }
+  .toc-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent1);
+    background: rgba(124,58,255,0.15);
+    border-radius: 6px;
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+  .toc-label { font-size: 0.85rem; font-weight: 600; }
+
+  /* SECTION */
+  .section {
+    margin: 60px 0;
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:none; } }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .section-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    border-radius: 8px;
+    padding: 5px 12px;
+    white-space: nowrap;
+  }
+  .section-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .emoji-big { font-size: 1.8rem; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 18px;
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent3);
+    margin-bottom: 10px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .card p { color: var(--muted); line-height: 1.8; font-size: 0.97rem; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width:660px){ .two-col { grid-template-columns: 1fr; } }
+
+  /* CODE BOX */
+  .code-box {
+    background: #07070f;
+    border: 1px solid rgba(0,229,255,0.2);
+    border-radius: 12px;
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--accent3);
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.7;
+    margin: 14px 0;
+  }
+  .code-box .comment { color: #555577; }
+  .code-box .kw { color: var(--accent2); }
+  .code-box .str { color: var(--accent5); }
+  .code-box .num { color: #ffb347; }
+
+  /* FLOWCHART */
+  .flowchart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 20px 0;
+  }
+  .flow-node {
+    background: var(--card2);
+    border: 2px solid var(--accent1);
+    border-radius: 12px;
+    padding: 12px 28px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-align: center;
+    min-width: 220px;
+    color: #fff;
+    position: relative;
+  }
+  .flow-node.start { border-color: var(--accent5); background: rgba(67,233,123,0.1); }
+  .flow-node.decision { border-color: #ffb347; background: rgba(255,179,71,0.1); border-radius: 50px; }
+  .flow-node.end { border-color: var(--accent4); background: rgba(255,107,107,0.1); }
+  .flow-arrow {
+    width: 2px;
+    height: 28px;
+    background: linear-gradient(to bottom, var(--accent1), var(--accent2));
+    position: relative;
+  }
+  .flow-arrow::after {
+    content: '▼';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--accent2);
+    font-size: 0.7rem;
+  }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; margin: 18px 0; border-radius: 12px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: linear-gradient(135deg, rgba(124,58,255,0.3), rgba(224,64,251,0.2)); }
+  th {
+    padding: 14px 18px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent3);
+    text-align: left;
+    white-space: nowrap;
+  }
+  td {
+    padding: 12px 18px;
+    font-size: 0.88rem;
+    border-top: 1px solid rgba(124,58,255,0.1);
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  tr:hover td { background: rgba(124,58,255,0.06); color: var(--text); }
+
+  /* TAGS */
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .tag {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .tag-blue { background: rgba(0,229,255,0.12); color: var(--accent3); border: 1px solid rgba(0,229,255,0.25); }
+  .tag-purple { background: rgba(124,58,255,0.15); color: #b48cff; border: 1px solid rgba(124,58,255,0.3); }
+  .tag-green { background: rgba(67,233,123,0.12); color: var(--accent5); border: 1px solid rgba(67,233,123,0.25); }
+  .tag-red { background: rgba(255,107,107,0.12); color: var(--accent4); border: 1px solid rgba(255,107,107,0.25); }
+  .tag-orange { background: rgba(255,179,71,0.12); color: #ffb347; border: 1px solid rgba(255,179,71,0.25); }
+
+  /* ADV/DISADV */
+  .adv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+  @media(max-width:500px){ .adv-grid { grid-template-columns: 1fr; } }
+  .adv-box {
+    background: var(--card2);
+    border-radius: 12px;
+    padding: 16px;
+    border-left: 4px solid;
+  }
+  .adv-box.pro { border-color: var(--accent5); }
+  .adv-box.con { border-color: var(--accent4); }
+  .adv-box h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; }
+  .adv-box.pro h4 { color: var(--accent5); }
+  .adv-box.con h4 { color: var(--accent4); }
+  .adv-box ul { padding-left: 16px; color: var(--muted); font-size: 0.85rem; line-height: 2; }
+
+  /* QUIZ BOX */
+  .exercise {
+    background: linear-gradient(135deg, rgba(124,58,255,0.1), rgba(0,229,255,0.07));
+    border: 1px solid rgba(124,58,255,0.35);
+    border-radius: 16px;
+    padding: 22px;
+    margin-top: 16px;
+  }
+  .exercise h4 { color: var(--accent2); font-size: 0.88rem; margin-bottom: 12px; font-family: 'Space Mono', monospace; }
+  .exercise ol { padding-left: 18px; color: var(--muted); font-size: 0.9rem; line-height: 2.2; }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent1), transparent);
+    margin: 50px 0;
+    opacity: 0.4;
+  }
+
+  /* REAL TIME EXAMPLE */
+  .rt-example {
+    background: var(--card2);
+    border-left: 4px solid var(--accent3);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.8;
+  }
+  .rt-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--accent3);
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 6px;
+  }
+
+  /* BOX CHART */
+  .box-chart { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+  .box-item {
+    flex: 1;
+    min-width: 110px;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+  .box-item .icon { font-size: 1.6rem; margin-bottom: 6px; }
+  .box-item .label { font-size: 0.75rem; color: var(--muted); font-weight: 600; }
+
+  /* CONCLUSION */
+  .conclusion {
+    background: linear-gradient(135deg, rgba(124,58,255,0.18), rgba(0,229,255,0.09));
+    border: 1px solid var(--accent1);
+    border-radius: 20px;
+    padding: 36px;
+    text-align: center;
+    margin-top: 70px;
+  }
+  .conclusion h2 { font-size: 2rem; font-weight: 800; margin-bottom: 16px; background: linear-gradient(135deg, var(--accent3), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .conclusion p { color: var(--muted); max-width: 600px; margin: 0 auto; line-height: 1.9; }
+
+  /* BACK TO TOP */
+  .top-btn {
+    display: block;
+    text-align: center;
+    margin: 40px auto 0;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 36px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    cursor: pointer;
+    letter-spacing: 2px;
+    text-decoration: none;
+    width: fit-content;
+    transition: opacity 0.2s;
+  }
+  .top-btn:hover { opacity: 0.85; }
+
+  h3.sub { color: var(--accent2); font-size: 1rem; margin: 18px 0 8px; }
+  strong { color: #fff; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero" id="top">
+    <div class="badge">📚 Unit 10 · Cybersecurity Course</div>
+    <h1>☁️ Cloud Security</h1>
+    <p>Complete guide: definitions, concepts, flowcharts, examples, exercises, advantages, disadvantages & more.</p>
+    <div class="range-pill">📄 Pages 165 – 178</div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <a class="toc-item" href="#s165"><span class="toc-num">165</span><span class="toc-label">☁️ Cloud Basics</span></a>
+    <a class="toc-item" href="#s166"><span class="toc-num">166</span><span class="toc-label">🧱 Cloud Models</span></a>
+    <a class="toc-item" href="#s167"><span class="toc-num">167</span><span class="toc-label">⚠️ Cloud Threats</span></a>
+    <a class="toc-item" href="#s168"><span class="toc-num">168</span><span class="toc-label">🤝 Shared Responsibility</span></a>
+    <a class="toc-item" href="#s169"><span class="toc-num">169</span><span class="toc-label">🔑 IAM</span></a>
+    <a class="toc-item" href="#s170"><span class="toc-num">170</span><span class="toc-label">⚙️ Misconfigurations</span></a>
+    <a class="toc-item" href="#s171"><span class="toc-num">171</span><span class="toc-label">🪣 S3 Bucket Leaks</span></a>
+    <a class="toc-item" href="#s172"><span class="toc-num">172</span><span class="toc-label">🛡️ Cloud Controls</span></a>
+    <a class="toc-item" href="#s173"><span class="toc-num">173</span><span class="toc-label">📡 Cloud Monitoring</span></a>
+    <a class="toc-item" href="#s174"><span class="toc-num">174</span><span class="toc-label">🔄 DevSecOps</span></a>
+    <a class="toc-item" href="#s175"><span class="toc-num">175</span><span class="toc-label">🚀 Secure Deployment</span></a>
+    <a class="toc-item" href="#s176"><span class="toc-num">176</span><span class="toc-label">📁 Case Study</span></a>
+    <a class="toc-item" href="#s177"><span class="toc-num">177</span><span class="toc-label">✅ Best Practices</span></a>
+    <a class="toc-item" href="#s178"><span class="toc-num">178</span><span class="toc-label">📝 Revision Notes</span></a>
+    <a class="toc-item" href="#summary"><span class="toc-num">📊</span><span class="toc-label">Summary Table</span></a>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 165 CLOUD BASICS ===== -->
+  <div class="section" id="s165">
+    <div class="section-header">
+      <span class="section-num">165</span>
+      <span class="emoji-big">☁️</span>
+      <span class="section-title">Cloud Basics</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📖 Definition</div>
+      <p><strong>Cloud Computing</strong> is the delivery of computing services — including servers, storage, databases, networking, software, analytics, and intelligence — over the Internet ("the cloud") to offer faster innovation, flexible resources, and economies of scale.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">🎯 Key Characteristics</div>
+        <div class="tags">
+          <span class="tag tag-blue">On-Demand Self-Service</span>
+          <span class="tag tag-green">Broad Network Access</span>
+          <span class="tag tag-purple">Resource Pooling</span>
+          <span class="tag tag-orange">Rapid Elasticity</span>
+          <span class="tag tag-red">Measured Service</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🌐 Real-Time Example</div>
+        <div class="rt-label">🏢 Netflix Example</div>
+        <p>Netflix stores all its movies/shows on AWS (Amazon Web Services). When you press play, data streams from cloud servers — not from Netflix's own physical machines. 🎬</p>
+      </div>
+    </div>
+
+    <div class="flowchart">
+      <div class="flow-node start">👤 User Request (Browser/App)</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">🌐 Internet</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">☁️ Cloud Provider (AWS/Azure/GCP)</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">🖥️ Virtual Servers & Storage</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node end">📦 Response Delivered to User</div>
+    </div>
+
+    <div class="exercise">
+      <h4>🧠 Exercise 165</h4>
+      <ol>
+        <li>List 3 real-world services that use cloud computing.</li>
+        <li>What is the difference between on-premise and cloud hosting?</li>
+        <li>Which cloud provider hosts the majority of Netflix?</li>
+        <li>Name the 5 essential characteristics of cloud computing (NIST).</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 166 CLOUD MODELS ===== -->
+  <div class="section" id="s166">
+    <div class="section-header">
+      <span class="section-num">166</span>
+      <span class="emoji-big">🧱</span>
+      <span class="section-title">Cloud Models</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📖 Definition</div>
+      <p>Cloud models define <strong>who manages what</strong> and <strong>where data lives</strong>. There are two major categories: <strong>Deployment Models</strong> (where) and <strong>Service Models</strong> (what).</p>
+    </div>
+
+    <h3 class="sub">🏗️ Deployment Models</h3>
+    <div class="box-chart">
+      <div class="box-item"><div class="icon">🌍</div><div class="label">Public Cloud<br><small style="color:#7c3aff">AWS, Azure, GCP</small></div></div>
+      <div class="box-item"><div class="icon">🏢</div><div class="label">Private Cloud<br><small style="color:#7c3aff">On-premises</small></div></div>
+      <div class="box-item"><div class="icon">🔀</div><div class="label">Hybrid Cloud<br><small style="color:#7c3aff">Both combined</small></div></div>
+      <div class="box-item"><div class="icon">🤝</div><div class="label">Community Cloud<br><small style="color:#7c3aff">Shared org</small></div></div>
+    </div>
+
+    <h3 class="sub">⚙️ Service Models</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Model</th><th>Full Form</th><th>You Manage</th><th>Provider Manages</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>☁️ IaaS</td><td>Infrastructure as a Service</td><td>OS, Apps, Data</td><td>Hardware, Network</td><td>AWS EC2</td></tr>
+          <tr><td>🛠️ PaaS</td><td>Platform as a Service</td><td>Apps, Data</td><td>OS, Hardware</td><td>Google App Engine</td></tr>
+          <tr><td>💻 SaaS</td><td>Software as a Service</td><td>Data only</td><td>Everything else</td><td>Gmail, Zoom</td></tr>
+          <tr><td>🔒 SECaaS</td><td>Security as a Service</td><td>Policy</td><td>Security tools</td><td>Cloudflare, Zscaler</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="rt-example">
+      <div class="rt-label">🔴 Real-Time Example</div>
+      <strong>Dropbox = SaaS.</strong> You just store your files — Dropbox manages servers, OS, backups, and encryption. You manage ONLY your data. 📂
+    </div>
+
+    <div class="exercise">
+      <h4>🧠 Exercise 166</h4>
+      <ol>
+        <li>Classify Google Docs, AWS EC2, and Heroku into IaaS/PaaS/SaaS.</li>
+        <li>A bank wants data on-premises but uses public cloud for email — what model is this?</li>
+        <li>Draw a pyramid showing IaaS, PaaS, SaaS layers.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 167 CLOUD THREATS ===== -->
+  <div class="section" id="s167">
+    <div class="section-header">
+      <span class="section-num">167</span>
+      <span class="emoji-big">⚠️</span>
+      <span class="section-title">Cloud Threats</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📖 Definition</div>
+      <p><strong>Cloud threats</strong> are security risks specific to cloud environments — they exploit the nature of shared infrastructure, remote access, and internet exposure.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Threat</th><th>Description</th><th>Real Example</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>☠️ Data Breaches</td><td>Unauthorized access to sensitive data</td><td>Capital One breach (AWS 2019) — 100M records</td></tr>
+          <tr><td>2</td><td>🔓 Insecure APIs</td><td>Exposed or poorly authenticated APIs</td><td>Parler API leak exposed user data 2021</td></tr>
+          <tr><td>3</td><td>🧩 Misconfigurations</td><td>Wrong settings expose resources publicly</td><td>Exposed S3 buckets (Facebook, 540M users)</td></tr>
+          <tr><td>4</td><td>👤 Account Hijacking</td><td>Stolen credentials gain admin access</td><td>Phishing attack on cloud admin accounts</td></tr>
+          <tr><td>5</td><td>🧲 Insider Threats</td><td>Malicious employee misuses access</td><td>AWS employee leaked data 2020</td></tr>
+          <tr><td>6</td><td>💥 DDoS Attacks</td><td>Overwhelm cloud resources</td><td>GitHub DDoS 1.35 Tbps — largest recorded</td></tr>
+          <tr><td>7</td><td>🔗 Shared Technology</td><td>Vulnerabilities in hypervisor/hardware</td><td>Meltdown/Spectre CPU flaws</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="adv-grid">
+      <div class="adv-box pro">
+        <h4>✅ Countermeasures</h4>
+        <ul>
+          <li>Encrypt data at rest & transit</li>
+          <li>Use MFA on all accounts</li>
+          <li>Apply least-privilege access</li>
+          <li>Regular security audits</li>
+          <li>Enable DDoS protection</li>
+        </ul>
+      </div>
+      <div class="adv-box con">
+        <h4>❌ Why Threats Succeed</h4>
+        <ul>
+          <li>Human error (wrong configs)</li>
+          <li>Weak passwords</li>
+          <li>No monitoring alerts</li>
+          <li>Outdated software patches</li>
+          <li>Shadow IT usage</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exercise">
+      <h4>🧠 Exercise 167</h4>
+      <ol>
+        <li>What is the most common cause of cloud data breaches?</li>
+        <li>Explain how a DDoS attack affects cloud availability.</li>
+        <li>Research "Capital One 2019 breach" — which misconfiguration caused it?</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 168 SHARED RESPONSIBILITY ===== -->
+  <div class="section" id="s168">
+    <div class="section-header">
+      <span class="section-num">168</span>
+      <span class="emoji-big">🤝</span>
+      <span class="section-title">Shared Responsibility</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📖 Definition</div>
+      <p>The <strong>Shared Responsibility Model</strong> defines which security tasks are handled by the <strong>Cloud Provider</strong> and which are the <strong>Customer's</strong> responsibility. "Security OF the cloud vs Security IN the cloud."</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Layer</th><th>Provider Responsible</th><th>Customer Responsible</th></tr></thead>
+        <tbody>
+          <tr><td>🖥️ IaaS</td><td>Physical hardware, network, hypervisor</td><td>OS, apps, data, identity, firewall</td></tr>
+          <tr><td>🛠️ PaaS</td><td>+ OS and runtime</td><td>Apps, data, access control</td></tr>
+          <tr><td>💻 SaaS</td><td>Almost everything</td><td>Data & user access only</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flowchart">
+      <div class="flow-node start">🌐 Cloud Provider = "Security OF the Cloud"<br><small>Physical security, hardware, infrastructure</small></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node decision">⚖️ Shared Zone (varies by model)</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node end">👤 Customer = "Security IN the Cloud"<br><small>Data, identity, access, app configs</small></div>
+    </div>
+
+    <div class="rt-example">
+      <div class="rt-label">🔴 Real-Time Example</div>
+      AWS secures their physical data centers with guards, cameras, and biometrics. <strong>YOU</strong> are responsible for setting your S3 bucket to "Private" not "Public." If you leave it public, that's YOUR fault. 🏗️
+    </div>
+
+    <div class="exercise">
+      <h4>🧠 Exercise 168</h4>
+      <ol>
+        <li>In SaaS, who is responsible for encrypting stored customer data?</li>
+        <li>A hacker breaks into AWS's physical data center — whose failure is this?</li>
+        <li>Draw the shared responsibility pyramid for AWS IaaS.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 169 IAM ===== -->
+  <div class="section" id="s169">
+    <div class="section-header">
+      <span class="section-num">169</span>
+      <span class="emoji-big">🔑</span>
+      <span class="section-title">IAM – Identity & Access Management</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📖 Definition</div>
+      <p><strong>IAM (Identity and Access Management)</strong> is a framework of policies, technologies, and processes that ensures the <strong>right people</strong> have the <strong>right access</strong> to the <strong>right resources</strong> at the <strong>right time</strong>.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">🧩 IAM Components</div>
+        <div class="tags">
+          <span class="tag tag-blue">👤 Authentication (Who are you?)</span>
+          <span class="tag tag-purple">🔐 Authorization (What can you do?)</span>
+          <span class="tag tag-green">📋 Roles & Policies</span>
+          <span class="tag tag-orange">🔄 MFA (Multi-Factor Auth)</span>
+          <span class="tag tag-red">🔑 SSO (Single Sign-On)</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📐 Principle of Least Privilege</div>
+        <p>Give users/services only the <strong>minimum permissions</strong> they need — nothing more. A developer who only needs to read logs should NOT have admin rights. 🔒</p>
+      </div>
+    </div>
+
+    <div class="code-box"><span class="comment"># AWS IAM Policy Example (JSON)</span>
+{
+  <span class="str">"Version"</span>: <span class="str">"2012-10-17"</span>,
+  <span class="str">"Statement"</span>: [
+    {
+      <span class="str">"Effect"</span>: <span class="str">"Allow"</span>,
+      <span class="str">"Action"</span>: [
+        <span class="str">"s3:GetObject"</span>       <span class="comment">// Read only</span>
+      ],
+      <span class="str">"Resource"</span>: <span class="str">"arn:aws:s3:::my-bucket/*"</span>
+    }
+  ]
+}
+<span class="comment"># ↑ This user can ONLY read from my-bucket, nothing else</span></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>IAM Concept</th><th>Definition</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>🙋 User</td><td>Individual identity</td><td>john@company.com</td></tr>
+          <tr><td>👥 Group</td><td>Collection of users</td><td>Developers, Admins</td></tr>
+          <tr><td>🎭 Role</td><td>Temporary permission set</td><td>EC2 can access S3</td></tr>
+          <tr><td>📜 Policy</td><td>JSON permission document</td><td>AllowS3ReadOnly</td></tr>
+          <tr><td>🔑 MFA</td><td>Second auth factor</td><td>Google Authenticator OTP</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="exercise">
+      <h4>🧠 Exercise 169</h4>
+      <ol>
+        <li>What does MFA stand for and why is it important in IAM?</li>
+        <li>Write a short IAM policy (in plain English) for a read-only database user.</li>
+        <li>Difference between authentication and authorization — give examples.</li>
+        <li>What is SSO and how does it benefit enterprises?</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 170 MISCONFIGURATIONS ===== -->
+  <div class="section" id="s170">
+    <div class="section-header">
+      <span class="section-num">170</span>
+      <span class="emoji-big">⚙️</span>
+      <span class="section-title">Misconfigurations</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📖 Definition</div>
+      <p><strong>Cloud misconfiguration</strong> occurs when cloud services are set up incorrectly — leaving data exposed, permissions too broad, or security features disabled. It is the <strong>#1 cause of cloud breaches</strong> (Gartner: 99% of cloud failures through 2025 are customer's fault).</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Misconfiguration Type</th><th>What Happens</th><th>Real Impact</th></tr></thead>
+        <tbody>
+          <tr><td>🌐 Public Storage Bucket</td><td>S3/Blob set to public</td><td>Anyone can download files</td></tr>
+          <tr><td>🔓 Overly Permissive IAM</td><td>All users = admin</td><td>Mass data deletion/theft</td></tr>
+          <tr><td>🚫 No Encryption</td><td>Data stored in plaintext</td><td>Immediate data exposure</td></tr>
+          <tr><td>🔥 Open Security Groups</td><td>0.0.0.0/0 on port 22 (SSH)</td><td>Anyone can SSH in</td></tr>
+          <tr><td>📋 No Logging</td><td>CloudTrail disabled</td><td>No audit trail after breach</td></tr>
+          <tr><td>🔑 Hardcoded Secrets</td><td>API keys in source code</td><td>Keys scraped from GitHub</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="code-box"><span class="comment"># BAD: Open security group (AWS CLI)</span>
+aws ec2 authorize-security-group-ingress \
+  --group-id sg-12345 \
+  --protocol tcp \
+  --port <span class="num">22</span> \
+  --cidr <span class="str">0.0.0.0/0</span>   <span class="comment"># ← Allows SSH from ANYWHERE!</span>
+
+<span class="comment"># GOOD: Restrict to your IP only</span>
+aws ec2 authorize-security-group-ingress \
+  --group-id sg-12345 \
+  --protocol tcp \
+  --port <span class="num">22</span> \
+  --cidr <span class="str">203.0.113.10/32</span>  <span class="comment"># ← Only your IP</span></div>
+
+    <div class="exercise">
+      <h4>🧠 Exercise 170</h4>
+      <ol>
+        <li>What CIDR notation means "allow all IPs"?</li>
+        <li>What tool can scan AWS accounts for misconfigurations? (Hint: Scout Suite, Prowler)</li>
+        <li>Why should API keys never be committed to GitHub?</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 171 S3 BUCKET LEAKS ===== -->
+  <div class="section" id="s171">
+    <div class="section-header">
+      <span class="section-num">171</span>
+      <span class="emoji-big">🪣</span>
+      <span class="section-title">S3 Bucket Leaks</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📖 Definition</div>
+      <p><strong>Amazon S3 (Simple Storage Service)</strong> buckets store files in the cloud. An <strong>S3 Bucket Leak</strong> occurs when access controls are misconfigured, making private data publicly accessible to anyone on the internet.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">💥 Famous S3 Leaks</div>
+        <ul style="padding-left:18px; color:var(--muted); font-size:0.88rem; line-height:2.2;">
+          <li>📘 Facebook – 540M user records (2019)</li>
+          <li>🚗 Tesla – Internal scripts exposed</li>
+          <li>🏥 US Military – 1.8B surveillance posts</li>
+          <li>🎮 Twitch – Source code leaked (2021)</li>
+          <li>🏦 Capital One – 100M customers</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">🛡️ How to Secure S3</div>
+        <ul style="padding-left:18px; color:var(--muted); font-size:0.88rem; line-height:2.2;">
+          <li>✅ Block Public Access setting ON</li>
+          <li>✅ Enable bucket versioning</li>
+          <li>✅ Enable server-side encryption (SSE)</li>
+          <li>✅ Use bucket policies (not ACLs)</li>
+          <li>✅ Enable CloudTrail logging</li>
+          <li>✅ Use Amazon Macie (auto-detect PII)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flowchart">
+      <div class="flow-node start">👤 Developer creates S3 Bucket</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node decision">⚠️ Sets ACL = "Public Read"</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">🔍 Attacker uses S3 Scanner tool</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">📂 Finds exposed bucket URL</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node end">💥 Downloads all data — BREACH!</div>
+    </div>
+
+    <div class="code-box"><span class="comment"># Check if S3 bucket is public (AWS CLI)</span>
+aws s3api get-bucket-acl --bucket my-bucket
+
+<span class="comment"># Block ALL public access (recommended)</span>
+aws s3api put-public-access-block \
+  --bucket my-bucket \
+  --public-access-block-configuration \
+  <span class="str">"BlockPublicAcls=true,IgnorePublicAcls=true,
+   BlockPublicPolicy=true,RestrictPublicBuckets=true"</span></div>
+
+    <div class="exercise">
+      <h4>🧠 Exercise 171</h4>
+      <ol>
+        <li>What does S3 stand for?</li>
+        <li>Name 2 tools used to find exposed S3 buckets.</li>
+        <li>What is Amazon Macie and how does it help?</li>
+        <li>Explain server-side encryption (SSE) in S3.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 172 CLOUD CONTROLS ===== -->
+  <div class="section" id="s172">
+    <div class="section-header">
+      <span class="section-num">172</span>
+      <span class="emoji-big">🛡️</span>
+      <span class="section-title">Cloud Controls</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📖 Definition</div>
+      <p><strong>Cloud Security Controls</strong> are the safeguards and countermeasures implemented to protect cloud assets — data, infrastructure, apps — from threats. They align with frameworks like <strong>CSA CCM</strong>, <strong>NIST 800-53</strong>, and <strong>ISO 27017</strong>.</p>
+    </div>
+
+    <div class="box-chart">
+      <div class="box-item"><div class="icon">🔐</div><div class="label">Preventive<br><small>Stop attacks</small></div></div>
+      <div class="box-item"><div class="icon">🕵️</div><div class="label">Detective<br><small>Find attacks</small></div></div>
+      <div class="box-item"><div class="icon">🔧</div><div class="label">Corrective<br><small>Fix damage</small></div></div>
+      <div class="box-item"><div class="icon">📋</div><div class="label">Deterrent<br><small>Discourage</small></div></div>
+      <div class="box-item"><div class="icon">💾</div><div class="label">Recovery<br><small>Restore</small></div></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Control Type</th><th>Cloud Example</th><th>Tool</th></tr></thead>
+        <tbody>
+          <tr><td>🔐 Preventive</td><td>Encryption, MFA, WAF</td><td>AWS KMS, Azure MFA</td></tr>
+          <tr><td>🕵️ Detective</td><td>Log analysis, SIEM</td><td>CloudTrail, Splunk</td></tr>
+          <tr><td>🔧 Corrective</td><td>Auto-remediation scripts</td><td>AWS Config Rules</td></tr>
+          <tr><td>💾 Recovery</td><td>Backups, snapshots</td><td>AWS Backup, Azure Recovery</td></tr>
+          <tr><td>📋 Deterrent</td><td>Legal notices, banners</td><td>Login warning banners</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="exercise">
+      <h4>🧠 Exercise 172</h4>
+      <ol>
+        <li>What is a WAF (Web Application Firewall) and where is it placed?</li>
+        <li>Categorize: Firewall = ?, SIEM = ?, Backup = ?</li>
+        <li>What framework does CSA CCM stand for?</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 173 CLOUD MONITORING ===== -->
+  <div class="section" id="s173">
+    <div class="section-header">
+      <span class="section-num">173</span>
+      <span class="emoji-big">📡</span>
+      <span class="section-title">Cloud Monitoring</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📖 Definition</div>
+      <p><strong>Cloud Monitoring</strong> is the continuous observation and analysis of cloud resources, performance, and security events to detect issues, ensure compliance, and respond to threats in real time.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tool</th><th>Provider</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>📋 CloudTrail</td><td>AWS</td><td>API call logging — who did what, when</td></tr>
+          <tr><td>📊 CloudWatch</td><td>AWS</td><td>Metrics, alarms, dashboards</td></tr>
+          <tr><td>🔍 Azure Monitor</td><td>Azure</td><td>Full-stack monitoring</td></tr>
+          <tr><td>📈 Stackdriver/Cloud Ops</td><td>GCP</td><td>Logs and metrics</td></tr>
+          <tr><td>🔎 SIEM (Splunk/Sentinel)</td><td>3rd Party</td><td>Correlation & alerting</td></tr>
+          <tr><td>🛡️ GuardDuty</td><td>AWS</td><td>Threat intelligence detection</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="code-box"><span class="comment"># AWS CloudWatch alarm — CPU spike alert</span>
+aws cloudwatch put-metric-alarm \
+  --alarm-name <span class="str">"HighCPU"</span> \
+  --metric-name <span class="str">CPUUtilization</span> \
+  --namespace <span class="str">AWS/EC2</span> \
+  --threshold <span class="num">80</span> \
+  --comparison-operator <span class="str">GreaterThanThreshold</span> \
+  --evaluation-periods <span class="num">2</span> \
+  --alarm-actions <span class="str">arn:aws:sns:us-east-1:123456:MyAlert</span>
+<span class="comment"># ↑ Sends SNS notification when CPU > 80% for 2 periods</span></div>
+
+    <div class="rt-example">
+      <div class="rt-label">🔴 Real-Time Example</div>
+      A bank uses AWS GuardDuty. At 3AM, an employee's account starts downloading 50GB of customer data. GuardDuty flags it as anomalous behavior → triggers alert → security team revokes access in minutes. 🚨
+    </div>
+
+    <div class="exercise">
+      <h4>🧠 Exercise 173</h4>
+      <ol>
+        <li>What is the difference between CloudTrail and CloudWatch?</li>
+        <li>What does SIEM stand for and what does it do?</li>
+        <li>How does AWS GuardDuty detect threats?</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 174 DEVSECOPS ===== -->
+  <div class="section" id="s174">
+    <div class="section-header">
+      <span class="section-num">174</span>
+      <span class="emoji-big">🔄</span>
+      <span class="section-title">DevSecOps</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📖 Definition</div>
+      <p><strong>DevSecOps</strong> = Development + Security + Operations. It integrates security practices <em>throughout</em> the software development lifecycle (SDLC) rather than adding security at the end. <strong>"Shift security left"</strong> — catch issues early when they are cheap to fix.</p>
+    </div>
+
+    <div class="flowchart">
+      <div class="flow-node start">📝 Plan<br><small>Threat modeling, security requirements</small></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">💻 Code<br><small>SAST (Static analysis), peer review</small></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">🔨 Build<br><small>Dependency scanning, SCA</small></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">🧪 Test<br><small>DAST, pen testing, IAST</small></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">🚀 Deploy<br><small>IaC scanning, signed containers</small></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">📡 Monitor<br><small>SIEM, threat detection, alerts</small></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node end">🔁 Feedback Loop → Back to Plan</div>
+    </div>
+
+    <div class="two-col">
+      <div class="adv-box pro" style="border-radius:12px; padding:18px;">
+        <h4>✅ Benefits of DevSecOps</h4>
+        <ul>
+          <li>Faster vulnerability detection</li>
+          <li>Cheaper to fix early-stage bugs</li>
+          <li>Consistent security policies</li>
+          <li>Compliance automation</li>
+          <li>Better team collaboration</li>
+        </ul>
+      </div>
+      <div class="adv-box con" style="border-radius:12px; padding:18px;">
+        <h4>❌ Challenges</h4>
+        <ul>
+          <li>Requires culture change</li>
+          <li>Tool integration complexity</li>
+          <li>Skills gap in security</li>
+          <li>Slows CI/CD if poorly tuned</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exercise">
+      <h4>🧠 Exercise 174</h4>
+      <ol>
+        <li>What does "shift left" mean in DevSecOps?</li>
+        <li>Difference between SAST and DAST — give one tool for each.</li>
+        <li>Name 3 popular DevSecOps tools (e.g., Snyk, SonarQube, Trivy).</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 175 SECURE DEPLOYMENT ===== -->
+  <div class="section" id="s175">
+    <div class="section-header">
+      <span class="section-num">175</span>
+      <span class="emoji-big">🚀</span>
+      <span class="section-title">Secure Deployment</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📖 Definition</div>
+      <p><strong>Secure Deployment</strong> means releasing software to production using processes that prevent vulnerabilities, unauthorized changes, and misconfigurations from reaching live environments.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Technique</th><th>Description</th><th>Tool</th></tr></thead>
+        <tbody>
+          <tr><td>🏗️ IaC Scanning</td><td>Scan Terraform/CloudFormation for misconfigs</td><td>Checkov, tfsec</td></tr>
+          <tr><td>📦 Container Scanning</td><td>Scan Docker images for CVEs</td><td>Trivy, Clair, Snyk</td></tr>
+          <tr><td>✍️ Code Signing</td><td>Verify artifact integrity</td><td>Sigstore, GPG</td></tr>
+          <tr><td>🔄 CI/CD Security Gates</td><td>Block deploy if scan fails</td><td>Jenkins, GitHub Actions</td></tr>
+          <tr><td>🔐 Secrets Management</td><td>Never hardcode secrets</td><td>HashiCorp Vault, AWS Secrets Manager</td></tr>
+          <tr><td>🌊 Blue/Green Deploy</td><td>Safe rollback capability</td><td>AWS CodeDeploy</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="code-box"><span class="comment"># GitHub Actions security gate example</span>
+<span class="kw">name</span>: Security Scan
+<span class="kw">on</span>: [push]
+<span class="kw">jobs</span>:
+  scan:
+    <span class="kw">runs-on</span>: ubuntu-latest
+    <span class="kw">steps</span>:
+      - <span class="kw">uses</span>: actions/checkout@v3
+      - <span class="kw">name</span>: <span class="str">Run Trivy vulnerability scanner</span>
+        <span class="kw">uses</span>: aquasecurity/trivy-action@master
+        <span class="kw">with</span>:
+          image-ref: <span class="str">'my-app:latest'</span>
+          exit-code: <span class="str">'1'</span>  <span class="comment"># BLOCKS deploy if HIGH CVE found</span>
+          severity: <span class="str">'HIGH,CRITICAL'</span></div>
+
+    <div class="exercise">
+      <h4>🧠 Exercise 175</h4>
+      <ol>
+        <li>What is IaC and why must it be scanned for security?</li>
+        <li>What is a CVE? How does a container scanner detect them?</li>
+        <li>Why should secrets never be in environment variables in container images?</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 176 CASE STUDY ===== -->
+  <div class="section" id="s176">
+    <div class="section-header">
+      <span class="section-num">176</span>
+      <span class="emoji-big">📁</span>
+      <span class="section-title">Case Study – Capital One Breach (2019)</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📖 Overview</div>
+      <p>In July 2019, a former AWS employee exploited a <strong>misconfigured Web Application Firewall (WAF)</strong> on Capital One's AWS infrastructure to steal data of <strong>100 million customers</strong> — names, addresses, credit scores, SSNs, and bank accounts.</p>
+    </div>
+
+    <div class="flowchart">
+      <div class="flow-node start">🏦 Capital One runs on AWS EC2 + S3</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node decision">⚠️ WAF misconfigured — allows SSRF attack</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">🔓 Attacker sends request to EC2 metadata endpoint (169.254.169.254)</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">🔑 Gets IAM credentials from metadata service</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node">📂 Uses credentials to list + download S3 buckets</div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node end">💥 100M records stolen. $80M+ fine. Criminal charges.</div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">❌ What Went Wrong</div>
+        <ul style="padding-left:18px; color:var(--muted); font-size:0.88rem; line-height:2;">
+          <li>WAF misconfigured for SSRF</li>
+          <li>EC2 metadata not protected (IMDSv1)</li>
+          <li>IAM role had too many permissions</li>
+          <li>No anomaly detection alerts</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">✅ Lessons Learned</div>
+        <ul style="padding-left:18px; color:var(--muted); font-size:0.88rem; line-height:2;">
+          <li>Use IMDSv2 (token-required)</li>
+          <li>Apply least-privilege IAM policies</li>
+          <li>Enable GuardDuty & CloudTrail</li>
+          <li>Regular WAF configuration audits</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exercise">
+      <h4>🧠 Exercise 176</h4>
+      <ol>
+        <li>What is an SSRF attack? How was it used in this breach?</li>
+        <li>What is EC2 instance metadata and why is it dangerous?</li>
+        <li>How much was Capital One fined by the OCC?</li>
+        <li>What is IMDSv2 and how does it prevent this attack?</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 177 BEST PRACTICES ===== -->
+  <div class="section" id="s177">
+    <div class="section-header">
+      <span class="section-num">177</span>
+      <span class="emoji-big">✅</span>
+      <span class="section-title">Best Practices</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📖 Definition</div>
+      <p>Cloud security best practices are proven guidelines that reduce risk, ensure compliance, and maintain a strong security posture across all cloud deployments.</p>
+    </div>
+
+    <div class="box-chart">
+      <div class="box-item"><div class="icon">🔐</div><div class="label">Encrypt Everything</div></div>
+      <div class="box-item"><div class="icon">🔑</div><div class="label">Enable MFA</div></div>
+      <div class="box-item"><div class="icon">📋</div><div class="label">Least Privilege</div></div>
+      <div class="box-item"><div class="icon">📡</div><div class="label">Monitor & Alert</div></div>
+      <div class="box-item"><div class="icon">🔍</div><div class="label">Audit Regularly</div></div>
+      <div class="box-item"><div class="icon">💾</div><div class="label">Backup & Test</div></div>
+      <div class="box-item"><div class="icon">🚫</div><div class="label">No Public Buckets</div></div>
+      <div class="box-item"><div class="icon">🔄</div><div class="label">Patch & Update</div></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Best Practice</th><th>Why It Matters</th><th>How To</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>🔐 Encrypt at rest & transit</td><td>Data useless if stolen</td><td>AES-256, TLS 1.3</td></tr>
+          <tr><td>2</td><td>🔑 MFA everywhere</td><td>Stops credential theft</td><td>TOTP, hardware keys</td></tr>
+          <tr><td>3</td><td>📋 Least privilege IAM</td><td>Limits blast radius</td><td>IAM policies, roles</td></tr>
+          <tr><td>4</td><td>🚫 Block public storage</td><td>Prevents data leaks</td><td>S3 Block Public Access</td></tr>
+          <tr><td>5</td><td>📡 Enable logging</td><td>Audit trail + forensics</td><td>CloudTrail, FlowLogs</td></tr>
+          <tr><td>6</td><td>🔍 CSPM tools</td><td>Auto-detect drift</td><td>Prisma Cloud, Wiz</td></tr>
+          <tr><td>7</td><td>🌊 Network segmentation</td><td>Contain breaches</td><td>VPCs, subnets, NACLs</td></tr>
+          <tr><td>8</td><td>💾 Regular backups</td><td>Ransomware recovery</td><td>3-2-1 backup rule</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="adv-grid">
+      <div class="adv-box pro">
+        <h4>✅ Advantages of Following Best Practices</h4>
+        <ul>
+          <li>Reduced breach risk</li>
+          <li>Regulatory compliance (GDPR, PCI-DSS)</li>
+          <li>Customer trust and reputation</li>
+          <li>Lower incident response costs</li>
+          <li>Insurance premium reduction</li>
+        </ul>
+      </div>
+      <div class="adv-box con">
+        <h4>❌ Disadvantages / Challenges</h4>
+        <ul>
+          <li>Higher initial complexity</li>
+          <li>Performance overhead (encryption)</li>
+          <li>Requires ongoing training</li>
+          <li>Tool costs (CSPM, SIEM)</li>
+          <li>False positive fatigue</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exercise">
+      <h4>🧠 Exercise 177</h4>
+      <ol>
+        <li>What is the 3-2-1 backup rule?</li>
+        <li>What does CSPM stand for? Name 2 tools.</li>
+        <li>Why is network segmentation important for cloud security?</li>
+        <li>List 5 compliance standards relevant to cloud security.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 178 REVISION NOTES ===== -->
+  <div class="section" id="s178">
+    <div class="section-header">
+      <span class="section-num">178</span>
+      <span class="emoji-big">📝</span>
+      <span class="section-title">Unit 10 Revision Notes</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🚀 Key Formulas & Mnemonics</div>
+      <p>
+        <strong>CIA Triad:</strong> Confidentiality + Integrity + Availability<br>
+        <strong>Shared Responsibility:</strong> Provider = "OF the cloud" | Customer = "IN the cloud"<br>
+        <strong>IAM rule:</strong> Least Privilege = Minimum permissions needed, nothing more<br>
+        <strong>DevSecOps:</strong> "Shift Left" = Add security EARLY in development lifecycle<br>
+        <strong>3-2-1 Backup:</strong> 3 copies · 2 different media · 1 offsite
+      </p>
+    </div>
+
+    <div class="table-wrap" id="summary">
+      <table>
+        <thead><tr><th>Page</th><th>Topic</th><th>Key Concept</th><th>Key Tool/Example</th></tr></thead>
+        <tbody>
+          <tr><td>165</td><td>☁️ Cloud Basics</td><td>On-demand internet computing</td><td>AWS, Azure, GCP</td></tr>
+          <tr><td>166</td><td>🧱 Cloud Models</td><td>IaaS / PaaS / SaaS + deployment models</td><td>EC2 (IaaS), Gmail (SaaS)</td></tr>
+          <tr><td>167</td><td>⚠️ Cloud Threats</td><td>Breaches, DDoS, misconfigs, insider threats</td><td>Capital One breach, GitHub DDoS</td></tr>
+          <tr><td>168</td><td>🤝 Shared Responsibility</td><td>Provider secures infra, you secure data</td><td>AWS Shared Model diagram</td></tr>
+          <tr><td>169</td><td>🔑 IAM</td><td>Right access, right person, right time</td><td>AWS IAM, MFA, RBAC</td></tr>
+          <tr><td>170</td><td>⚙️ Misconfigurations</td><td>#1 cause of cloud breaches</td><td>Open SG, public S3, hardcoded keys</td></tr>
+          <tr><td>171</td><td>🪣 S3 Bucket Leaks</td><td>Public buckets = instant data leak</td><td>Facebook 540M, Block Public Access</td></tr>
+          <tr><td>172</td><td>🛡️ Cloud Controls</td><td>Preventive / Detective / Corrective / Recovery</td><td>WAF, SIEM, Backups</td></tr>
+          <tr><td>173</td><td>📡 Cloud Monitoring</td><td>Continuous observation of cloud events</td><td>CloudTrail, GuardDuty, Splunk</td></tr>
+          <tr><td>174</td><td>🔄 DevSecOps</td><td>Security integrated into dev pipeline</td><td>Snyk, SonarQube, Trivy</td></tr>
+          <tr><td>175</td><td>🚀 Secure Deployment</td><td>Safe release with security gates</td><td>Checkov, GitHub Actions, Vault</td></tr>
+          <tr><td>176</td><td>📁 Case Study</td><td>Capital One — SSRF + misconfigured WAF</td><td>IMDSv2, GuardDuty, least privilege</td></tr>
+          <tr><td>177</td><td>✅ Best Practices</td><td>Encrypt, MFA, least privilege, monitor</td><td>CSPM, 3-2-1 backup, VPCs</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CONCLUSION -->
+  <div class="conclusion">
+    <h2>🎯 Unit 10 Conclusion</h2>
+    <p>
+      Cloud Security is not optional — it is the <strong>foundation</strong> of every modern digital business. The core insight of this unit: <em>most cloud breaches are not caused by sophisticated hackers breaking encryption — they are caused by <strong>misconfigurations, weak access controls, and ignored monitoring alerts</strong>.</em>
+      <br><br>
+      Master IAM, apply the Shared Responsibility Model, always encrypt, monitor continuously, and embed security into your DevOps pipeline — and you will be ahead of 95% of cloud deployments. ☁️🔐
+    </p>
+  </div>
+
+  <a class="top-btn" href="#top">↑ BACK TO TOP</a>
+
+</div>
+</body>
+</html>

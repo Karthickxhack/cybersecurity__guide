@@ -1,0 +1,2659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unit 2: Computer & Internet Basics — Complete Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Nunito:wght@400;600;700;800&family=Oxanium:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg-dark: #050d1a;
+    --bg-card: #0a1628;
+    --bg-panel: #0d1f35;
+    --accent-blue: #00c8ff;
+    --accent-cyan: #00ffd5;
+    --accent-orange: #ff8c00;
+    --accent-purple: #a855f7;
+    --accent-green: #22c55e;
+    --accent-red: #ff4466;
+    --accent-yellow: #fbbf24;
+    --text-main: #e2f0ff;
+    --text-dim: #7a9abf;
+    --border: rgba(0,200,255,0.15);
+    --glow-blue: 0 0 20px rgba(0,200,255,0.3);
+    --glow-cyan: 0 0 20px rgba(0,255,213,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Nunito', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* Circuit board background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  canvas#particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 60px 20px 40px;
+    background: linear-gradient(180deg, rgba(0,20,50,0.95) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .unit-badge {
+    display: inline-block;
+    font-family: 'Oxanium', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent-cyan);
+    border: 1px solid var(--accent-cyan);
+    padding: 6px 18px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+    box-shadow: var(--glow-cyan);
+  }
+
+  header h1 {
+    font-family: 'Oxanium', monospace;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-cyan) 50%, var(--accent-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  header p.subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--text-dim);
+    font-size: 1rem;
+    letter-spacing: 2px;
+  }
+
+  .header-stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+  }
+
+  .stat-box {
+    background: rgba(0,200,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 24px;
+    text-align: center;
+  }
+
+  .stat-box .num {
+    font-family: 'Oxanium', monospace;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent-cyan);
+  }
+
+  .stat-box .label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ===== LAYOUT ===== */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 5;
+  }
+
+  /* ===== TOC ===== */
+  .toc-section {
+    padding: 40px 0;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: var(--text-main);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .toc-item:hover {
+    border-color: var(--accent-blue);
+    background: rgba(0,200,255,0.08);
+    transform: translateX(4px);
+    box-shadow: var(--glow-blue);
+  }
+
+  .toc-num {
+    font-family: 'Oxanium', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent-orange);
+    min-width: 28px;
+  }
+
+  .toc-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  /* ===== SECTION CARDS ===== */
+  .section {
+    margin: 40px 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .section::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--accent-blue), var(--accent-cyan));
+  }
+
+  .section-header {
+    padding: 28px 32px 20px 36px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .sec-num {
+    font-family: 'Oxanium', monospace;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--accent-orange);
+    background: rgba(255,140,0,0.1);
+    border: 1px solid rgba(255,140,0,0.3);
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .section-header h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(1.3rem, 3vw, 1.9rem);
+    font-weight: 700;
+    color: var(--accent-blue);
+    letter-spacing: 1px;
+  }
+
+  .section-emoji {
+    font-size: 1.8rem;
+    margin-left: auto;
+  }
+
+  .section-body {
+    padding: 28px 32px 32px 36px;
+  }
+
+  /* ===== SUBSECTIONS ===== */
+  .subsection {
+    margin-bottom: 28px;
+  }
+
+  .subsection h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .subsection h3::before {
+    content: '▸';
+    color: var(--accent-orange);
+    font-size: 0.9rem;
+  }
+
+  p {
+    line-height: 1.75;
+    color: #c5d9ef;
+    margin-bottom: 10px;
+    font-size: 0.97rem;
+  }
+
+  strong {
+    color: var(--accent-yellow);
+    font-weight: 700;
+  }
+
+  /* ===== DEFINITION BOX ===== */
+  .def-box {
+    background: rgba(0,200,255,0.06);
+    border: 1px solid rgba(0,200,255,0.25);
+    border-left: 3px solid var(--accent-blue);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-size: 0.96rem;
+    line-height: 1.7;
+  }
+
+  .def-box .def-label {
+    font-family: 'Oxanium', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--accent-blue);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* ===== TABLES ===== */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+
+  thead {
+    background: linear-gradient(90deg, rgba(0,200,255,0.15), rgba(168,85,247,0.1));
+  }
+
+  thead th {
+    padding: 12px 16px;
+    text-align: left;
+    font-family: 'Oxanium', monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent-cyan);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(0,200,255,0.06);
+    transition: background 0.2s;
+  }
+
+  tbody tr:hover {
+    background: rgba(0,200,255,0.05);
+  }
+
+  tbody td {
+    padding: 11px 16px;
+    color: #c5d9ef;
+    vertical-align: top;
+    line-height: 1.55;
+  }
+
+  tbody td:first-child {
+    color: var(--accent-yellow);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  /* ===== CODE BLOCKS ===== */
+  .code-block {
+    background: #020c18;
+    border: 1px solid rgba(0,200,255,0.2);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 14px 0;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .code-label {
+    position: absolute;
+    top: 8px; right: 12px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--accent-blue);
+    opacity: 0.7;
+    text-transform: uppercase;
+  }
+
+  .code-block pre {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: #a8d8ff;
+    white-space: pre;
+  }
+
+  .code-block .c-green { color: #22c55e; }
+  .code-block .c-yellow { color: #fbbf24; }
+  .code-block .c-orange { color: #ff8c00; }
+  .code-block .c-cyan { color: #00ffd5; }
+  .code-block .c-purple { color: #c084fc; }
+  .code-block .c-red { color: #ff4466; }
+  .code-block .c-dim { color: #4a6a8a; }
+  .code-block .c-blue { color: #60a5fa; }
+
+  /* ===== CARDS GRID ===== */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+    margin: 16px 0;
+  }
+
+  .card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    transition: all 0.3s;
+  }
+
+  .card:hover {
+    border-color: var(--accent-blue);
+    transform: translateY(-3px);
+    box-shadow: var(--glow-blue);
+  }
+
+  .card-icon {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    margin-bottom: 6px;
+  }
+
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    line-height: 1.55;
+  }
+
+  /* ===== FLOWCHARTS ===== */
+  .flowchart {
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .flow-node {
+    background: rgba(0,200,255,0.08);
+    border: 1.5px solid var(--accent-blue);
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+    text-align: center;
+    min-width: 220px;
+    max-width: 500px;
+    width: 100%;
+    transition: all 0.3s;
+  }
+
+  .flow-node:hover {
+    background: rgba(0,200,255,0.15);
+    box-shadow: var(--glow-blue);
+  }
+
+  .flow-node.diamond {
+    background: rgba(255,140,0,0.08);
+    border-color: var(--accent-orange);
+    clip-path: polygon(50% 0%,100% 50%,50% 100%,0% 50%);
+    padding: 24px 32px;
+    color: var(--accent-orange);
+  }
+
+  .flow-node.start {
+    background: rgba(34,197,94,0.1);
+    border-color: var(--accent-green);
+    border-radius: 50px;
+    color: var(--accent-green);
+  }
+
+  .flow-node.end {
+    background: rgba(255,68,102,0.1);
+    border-color: var(--accent-red);
+    border-radius: 50px;
+    color: var(--accent-red);
+  }
+
+  .flow-node.highlight {
+    background: rgba(168,85,247,0.1);
+    border-color: var(--accent-purple);
+    color: var(--accent-purple);
+  }
+
+  .flow-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 2px 0;
+  }
+
+  .flow-arrow .line {
+    width: 2px;
+    height: 20px;
+    background: var(--accent-blue);
+    opacity: 0.5;
+  }
+
+  .flow-arrow .tip {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--accent-blue);
+    opacity: 0.5;
+  }
+
+  .flow-label {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 1px;
+    margin: 2px 0;
+  }
+
+  /* Horizontal flow */
+  .flowchart-h {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    padding: 16px 0;
+    margin: 16px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .flow-node-h {
+    background: rgba(0,200,255,0.07);
+    border: 1px solid var(--accent-blue);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text-main);
+    white-space: nowrap;
+    font-family: 'Rajdhani', sans-serif;
+  }
+
+  .flow-arrow-h {
+    color: var(--accent-cyan);
+    font-size: 1.2rem;
+    padding: 0 4px;
+    opacity: 0.6;
+  }
+
+  /* ===== HIGHLIGHT BOXES ===== */
+  .info-box {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  .info-box.blue {
+    background: rgba(0,200,255,0.07);
+    border: 1px solid rgba(0,200,255,0.25);
+  }
+
+  .info-box.green {
+    background: rgba(34,197,94,0.07);
+    border: 1px solid rgba(34,197,94,0.25);
+    color: #a7f3c0;
+  }
+
+  .info-box.orange {
+    background: rgba(255,140,0,0.07);
+    border: 1px solid rgba(255,140,0,0.25);
+    color: #fcd89a;
+  }
+
+  .info-box.purple {
+    background: rgba(168,85,247,0.07);
+    border: 1px solid rgba(168,85,247,0.25);
+    color: #d8b4fe;
+  }
+
+  .info-box.red {
+    background: rgba(255,68,102,0.07);
+    border: 1px solid rgba(255,68,102,0.25);
+    color: #fca5b4;
+  }
+
+  .info-box .box-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ===== COMPARISON GRID ===== */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 16px 0;
+  }
+
+  .compare-panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+  }
+
+  .compare-panel h4 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-panel.blue h4 { color: var(--accent-blue); border-bottom-color: rgba(0,200,255,0.2); }
+  .compare-panel.orange h4 { color: var(--accent-orange); border-bottom-color: rgba(255,140,0,0.2); }
+  .compare-panel.green h4 { color: var(--accent-green); border-bottom-color: rgba(34,197,94,0.2); }
+  .compare-panel.purple h4 { color: var(--accent-purple); border-bottom-color: rgba(168,85,247,0.2); }
+
+  .compare-panel ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .compare-panel ul li {
+    font-size: 0.85rem;
+    color: #c5d9ef;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+
+  .compare-panel ul li::before {
+    content: '→';
+    color: var(--text-dim);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ===== EXERCISE BOX ===== */
+  .exercise-box {
+    background: rgba(168,85,247,0.07);
+    border: 1px solid rgba(168,85,247,0.3);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 16px 0;
+  }
+
+  .exercise-box .ex-label {
+    font-family: 'Oxanium', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--accent-purple);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .exercise-box ol {
+    padding-left: 20px;
+  }
+
+  .exercise-box ol li {
+    font-size: 0.88rem;
+    color: #c5d9ef;
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+
+  /* ===== KEY POINT PILLS ===== */
+  .key-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0;
+  }
+
+  .key-pill {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: rgba(0,200,255,0.08);
+    border: 1px solid rgba(0,200,255,0.2);
+    color: var(--accent-cyan);
+    letter-spacing: 0.5px;
+  }
+
+  .key-pill.orange {
+    background: rgba(255,140,0,0.08);
+    border-color: rgba(255,140,0,0.2);
+    color: var(--accent-orange);
+  }
+
+  .key-pill.purple {
+    background: rgba(168,85,247,0.08);
+    border-color: rgba(168,85,247,0.2);
+    color: var(--accent-purple);
+  }
+
+  .key-pill.green {
+    background: rgba(34,197,94,0.08);
+    border-color: rgba(34,197,94,0.2);
+    color: var(--accent-green);
+  }
+
+  /* ===== CONCLUSION BOX ===== */
+  .conclusion {
+    margin-top: 28px;
+    background: linear-gradient(135deg, rgba(0,200,255,0.05), rgba(168,85,247,0.05));
+    border: 1px solid rgba(0,200,255,0.2);
+    border-radius: 10px;
+    padding: 18px 22px;
+  }
+
+  .conclusion .c-label {
+    font-family: 'Oxanium', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--accent-cyan);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .conclusion p {
+    font-size: 0.9rem;
+    color: var(--text-main);
+    line-height: 1.7;
+  }
+
+  /* ===== SECTION DIVIDER ===== */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+    margin: 8px 0 24px;
+    opacity: 0.3;
+  }
+
+  /* ===== SECTION TITLE ===== */
+  .section-group-title {
+    font-family: 'Oxanium', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    padding: 32px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .section-group-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ===== PROTOCOL DISPLAY ===== */
+  .protocol-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.82rem;
+  }
+
+  .proto-badge {
+    background: rgba(0,200,255,0.1);
+    border: 1px solid rgba(0,200,255,0.3);
+    border-radius: 4px;
+    padding: 3px 10px;
+    color: var(--accent-blue);
+    font-weight: 700;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  .proto-desc {
+    color: var(--text-dim);
+  }
+
+  /* ===== OSI BOX ===== */
+  .osi-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 14px 0;
+  }
+
+  .osi-layer {
+    display: grid;
+    grid-template-columns: 30px 80px 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+  }
+
+  .osi-layer:hover {
+    transform: translateX(4px);
+  }
+
+  .osi-layer .l-num {
+    font-family: 'Oxanium', monospace;
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .osi-layer .l-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .osi-layer .l-desc {
+    color: var(--text-dim);
+    font-size: 0.82rem;
+  }
+
+  .osi-layer:nth-child(1) { background: rgba(255,68,102,0.06); }
+  .osi-layer:nth-child(1) .l-num, .osi-layer:nth-child(1) .l-name { color: #ff4466; }
+  .osi-layer:nth-child(2) { background: rgba(255,140,0,0.06); }
+  .osi-layer:nth-child(2) .l-num, .osi-layer:nth-child(2) .l-name { color: #ff8c00; }
+  .osi-layer:nth-child(3) { background: rgba(251,191,36,0.06); }
+  .osi-layer:nth-child(3) .l-num, .osi-layer:nth-child(3) .l-name { color: #fbbf24; }
+  .osi-layer:nth-child(4) { background: rgba(34,197,94,0.06); }
+  .osi-layer:nth-child(4) .l-num, .osi-layer:nth-child(4) .l-name { color: #22c55e; }
+  .osi-layer:nth-child(5) { background: rgba(0,255,213,0.06); }
+  .osi-layer:nth-child(5) .l-num, .osi-layer:nth-child(5) .l-name { color: #00ffd5; }
+  .osi-layer:nth-child(6) { background: rgba(0,200,255,0.06); }
+  .osi-layer:nth-child(6) .l-num, .osi-layer:nth-child(6) .l-name { color: #00c8ff; }
+  .osi-layer:nth-child(7) { background: rgba(168,85,247,0.06); }
+  .osi-layer:nth-child(7) .l-num, .osi-layer:nth-child(7) .l-name { color: #a855f7; }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-dark); }
+  ::-webkit-scrollbar-thumb { background: rgba(0,200,255,0.3); border-radius: 3px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    .section-body { padding: 18px 18px 22px; }
+    .section-header { padding: 18px 18px 14px 22px; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .cards-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ===== REVISION SECTION ===== */
+  .revision-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+    margin: 14px 0;
+  }
+
+  .revision-item {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .revision-item .r-term {
+    font-family: 'Oxanium', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent-orange);
+    min-width: 100px;
+    padding-top: 2px;
+  }
+
+  .revision-item .r-def {
+    font-size: 0.83rem;
+    color: #a0bcd8;
+    line-height: 1.5;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    height: 6px;
+    background: rgba(0,200,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 6px 0;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+    transition: width 1s ease;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<!-- HEADER -->
+<header>
+  <div class="unit-badge">Cybersecurity Course · Unit 2</div>
+  <h1>Computer &amp; Internet Basics</h1>
+  <p class="subtitle">// TOPICS 17 — 32 · COMPLETE STUDY GUIDE</p>
+  <div class="header-stats">
+    <div class="stat-box"><div class="num">16</div><div class="label">Topics</div></div>
+    <div class="stat-box"><div class="num">7</div><div class="label">OSI Layers</div></div>
+    <div class="stat-box"><div class="num">HTTP<br>HTTPS</div><div class="label">Protocols</div></div>
+    <div class="stat-box"><div class="num">DNS</div><div class="label">How Web Works</div></div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="section-group-title">📋 Table of Contents</div>
+  <div class="toc-grid">
+    <a href="#t17" class="toc-item"><span class="toc-num">17</span><span class="toc-title">Computer Fundamentals</span></a>
+    <a href="#t18" class="toc-item"><span class="toc-num">18</span><span class="toc-title">Hardware vs Software</span></a>
+    <a href="#t19" class="toc-item"><span class="toc-num">19</span><span class="toc-title">Operating System Basics</span></a>
+    <a href="#t20" class="toc-item"><span class="toc-num">20</span><span class="toc-title">Types of Operating Systems</span></a>
+    <a href="#t21" class="toc-item"><span class="toc-num">21</span><span class="toc-title">File Systems</span></a>
+    <a href="#t22" class="toc-item"><span class="toc-num">22</span><span class="toc-title">Process &amp; Memory Management</span></a>
+    <a href="#t23" class="toc-item"><span class="toc-num">23</span><span class="toc-title">Internet Basics</span></a>
+    <a href="#t24" class="toc-item"><span class="toc-num">24</span><span class="toc-title">How Internet Works</span></a>
+    <a href="#t25" class="toc-item"><span class="toc-num">25</span><span class="toc-title">Client–Server Model</span></a>
+    <a href="#t26" class="toc-item"><span class="toc-num">26</span><span class="toc-title">Web Browsers &amp; Search Engines</span></a>
+    <a href="#t27" class="toc-item"><span class="toc-num">27</span><span class="toc-title">HTTP Protocol</span></a>
+    <a href="#t28" class="toc-item"><span class="toc-num">28</span><span class="toc-title">HTTPS &amp; SSL Basics</span></a>
+    <a href="#t29" class="toc-item"><span class="toc-num">29</span><span class="toc-title">Cookies &amp; Sessions</span></a>
+    <a href="#t30" class="toc-item"><span class="toc-num">30</span><span class="toc-title">DNS Basics</span></a>
+    <a href="#t31" class="toc-item"><span class="toc-num">31</span><span class="toc-title">Internet Security Basics</span></a>
+    <a href="#t32" class="toc-item"><span class="toc-num">32</span><span class="toc-title">Unit 2 Revision Notes</span></a>
+  </div>
+
+  <!-- ========================== TOPIC 17 ========================== -->
+  <div class="section-group-title">💻 Computer Systems</div>
+  <div class="section" id="t17">
+    <div class="section-header">
+      <span class="sec-num">Topic 17</span>
+      <h2>Computer Fundamentals</h2>
+      <span class="section-emoji">🖥️</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>Definition</h3>
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          A <strong>computer</strong> is an electronic device that accepts input data, processes it according to a set of instructions (programs), stores the results, and produces output. The basic model is: <strong>Input → Process → Output → Storage</strong>.
+        </div>
+        <p>Every digital device — from a smartphone to a supercomputer — follows this same fundamental model. Understanding it is the foundation of all cybersecurity thinking because <strong>each stage is an attack surface</strong>.</p>
+      </div>
+
+      <div class="subsection">
+        <h3>IPO Cycle (Input → Process → Output)</h3>
+        <div class="flowchart-h">
+          <div class="flow-node-h">📥 INPUT<br/><small style="color:#4a6a8a">Keyboard, Mouse, Mic</small></div>
+          <div class="flow-arrow-h">→</div>
+          <div class="flow-node-h">⚙️ PROCESS<br/><small style="color:#4a6a8a">CPU Executes Code</small></div>
+          <div class="flow-arrow-h">→</div>
+          <div class="flow-node-h">📤 OUTPUT<br/><small style="color:#4a6a8a">Monitor, Speaker, Printer</small></div>
+          <div class="flow-arrow-h">⇅</div>
+          <div class="flow-node-h">💾 STORAGE<br/><small style="color:#4a6a8a">HDD, SSD, RAM</small></div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Key Components</h3>
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-icon">🧠</div>
+            <div class="card-title">CPU</div>
+            <div class="card-desc">Central Processing Unit — the "brain". Executes instructions. Speed measured in GHz (billion cycles/sec). Has cores: dual, quad, octa.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🗃️</div>
+            <div class="card-title">RAM</div>
+            <div class="card-desc">Random Access Memory — temporary, fast working memory. Lost on power off. Measured in GB. More RAM = more programs run simultaneously.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">💽</div>
+            <div class="card-title">Storage (HDD/SSD)</div>
+            <div class="card-desc">Permanent data storage. HDD = magnetic spinning disk, slower. SSD = flash memory, faster, more expensive, no moving parts.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🎛️</div>
+            <div class="card-title">Motherboard</div>
+            <div class="card-desc">The main circuit board connecting all components. Contains BIOS/UEFI firmware. First thing to start when PC powers on.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🖥️</div>
+            <div class="card-title">GPU</div>
+            <div class="card-desc">Graphics Processing Unit — renders images/video. Also used for ML and password cracking (parallel processing power).</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔌</div>
+            <div class="card-title">PSU</div>
+            <div class="card-desc">Power Supply Unit — converts AC mains power to DC power for components. Failure = total system failure.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Number Systems — Binary & Hex</h3>
+        <p>Computers operate in <strong>binary (base-2)</strong>. All data is ultimately 0s and 1s. Hackers also use <strong>hexadecimal (base-16)</strong> to represent binary data compactly.</p>
+        <div class="code-block">
+          <div class="code-label">NUMBER SYSTEMS</div>
+          <pre><span class="c-dim"># Decimal → Binary → Hexadecimal</span>
+<span class="c-cyan">Decimal</span>   <span class="c-green">Binary</span>       <span class="c-orange">Hex</span>    <span class="c-dim">Use in Cybersecurity</span>
+──────────────────────────────────────────────────
+0         0000 0000    0x00   Null byte (string termination exploit)
+10        0000 1010    0x0A   Newline character
+65        0100 0001    0x41   Letter 'A' (ASCII)
+255       1111 1111    0xFF   Max byte value
+<span class="c-yellow">1 byte</span>  = 8 bits  = 2 hex digits
+<span class="c-yellow">1 KB</span>    = 1024 bytes
+<span class="c-yellow">1 MB</span>    = 1024 KB
+<span class="c-yellow">1 GB</span>    = 1024 MB
+<span class="c-yellow">1 TB</span>    = 1024 GB
+
+<span class="c-dim"># MAC address (hardware address) — expressed in hex:</span>
+<span class="c-purple">00:1A:2B:3C:4D:5E</span>  ← 6 bytes, 12 hex digits
+
+<span class="c-dim"># IPv4 address — 4 bytes, decimal notation:</span>
+<span class="c-blue">192.168.1.1</span>  =  <span class="c-green">11000000.10101000.00000001.00000001</span> (binary)</pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Security Relevance</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Component</th><th>Security Attack Targeting It</th><th>Defence</th></tr></thead>
+            <tbody>
+              <tr><td>CPU</td><td>Spectre/Meltdown (side-channel), cryptojacking</td><td>Firmware patches, process isolation</td></tr>
+              <tr><td>RAM</td><td>Cold boot attack (freeze RAM, extract keys), buffer overflow</td><td>RAM encryption, memory protection</td></tr>
+              <tr><td>HDD/SSD</td><td>Data theft, ransomware encryption, forensic recovery</td><td>Full-disk encryption (BitLocker/VeraCrypt)</td></tr>
+              <tr><td>BIOS/UEFI</td><td>Rootkit installation, bootkits, persistence</td><td>Secure Boot, UEFI password</td></tr>
+              <tr><td>GPU</td><td>Password cracking (hashcat, 100B+ hashes/sec)</td><td>Strong hashing algorithms (bcrypt, Argon2)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>Convert the decimal number <strong>172</strong> to binary and hexadecimal.</li>
+          <li>A website's IP is <strong>192.168.0.1</strong> — convert each octet to binary. How many total bits in an IPv4 address?</li>
+          <li>Which component would an attacker target to install a persistent rootkit that survives OS reinstall?</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>Every component in a computer is both a tool and a potential vulnerability. Understanding the hardware fundamentals lets you think like both a builder and an attacker — essential for any cybersecurity professional.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 18 ========================== -->
+  <div class="section" id="t18">
+    <div class="section-header">
+      <span class="sec-num">Topic 18</span>
+      <h2>Hardware vs Software</h2>
+      <span class="section-emoji">⚙️</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>Definitions</h3>
+        <div class="compare-grid">
+          <div class="compare-panel blue">
+            <h4>🔧 Hardware</h4>
+            <p style="font-size:0.85rem;color:#a0bcd8;margin-bottom:8px">Physical, tangible components you can touch.</p>
+            <ul>
+              <li>CPU, RAM, HDD, SSD</li>
+              <li>Monitor, keyboard, mouse</li>
+              <li>Network cards, routers</li>
+              <li>Firmware (software burned into hardware)</li>
+              <li>Cannot be easily modified/patched</li>
+            </ul>
+          </div>
+          <div class="compare-panel orange">
+            <h4>💾 Software</h4>
+            <p style="font-size:0.85rem;color:#a0bcd8;margin-bottom:8px">Intangible programs and data; instructions for hardware.</p>
+            <ul>
+              <li>Operating Systems (Windows, Linux)</li>
+              <li>Applications (Chrome, Word)</li>
+              <li>Drivers (translate OS ↔ hardware)</li>
+              <li>Middleware, APIs, libraries</li>
+              <li>Easily updated/patched</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Software Categories</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Category</th><th>Description</th><th>Examples</th><th>Security Note</th></tr></thead>
+            <tbody>
+              <tr><td>System Software</td><td>Manages hardware resources</td><td>Windows, Linux, macOS, BIOS</td><td>Most critical to patch — runs with highest privilege</td></tr>
+              <tr><td>Application Software</td><td>User-facing programs</td><td>Chrome, Notepad, Photoshop</td><td>Largest attack surface (most bugs)</td></tr>
+              <tr><td>Utility Software</td><td>System maintenance tools</td><td>Antivirus, disk cleaner, backup</td><td>Antivirus itself can have vulnerabilities</td></tr>
+              <tr><td>Programming Software</td><td>Tools to write software</td><td>Visual Studio, Python, GCC</td><td>Supply chain attacks target IDEs/compilers</td></tr>
+              <tr><td>Firmware</td><td>Low-level software in hardware</td><td>UEFI, router firmware, SSD controller</td><td>Hard to patch; rootkits live here</td></tr>
+              <tr><td>Malware</td><td>Malicious software</td><td>Virus, worm, ransomware, trojan</td><td>Exploits all above categories</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Software Vulnerability Lifecycle</h3>
+        <div class="flowchart">
+          <div class="flow-node start">Developer Writes Code</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">Bug / Vulnerability Introduced</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">Researcher Discovers Vulnerability</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node diamond" style="clip-path:none;padding:12px 24px;">Responsible Disclosure?</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">Vendor Creates Patch</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">Patch Released — Users Must Apply It!</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node end">Vulnerability Mitigated (if patched)</div>
+        </div>
+        <div class="info-box red">
+          <span class="box-icon">⚠️</span>
+          <span><strong>Zero-Day Window:</strong> The time between vulnerability discovery and patch release. During this window, no defence exists except workarounds. WannaCry exploited an unpatched Windows vulnerability (EternalBlue) — Microsoft had released a patch 2 months earlier, but many users hadn't applied it.</span>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Advantages &amp; Disadvantages</h3>
+        <div class="compare-grid">
+          <div class="compare-panel green">
+            <h4>✅ Software Advantages</h4>
+            <ul>
+              <li>Easily updated/patched remotely</li>
+              <li>Can be replicated infinitely at zero cost</li>
+              <li>Open source allows community security review</li>
+              <li>Virtualisation runs multiple systems on one hardware</li>
+            </ul>
+          </div>
+          <div class="compare-panel purple">
+            <h4>⚠️ Software Disadvantages</h4>
+            <ul>
+              <li>Vulnerable to bugs, exploits, malware</li>
+              <li>Complexity increases attack surface</li>
+              <li>Pirated software often contains backdoors</li>
+              <li>Dependency on unvetted libraries (supply chain risk)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>Classify each item: <em>browser plugin, USB drive, network switch, operating system kernel, UEFI firmware</em> — is it hardware, software, or firmware?</li>
+          <li>A ransomware attack encrypts files on your computer. Is the ransomware hardware or software? What part of the IPO model does it target?</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>Hardware provides the physical foundation; software provides the intelligence. Most cyber attacks target software because it can be manipulated remotely without physical access. Keeping both hardware firmware and software patched is your primary defence.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 19 ========================== -->
+  <div class="section" id="t19">
+    <div class="section-header">
+      <span class="sec-num">Topic 19</span>
+      <h2>Operating System Basics</h2>
+      <span class="section-emoji">🖱️</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>Definition</h3>
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          An <strong>Operating System (OS)</strong> is the master control software that manages all hardware resources, provides services to applications, and acts as an interface between the user and the hardware. Without an OS, you cannot run any programs.
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Core OS Functions</h3>
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-icon">⚙️</div>
+            <div class="card-title">Process Management</div>
+            <div class="card-desc">Creates, schedules, and terminates processes. Ensures CPU time is shared fairly (multitasking).</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🗄️</div>
+            <div class="card-title">Memory Management</div>
+            <div class="card-desc">Allocates RAM to processes. Uses virtual memory (swap) when RAM is full. Prevents processes accessing each other's memory.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">📁</div>
+            <div class="card-title">File System Mgmt</div>
+            <div class="card-desc">Organises files in hierarchical structure. Controls read/write/execute permissions on files and directories.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔌</div>
+            <div class="card-title">Device Management</div>
+            <div class="card-desc">Communicates with hardware via device drivers. I/O scheduling for disks, network cards, USB devices.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">👤</div>
+            <div class="card-title">User Management</div>
+            <div class="card-desc">Manages user accounts, passwords, access rights. Enforces privilege levels (admin vs standard user).</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔒</div>
+            <div class="card-title">Security &amp; Access</div>
+            <div class="card-desc">Enforces file permissions, user authentication, process isolation. First line of defence on any system.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>OS Architecture: Kernel vs User Space</h3>
+        <div class="code-block">
+          <div class="code-label">OS ARCHITECTURE</div>
+          <pre>┌───────────────────────────────────────────────┐
+│              <span class="c-blue">USER SPACE</span>                          │
+│  ┌──────────┐  ┌──────────┐  ┌──────────────┐ │
+│  │  Chrome  │  │  Word    │  │  Python App  │ │
+│  └─────┬────┘  └────┬─────┘  └──────┬───────┘ │
+│        │             │               │          │
+│  ┌─────▼─────────────▼───────────────▼──────┐  │
+│  │           <span class="c-cyan">System Call Interface</span>             │  │
+├──┴───────────────────────────────────────────┴──┤
+│              <span class="c-orange">KERNEL SPACE</span>                      │
+│  ┌────────────┐ ┌──────────┐ ┌──────────────┐  │
+│  │  Process   │ │  Memory  │ │   File Sys   │  │
+│  │  Manager   │ │  Manager │ │   Manager    │  │
+│  └────────────┘ └──────────┘ └──────────────┘  │
+│  ┌──────────────────────────────────────────┐   │
+│  │         <span class="c-green">Device Drivers</span>                   │   │
+└──┴──────────────────────────────────────────┴───┘
+              <span class="c-purple">HARDWARE</span> (CPU, RAM, Disk, NIC)
+
+<span class="c-dim"># Key concept: Kernel runs in Ring 0 (highest privilege)
+# User apps run in Ring 3 (lowest privilege)
+# Malware that reaches kernel = rootkit (very dangerous)</span></pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>File Permission System (Linux Example)</h3>
+        <div class="code-block">
+          <div class="code-label">LINUX PERMISSIONS</div>
+          <pre><span class="c-dim"># Command: ls -la</span>
+<span class="c-green">-rwxr-xr--</span>  2  alice  staff  4096  Mar 15  password_checker.py
+
+<span class="c-yellow">Position:  -  rwx  r-x  r--</span>
+           │   │    │    └── Others: read only
+           │   │    └─────── Group:  read + execute
+           │   └──────────── Owner:  read + write + execute
+           └──────────────── File type (- = file, d = directory)
+
+<span class="c-dim"># Numeric representation (chmod):</span>
+<span class="c-cyan">r=4, w=2, x=1</span>
+chmod <span class="c-orange">755</span> file  →  <span class="c-green">rwx</span> <span class="c-blue">r-x</span> <span class="c-dim">r-x</span>  (owner=7, group=5, others=5)
+chmod <span class="c-orange">600</span> file  →  <span class="c-green">rw-</span> <span class="c-dim">--- ---</span>  (owner only — use for private keys!)
+
+<span class="c-red"># BAD PRACTICE (never do this):</span>
+chmod 777 /var/www/html  →  EVERYONE can read, write, execute!</pre>
+        </div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>What <code>chmod</code> number would give owner read+write, group read only, others no permissions?</li>
+          <li>An attacker gains kernel-level access. What can they do that a normal user-space attacker cannot?</li>
+          <li>List three ways an OS protects one process from interfering with another.</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>The OS is the gatekeeper of all system resources. Compromising the OS kernel grants an attacker complete control over the machine. This is why privilege escalation attacks — gaining admin/root access — are among the most dangerous exploits.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 20 ========================== -->
+  <div class="section" id="t20">
+    <div class="section-header">
+      <span class="sec-num">Topic 20</span>
+      <h2>Types of Operating Systems</h2>
+      <span class="section-emoji">🐧</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>Major OS Types</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>OS Type</th><th>Examples</th><th>Use Case</th><th>Security Profile</th></tr></thead>
+            <tbody>
+              <tr><td>Desktop / PC</td><td>Windows 11, macOS, Ubuntu Desktop</td><td>Personal/work computers</td><td>Largest malware target (Windows esp.)</td></tr>
+              <tr><td>Server</td><td>Windows Server, Ubuntu Server, RHEL</td><td>Hosting websites, databases, email</td><td>Hardened, minimal GUI, patched aggressively</td></tr>
+              <tr><td>Mobile</td><td>Android, iOS, HarmonyOS</td><td>Smartphones, tablets</td><td>Sandboxed apps; high surveillance risk</td></tr>
+              <tr><td>Embedded</td><td>FreeRTOS, VxWorks, QNX</td><td>Routers, IoT, medical devices, cars</td><td>Rarely updated — highest IoT vulnerability</td></tr>
+              <tr><td>Real-Time (RTOS)</td><td>VxWorks, RTLinux</td><td>Industrial control, avionics</td><td>Stuxnet targeted RTOS (SCADA/ICS)</td></tr>
+              <tr><td>Security-Focused</td><td>Kali Linux, Tails, Qubes OS</td><td>Pen testing, privacy, isolation</td><td>Built specifically for security work</td></tr>
+              <tr><td>Hypervisor / VM</td><td>VMware ESXi, Hyper-V, KVM</td><td>Cloud, virtualisation</td><td>VM escape attacks (rare but critical)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Windows vs Linux vs macOS Security</h3>
+        <div class="compare-grid">
+          <div class="compare-panel blue">
+            <h4>🪟 Windows</h4>
+            <ul>
+              <li>~75% desktop market share = #1 malware target</li>
+              <li>Active Directory for enterprise identity</li>
+              <li>Many legacy applications = old vulnerabilities</li>
+              <li>Windows Defender built-in AV</li>
+              <li>SMB protocol historically exploited (WannaCry)</li>
+            </ul>
+          </div>
+          <div class="compare-panel orange">
+            <h4>🐧 Linux</h4>
+            <ul>
+              <li>Open source — community audited</li>
+              <li>Dominates servers (90%+ of web servers)</li>
+              <li>Fine-grained permissions (everything is a file)</li>
+              <li>Fewer consumer malware, but targeted by APTs</li>
+              <li>Kali Linux = standard pen-testing OS</li>
+            </ul>
+          </div>
+        </div>
+        <div class="compare-grid" style="margin-top:10px">
+          <div class="compare-panel green">
+            <h4>🍎 macOS</h4>
+            <ul>
+              <li>Unix-based — inherits Linux security model</li>
+              <li>Growing malware target as market share rises</li>
+              <li>Gatekeeper prevents unsigned app installation</li>
+              <li>SIP (System Integrity Protection) blocks rootkits</li>
+            </ul>
+          </div>
+          <div class="compare-panel purple">
+            <h4>📱 Android vs iOS</h4>
+            <ul>
+              <li>Android: open, more malware risk, APK sideloading</li>
+              <li>iOS: closed, App Store only, fewer vulnerabilities</li>
+              <li>Both: app sandboxing limits damage</li>
+              <li>Both: full disk encryption enabled by default</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>A hospital runs Windows XP on medical devices because upgrading is expensive. What security risks does this create? What can they do to reduce risk?</li>
+          <li>Why would a penetration tester choose Kali Linux over Windows for their work machine?</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>No OS is 100% secure. The "most secure" OS depends on the use case, how it's configured, and how actively it's patched. The most dangerous OS is always the one that's out of date and unpatched.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 21 ========================== -->
+  <div class="section" id="t21">
+    <div class="section-header">
+      <span class="sec-num">Topic 21</span>
+      <h2>File Systems</h2>
+      <span class="section-emoji">📁</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>Definition</h3>
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          A <strong>file system</strong> is the method and data structure an OS uses to organise, store, retrieve, and manage files on a storage device. It defines how data is named, stored, and accessed — and who can do what to it.
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Common File Systems</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>File System</th><th>OS</th><th>Max File Size</th><th>Features</th><th>Security Notes</th></tr></thead>
+            <tbody>
+              <tr><td>NTFS</td><td>Windows</td><td>16 EB</td><td>Permissions, encryption (EFS), journaling, ADS</td><td>ADS can hide malware in alternate data streams</td></tr>
+              <tr><td>FAT32</td><td>USB drives</td><td>4 GB</td><td>Universal compatibility, simple</td><td>No permissions — anyone can read/write everything</td></tr>
+              <tr><td>exFAT</td><td>USB/SD cards</td><td>16 EB</td><td>Large files, no journaling</td><td>No access control — data exposed if lost</td></tr>
+              <tr><td>ext4</td><td>Linux</td><td>16 TB</td><td>Journaling, permissions, mature</td><td>Strong Unix permissions; supports SELinux labels</td></tr>
+              <tr><td>APFS</td><td>macOS/iOS</td><td>8 EB</td><td>Snapshots, encryption, cloning</td><td>Full encryption at rest, copy-on-write</td></tr>
+              <tr><td>ZFS</td><td>Linux/FreeBSD</td><td>256 ZB</td><td>Data integrity checksums, snapshots, RAID-Z</td><td>Detects silent data corruption; excellent for forensics</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Directory Structure</h3>
+        <div class="code-block">
+          <div class="code-label">FILE SYSTEM PATHS</div>
+          <pre><span class="c-cyan"># Windows (NTFS) — backslash separator</span>
+<span class="c-yellow">C:\</span>                    ← Root (C drive)
+<span class="c-yellow">C:\Windows\System32\</span>   ← OS system files (protect this!)
+<span class="c-yellow">C:\Users\Alice\</span>        ← User home directory
+<span class="c-yellow">C:\Program Files\</span>      ← Installed applications
+
+<span class="c-cyan"># Linux (ext4) — forward slash separator</span>
+<span class="c-green">/</span>                  ← Root (everything starts here)
+<span class="c-green">/etc/</span>              ← System config files (passwd, shadow, hosts)
+<span class="c-green">/home/alice/</span>       ← User home directory
+<span class="c-green">/var/log/</span>          ← System logs (security logs live here!)
+<span class="c-green">/tmp/</span>              ← Temporary files (often used by malware!)
+<span class="c-green">/etc/shadow</span>        ← <span class="c-red">Hashed passwords — NEVER world-readable!</span>
+
+<span class="c-dim"># Attacker's interest:</span>
+<span class="c-red">C:\Windows\SAM</span>     ← Windows password hashes
+<span class="c-red">/etc/shadow</span>        ← Linux password hashes
+<span class="c-red">~/.ssh/id_rsa</span>      ← Private SSH keys</pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>NTFS Alternate Data Streams (ADS) — Steganography Attack</h3>
+        <div class="info-box red">
+          <span class="box-icon">🚨</span>
+          <div><strong>NTFS ADS Attack:</strong> Windows NTFS allows files to have "hidden streams" attached. Malware can hide itself inside a legitimate file's ADS. E.g., <code>notepad.exe:malware.exe</code> — antivirus may miss this! Detection: use <code>dir /r</code> or tools like Streams.exe.</div>
+        </div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>Why is FAT32 dangerous for a USB drive containing sensitive work documents?</li>
+          <li>An attacker gains read access to <code>/etc/shadow</code>. What can they do with it? What attack follows?</li>
+          <li>Which file system would you choose for a forensics evidence server and why?</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>File systems are not just about organisation — they are critical security boundaries. Misconfigurations (world-readable sensitive files, no encryption on USB drives) are among the easiest vulnerabilities for attackers to exploit.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 22 ========================== -->
+  <div class="section" id="t22">
+    <div class="section-header">
+      <span class="sec-num">Topic 22</span>
+      <h2>Process &amp; Memory Management</h2>
+      <span class="section-emoji">🧠</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>Process Management</h3>
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          A <strong>process</strong> is a program in execution. It has its own memory space, CPU time, and resources. The OS manages the lifecycle of processes from creation to termination.
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Process State</th><th>Description</th><th>Security Implication</th></tr></thead>
+            <tbody>
+              <tr><td>New</td><td>Process being created</td><td>Process injection at creation time</td></tr>
+              <tr><td>Ready</td><td>Waiting for CPU time</td><td>Scheduler manipulation</td></tr>
+              <tr><td>Running</td><td>Currently executing on CPU</td><td>Memory scraping (POS malware)</td></tr>
+              <tr><td>Waiting</td><td>Blocked waiting for I/O</td><td>Race conditions (TOCTOU attacks)</td></tr>
+              <tr><td>Terminated</td><td>Finished execution</td><td>Memory not cleared = data leakage</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Memory Layout &amp; Buffer Overflow Attack</h3>
+        <div class="code-block">
+          <div class="code-label">MEMORY LAYOUT &amp; BUFFER OVERFLOW</div>
+          <pre><span class="c-dim"># Program memory layout (stack grows down):</span>
+┌─────────────────────────────┐  HIGH ADDRESS
+│  <span class="c-purple">Command Line Args / Env Vars</span> │
+├─────────────────────────────┤
+│         <span class="c-orange">Stack</span>               │  ← grows downward ↓
+│   (local variables, return  │
+│    addresses, stack frames) │  <span class="c-red">← BUFFER OVERFLOW TARGET</span>
+├─────────────────────────────┤
+│           ↕ gap             │
+├─────────────────────────────┤
+│          <span class="c-cyan">Heap</span>               │  ← grows upward ↑
+│   (dynamically allocated)   │
+├─────────────────────────────┤
+│   <span class="c-green">BSS Segment</span> (uninitialized)│
+├─────────────────────────────┤
+│  <span class="c-green">Data Segment</span> (global vars) │
+├─────────────────────────────┤
+│    <span class="c-blue">Text Segment</span> (code)       │
+└─────────────────────────────┘  LOW ADDRESS
+
+<span class="c-dim"># Buffer Overflow Example (C — vulnerable code):</span>
+<span class="c-red">char buffer[8];  // only 8 bytes allocated
+strcpy(buffer, user_input);  // NO bounds check!</span>
+
+<span class="c-dim"># If attacker sends 20 bytes:</span>
+<span class="c-orange">AAAAAAAA</span><span class="c-red">AAAAAAAAAAAA</span>  ← overflow overwrites return address!
+<span class="c-orange">buffer  </span><span class="c-red">↑ OVERWRITES saved RIP → attacker controls code flow</span>
+
+<span class="c-green"># Defences:</span>
+ASLR  = randomize memory addresses (makes overflow harder)
+DEP   = Data Execution Prevention (stack not executable)
+Stack Canaries = detect overflow before return
+Safe functions: strncpy(), snprintf() instead of strcpy(), sprintf()</pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Virtual Memory &amp; Paging</h3>
+        <div class="info-box blue">
+          <span class="box-icon">💡</span>
+          <div><strong>Virtual Memory:</strong> The OS gives each process the illusion it has its own private memory space. Physical RAM is divided into 4KB "pages" mapped to virtual addresses. When RAM is full, infrequently used pages are moved to disk (swap/pagefile). <strong>Security benefit:</strong> process isolation — Process A cannot read Process B's memory directly.</div>
+        </div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>What is a buffer overflow attack? Name one famous vulnerability caused by it.</li>
+          <li>Why does virtual memory improve security even if it doesn't add encryption?</li>
+          <li>An attacker writes a program that fills a 256-byte input field with 512 'A' characters. What vulnerability are they testing for?</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>Memory is where all running code lives — it's the battlefield of exploitation. Buffer overflows were responsible for decades of critical vulnerabilities. Modern defences (ASLR, DEP, canaries) have made exploitation harder but not impossible.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 23 ========================== -->
+  <div class="section-group-title">🌐 Internet &amp; Networking</div>
+  <div class="section" id="t23">
+    <div class="section-header">
+      <span class="sec-num">Topic 23</span>
+      <h2>Internet Basics</h2>
+      <span class="section-emoji">🌐</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>What is the Internet?</h3>
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          The <strong>Internet</strong> is a global system of interconnected computer networks that communicate using a standardised protocol suite (TCP/IP). It is not owned by any single entity — it is a <strong>network of networks</strong> connecting billions of devices worldwide.
+        </div>
+        <div class="compare-grid">
+          <div class="compare-panel blue">
+            <h4>🌐 Internet</h4>
+            <ul>
+              <li>Global public network</li>
+              <li>Anyone can connect (with ISP)</li>
+              <li>Carries all types of traffic (email, web, video)</li>
+              <li>Not owned by anyone</li>
+              <li>Routes data around failures (designed for nuclear war)</li>
+            </ul>
+          </div>
+          <div class="compare-panel orange">
+            <h4>🕸️ Web (WWW)</h4>
+            <ul>
+              <li>Service <em>running on</em> the Internet</li>
+              <li>HTTP/HTTPS websites and pages</li>
+              <li>Invented by Tim Berners-Lee (1989, CERN)</li>
+              <li>Requires a browser to navigate</li>
+              <li>Web ≠ Internet (email ≠ web, but uses internet)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Key Internet Concepts</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Term</th><th>Definition</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>IP Address</td><td>Numerical label identifying a device on a network</td><td>192.168.1.1 (IPv4), ::1 (IPv6 localhost)</td></tr>
+              <tr><td>Domain Name</td><td>Human-readable name mapped to an IP via DNS</td><td>google.com → 142.250.80.46</td></tr>
+              <tr><td>ISP</td><td>Internet Service Provider — connects you to internet</td><td>BT, Virgin Media, Comcast, Jio</td></tr>
+              <tr><td>Bandwidth</td><td>Maximum data transfer rate of a connection</td><td>100 Mbps fibre broadband</td></tr>
+              <tr><td>Latency</td><td>Time for data to travel from source to destination</td><td>10ms (gaming), 200ms (satellite)</td></tr>
+              <tr><td>Packet</td><td>Unit of data transmitted over a network</td><td>Max 1500 bytes on Ethernet (MTU)</td></tr>
+              <tr><td>Router</td><td>Directs packets between networks using routing tables</td><td>Home router, BGP routers at ISP</td></tr>
+              <tr><td>Firewall</td><td>Filters network traffic based on rules</td><td>iptables, Windows Firewall, Palo Alto</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>IPv4 vs IPv6</h3>
+        <div class="code-block">
+          <div class="code-label">IP ADDRESSING</div>
+          <pre><span class="c-cyan">IPv4</span>  (32-bit, ~4.3 billion addresses — EXHAUSTED!)
+Format:  <span class="c-yellow">192.168.1.100</span>    (4 octets, 0–255 each)
+Private: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
+Special: 127.0.0.1 = loopback (localhost)
+
+<span class="c-cyan">IPv6</span>  (128-bit, 340 undecillion addresses)
+Format:  <span class="c-green">2001:0db8:85a3:0000:0000:8a2e:0370:7334</span>
+Short:   <span class="c-green">2001:db8:85a3::8a2e:370:7334</span>  (:: = zeros)
+Special: ::1 = loopback
+
+<span class="c-dim"># CIDR Notation (subnet masks)</span>
+<span class="c-orange">192.168.1.0/24</span>  → 256 addresses (192.168.1.0 — 192.168.1.255)
+<span class="c-orange">10.0.0.0/8</span>      → 16.7 million addresses
+
+<span class="c-dim"># Security note: NAT hides internal IPs from internet
+# IPv6 = every device gets a public IP → new attack surface</span></pre>
+        </div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>What is the difference between the Internet and the World Wide Web? Give two examples of Internet services that are NOT the web.</li>
+          <li>Your home IP is 192.168.1.5. Is this visible on the internet? Why or why not?</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>The Internet was built for resilience and openness, not security. This fundamental design choice — trusting by default — is why cybersecurity exists as a field. Every connection is a potential attack vector.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 24 ========================== -->
+  <div class="section" id="t24">
+    <div class="section-header">
+      <span class="sec-num">Topic 24</span>
+      <h2>How the Internet Works</h2>
+      <span class="section-emoji">📡</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>TCP/IP Protocol Suite</h3>
+        <p>All internet communication uses <strong>TCP/IP</strong> — a set of rules (protocols) governing how data is packaged, addressed, transmitted, routed, and received.</p>
+        <div class="osi-layers">
+          <div class="osi-layer"><span class="l-num">7</span><span class="l-name">Application</span><span class="l-desc">HTTP, HTTPS, FTP, SMTP, DNS, SSH — user-facing protocols</span></div>
+          <div class="osi-layer"><span class="l-num">6</span><span class="l-name">Presentation</span><span class="l-desc">Encryption/decryption (SSL/TLS), data formatting (JSON, XML)</span></div>
+          <div class="osi-layer"><span class="l-num">5</span><span class="l-name">Session</span><span class="l-desc">Manages connections and sessions between apps</span></div>
+          <div class="osi-layer"><span class="l-num">4</span><span class="l-name">Transport</span><span class="l-desc">TCP (reliable, ordered) | UDP (fast, no guarantee) — ports here</span></div>
+          <div class="osi-layer"><span class="l-num">3</span><span class="l-name">Network</span><span class="l-desc">IP addressing &amp; routing — packets, routers, ICMP</span></div>
+          <div class="osi-layer"><span class="l-num">2</span><span class="l-name">Data Link</span><span class="l-desc">MAC addresses, Ethernet frames, switches</span></div>
+          <div class="osi-layer"><span class="l-num">1</span><span class="l-name">Physical</span><span class="l-desc">Cables, radio waves, fibre optic — actual bits as signals</span></div>
+        </div>
+        <div class="info-box orange">
+          <span class="box-icon">🧠</span>
+          <span><strong>Memory trick:</strong> "All People Seem To Need Data Processing" (Application, Presentation, Session, Transport, Network, Data Link, Physical) — or in reverse "Please Do Not Throw Sausage Pizza Away"</span>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>What Happens When You Visit a Website</h3>
+        <div class="flowchart">
+          <div class="flow-node start">You type: https://google.com</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">1️⃣ DNS Lookup: google.com → 142.250.80.46</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">2️⃣ TCP 3-Way Handshake with 142.250.80.46:443</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">3️⃣ TLS Handshake — certificates verified, session key exchanged</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">4️⃣ HTTP GET / request sent (encrypted)</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">5️⃣ Server responds with HTTP 200 + HTML</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">6️⃣ Browser renders HTML, loads CSS/JS/Images</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node end">Page displayed to user (~50–200ms)</div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>TCP vs UDP</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Feature</th><th>TCP</th><th>UDP</th></tr></thead>
+            <tbody>
+              <tr><td>Connection</td><td>Connection-oriented (3-way handshake)</td><td>Connectionless</td></tr>
+              <tr><td>Reliability</td><td>Guaranteed delivery, ordered packets</td><td>Best-effort, packets can be lost</td></tr>
+              <tr><td>Speed</td><td>Slower (overhead)</td><td>Faster (no overhead)</td></tr>
+              <tr><td>Use cases</td><td>HTTP, HTTPS, SSH, email, file transfer</td><td>DNS, VoIP, gaming, video streaming</td></tr>
+              <tr><td>Attack risk</td><td>SYN flood (exhaust half-open connections)</td><td>UDP flood (DDoS amplification)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>At which OSI layer does a firewall typically operate? What about a switch? A proxy?</li>
+          <li>A SYN flood attack sends millions of SYN packets but never completes the handshake. At which OSI layer does this attack occur and why is it effective?</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>The OSI model is the cybersecurity professional's map. Every attack can be located on this model, and defences are designed layer by layer. Know where an attack lives in the OSI model and you'll know what tools to use against it.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 25 ========================== -->
+  <div class="section" id="t25">
+    <div class="section-header">
+      <span class="sec-num">Topic 25</span>
+      <h2>Client–Server Model</h2>
+      <span class="section-emoji">🖧</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>Definition</h3>
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          The <strong>client–server model</strong> is a distributed application structure where the <strong>client</strong> (requester) sends requests to a <strong>server</strong> (provider), which processes them and returns a response. The internet is built almost entirely on this model.
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>How it Works</h3>
+        <div class="code-block">
+          <div class="code-label">CLIENT-SERVER COMMUNICATION</div>
+          <pre><span class="c-cyan">CLIENT</span>                              <span class="c-orange">SERVER</span>
+(Your Browser)                      (Web Server - Apache/Nginx)
+     │                                    │
+     │  ──── HTTP GET /index.html ────▶  │
+     │                                    │  Process request
+     │  ◀──── HTTP 200 OK + HTML ─────   │  Send response
+     │                                    │
+     │  ──── HTTP GET /style.css ─────▶  │
+     │  ◀──── HTTP 200 OK + CSS ──────   │
+     │                                    │
+<span class="c-dim"># Port numbers identify which service to connect to:</span>
+Port <span class="c-yellow">80</span>   → HTTP (web, unencrypted)
+Port <span class="c-yellow">443</span>  → HTTPS (web, encrypted)
+Port <span class="c-yellow">22</span>   → SSH (secure shell)
+Port <span class="c-yellow">21</span>   → FTP (file transfer — avoid, unencrypted!)
+Port <span class="c-yellow">25</span>   → SMTP (email sending)
+Port <span class="c-yellow">53</span>   → DNS (domain name lookup)
+Port <span class="c-yellow">3306</span> → MySQL database
+Port <span class="c-yellow">3389</span> → RDP (Remote Desktop Protocol — frequent attack target!)</pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Attack Surface of Client-Server</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Target</th><th>Common Attack</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Client (browser)</td><td>XSS, malicious scripts, drive-by download</td><td>Injected JS steals session cookie</td></tr>
+              <tr><td>Network (between)</td><td>Man-in-the-Middle (MitM), packet sniffing</td><td>Unencrypted HTTP → attacker reads passwords</td></tr>
+              <tr><td>Server (web app)</td><td>SQL injection, RCE, path traversal</td><td>SQLi dumps entire user database</td></tr>
+              <tr><td>Server (OS)</td><td>Unpatched CVEs, brute force SSH</td><td>Attackers scan port 22 for weak passwords</td></tr>
+              <tr><td>Database</td><td>SQLi, credential stuffing, data exfiltration</td><td>2013 Adobe breach — 153M user records</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>When you log into your bank's website, which component is the client and which is the server? What port does the connection use?</li>
+          <li>Why is port 3389 (RDP) dangerous if left open to the internet? What happened in the BlueKeep vulnerability?</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>Attackers target every layer of the client-server relationship. Defence must cover the client (browser security), the channel (encryption/HTTPS), and the server (patching, WAF, input validation). Security is only as strong as the weakest link.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 26 ========================== -->
+  <div class="section" id="t26">
+    <div class="section-header">
+      <span class="sec-num">Topic 26</span>
+      <h2>Web Browsers &amp; Search Engines</h2>
+      <span class="section-emoji">🔍</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>How a Browser Works</h3>
+        <p>A web browser is a client application that retrieves, parses, and renders web content. Understanding how browsers work is fundamental to web security.</p>
+        <div class="flowchart-h">
+          <div class="flow-node-h">URL Entered</div>
+          <div class="flow-arrow-h">→</div>
+          <div class="flow-node-h">DNS Resolve</div>
+          <div class="flow-arrow-h">→</div>
+          <div class="flow-node-h">HTTP Request</div>
+          <div class="flow-arrow-h">→</div>
+          <div class="flow-node-h">HTML Parsed → DOM</div>
+          <div class="flow-arrow-h">→</div>
+          <div class="flow-node-h">CSS Applied</div>
+          <div class="flow-arrow-h">→</div>
+          <div class="flow-node-h">JS Executed</div>
+          <div class="flow-arrow-h">→</div>
+          <div class="flow-node-h">Page Rendered</div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Browser Security Features</h3>
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-icon">🏖️</div>
+            <div class="card-title">Sandbox</div>
+            <div class="card-desc">Each browser tab runs in an isolated sandbox. JavaScript cannot access your filesystem, OS, or other tabs' data.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔒</div>
+            <div class="card-title">Same-Origin Policy</div>
+            <div class="card-desc">JavaScript on evil.com cannot read data from bank.com. Prevents cross-site data theft. CORS relaxes this when needed.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🚨</div>
+            <div class="card-title">Safe Browsing</div>
+            <div class="card-desc">Google/Firefox maintain blocklists of phishing/malware sites. Browser warns before visiting dangerous URLs.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">📜</div>
+            <div class="card-title">CSP Headers</div>
+            <div class="card-desc">Content Security Policy: server tells browser which sources are allowed to load scripts, images, etc. Prevents XSS.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🍪</div>
+            <div class="card-title">Cookie Controls</div>
+            <div class="card-desc">Browsers enforce SameSite, Secure, HttpOnly cookie flags to prevent theft and CSRF attacks.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔐</div>
+            <div class="card-title">HTTPS Enforcement</div>
+            <div class="card-desc">HSTS (HTTP Strict Transport Security) forces browsers to always use HTTPS for a site, preventing downgrade attacks.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Browser Fingerprinting — Privacy Attack</h3>
+        <div class="info-box purple">
+          <span class="box-icon">👁️</span>
+          <div><strong>Browser Fingerprinting:</strong> Websites can identify you without cookies by combining: screen resolution, installed fonts, browser plugins, timezone, language, canvas rendering, WebGL data. Panopticlick found 83% of browsers had a unique fingerprint. Used by ad trackers and criminals to track users across sites even in "incognito" mode.</div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Search Engines &amp; OSINT</h3>
+        <div class="code-block">
+          <div class="code-label">GOOGLE DORK EXAMPLES (OSINT)</div>
+          <pre><span class="c-dim"># Google "dorks" — advanced search operators used in reconnaissance:</span>
+<span class="c-orange">site:target.com</span>          → Find all indexed pages of a domain
+<span class="c-orange">filetype:pdf site:gov.uk</span>  → Find PDF files on government sites
+<span class="c-orange">intitle:"index of"</span>        → Find exposed directory listings
+<span class="c-orange">inurl:admin login</span>         → Find admin login pages
+<span class="c-orange">"password" filetype:txt</span>  → Find exposed password files
+<span class="c-orange">site:linkedin.com "Company Name"</span> → Find employee names
+
+<span class="c-red"># WARNING: Google dorking against targets without permission
+# can be illegal. Use only on your own systems or with consent.</span>
+
+<span class="c-green"># Shodan.io — search engine for internet-connected devices:</span>
+<span class="c-yellow">port:3389</span>      → Find all RDP servers exposed to internet
+<span class="c-yellow">os:"Windows XP"</span> → Find ancient unpatched systems
+<span class="c-yellow">default password</span> → Find devices with factory passwords</pre>
+        </div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>What is the Same-Origin Policy? Give an example of an attack it prevents.</li>
+          <li>Use a Google dork to find publicly exposed login pages on a fictional company website "acme.com". Write the search query.</li>
+          <li>What browser security feature prevents a script from evil.com reading your session token from bank.com?</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>Browsers are both gateways to the internet and significant attack surfaces. Modern browsers include robust security features — but attackers exploit misconfigurations (bad CSP, missing HttpOnly flags) and browser bugs. Keep your browser updated; it's patched constantly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 27 ========================== -->
+  <div class="section-group-title">🔗 Web Protocols</div>
+  <div class="section" id="t27">
+    <div class="section-header">
+      <span class="sec-num">Topic 27</span>
+      <h2>HTTP Protocol</h2>
+      <span class="section-emoji">📨</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>Definition</h3>
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          <strong>HTTP (HyperText Transfer Protocol)</strong> is the foundation of web communication. It defines how messages are formatted and transmitted between clients and servers. HTTP is <strong>stateless</strong> (each request is independent) and <strong>plaintext</strong> (data is readable by anyone intercepting the connection).
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>HTTP Request Structure</h3>
+        <div class="code-block">
+          <div class="code-label">HTTP REQUEST</div>
+          <pre><span class="c-orange">GET</span> <span class="c-cyan">/login.php?user=alice</span> <span class="c-yellow">HTTP/1.1</span>
+<span class="c-green">Host:</span> www.example.com
+<span class="c-green">User-Agent:</span> Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+<span class="c-green">Accept:</span> text/html,application/xhtml+xml
+<span class="c-green">Cookie:</span> session=abc123def456
+<span class="c-green">Connection:</span> keep-alive
+<span class="c-dim">(blank line)</span>
+<span class="c-purple">[Optional Request Body — used in POST/PUT requests]</span>
+
+<span class="c-dim">Method │ URL/Path │ HTTP Version
+Headers (key: value pairs)
+Body (for POST/PUT)</span></pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>HTTP Methods</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Method</th><th>Purpose</th><th>Data Location</th><th>Security Note</th></tr></thead>
+            <tbody>
+              <tr><td>GET</td><td>Retrieve data from server</td><td>URL query string</td><td>Parameters visible in URL, browser history, logs</td></tr>
+              <tr><td>POST</td><td>Submit data to server</td><td>Request body</td><td>Data not in URL, but still plaintext over HTTP</td></tr>
+              <tr><td>PUT</td><td>Update/replace a resource</td><td>Request body</td><td>Dangerous if unauthenticated — allows file upload</td></tr>
+              <tr><td>DELETE</td><td>Delete a resource</td><td>URL</td><td>Must be protected with authentication</td></tr>
+              <tr><td>OPTIONS</td><td>Query allowed methods</td><td>URL</td><td>Attackers use to enumerate allowed verbs</td></tr>
+              <tr><td>HEAD</td><td>GET but response body only</td><td>URL</td><td>Used in recon — reveal server version headers</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>HTTP Response Status Codes</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Code</th><th>Meaning</th><th>Security Relevance</th></tr></thead>
+            <tbody>
+              <tr><td>200 OK</td><td>Success</td><td>Page exists and returned</td></tr>
+              <tr><td>301/302</td><td>Redirect</td><td>Redirect attacks, open redirects</td></tr>
+              <tr><td>400</td><td>Bad Request</td><td>Malformed input — could indicate SQLi attempt detected</td></tr>
+              <tr><td>401</td><td>Unauthorised</td><td>Authentication required</td></tr>
+              <tr><td>403</td><td>Forbidden</td><td>File exists but access denied — confirms path exists</td></tr>
+              <tr><td>404</td><td>Not Found</td><td>Confirms path doesn't exist — useful for attackers mapping site</td></tr>
+              <tr><td>500</td><td>Internal Server Error</td><td>Server crash — may reveal error details (info disclosure)</td></tr>
+              <tr><td>503</td><td>Service Unavailable</td><td>Possible DDoS attack in progress</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Why HTTP is Dangerous (Unencrypted)</h3>
+        <div class="code-block">
+          <div class="code-label">INTERCEPTED HTTP (Wireshark Capture)</div>
+          <pre><span class="c-dim"># Attacker on same WiFi captures unencrypted HTTP:</span>
+POST /login HTTP/1.1
+Host: bank.example.com
+Content-Type: application/x-www-form-urlencoded
+
+<span class="c-red">username=alice&amp;password=SuperSecret123&amp;remember=true</span>
+                          <span class="c-red">↑ Password visible in plaintext!</span>
+
+<span class="c-dim"># This is why using HTTP (not HTTPS) on public WiFi
+# is extremely dangerous. Switch to HTTPS immediately.</span>
+
+<span class="c-dim"># HTTP Security Headers (best practice):</span>
+<span class="c-green">Strict-Transport-Security: max-age=31536000; includeSubDomains</span>
+<span class="c-green">X-Content-Type-Options: nosniff</span>
+<span class="c-green">X-Frame-Options: DENY</span>
+<span class="c-green">Content-Security-Policy: default-src 'self'</span></pre>
+        </div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>A login form uses GET method, putting username and password in the URL. Why is this a critical security flaw?</li>
+          <li>A server returns HTTP 500 with a detailed PHP error message showing database connection strings. What attack does this enable?</li>
+          <li>Write the HTTP request line to retrieve the admin panel at <code>/admin/dashboard</code> using HTTP/1.1.</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>HTTP is the language of the web — and it was designed for sharing documents, not security. Every parameter, every cookie, every form field sent over HTTP is visible to any network observer. <strong>HTTPS must be used for all real applications.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 28 ========================== -->
+  <div class="section" id="t28">
+    <div class="section-header">
+      <span class="sec-num">Topic 28</span>
+      <h2>HTTPS &amp; SSL/TLS Basics</h2>
+      <span class="section-emoji">🔒</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>Definition</h3>
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          <strong>HTTPS</strong> (HTTP Secure) = HTTP + <strong>TLS</strong> (Transport Layer Security). TLS is the cryptographic protocol that provides three security guarantees: <strong>Confidentiality</strong> (encryption), <strong>Integrity</strong> (tamper detection), and <strong>Authentication</strong> (certificate verification). The old name "SSL" (Secure Sockets Layer) is deprecated but still used colloquially.
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>TLS Handshake — Step by Step</h3>
+        <div class="flowchart">
+          <div class="flow-node start">Client sends: ClientHello (TLS version, cipher suites, random number)</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">Server sends: ServerHello (chosen cipher suite) + Certificate</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">Client verifies certificate with Certificate Authority (CA)</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">Key exchange: both derive shared session key (using ECDHE)</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">Both send Finished message — handshake complete</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node end">🔐 All data now encrypted with AES-256 (symmetric)</div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>SSL/TLS Versions &amp; Vulnerabilities</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Version</th><th>Year</th><th>Status</th><th>Known Vulnerabilities</th></tr></thead>
+            <tbody>
+              <tr><td>SSL 2.0</td><td>1995</td><td style="color:#ff4466">BROKEN</td><td>DROWN attack — disable completely</td></tr>
+              <tr><td>SSL 3.0</td><td>1996</td><td style="color:#ff4466">BROKEN</td><td>POODLE attack — disable completely</td></tr>
+              <tr><td>TLS 1.0</td><td>1999</td><td style="color:#ff8c00">DEPRECATED</td><td>BEAST, CRIME — PCI-DSS banned since 2018</td></tr>
+              <tr><td>TLS 1.1</td><td>2006</td><td style="color:#ff8c00">DEPRECATED</td><td>Weak ciphers, all major browsers removed in 2021</td></tr>
+              <tr><td>TLS 1.2</td><td>2008</td><td style="color:#fbbf24">ACCEPTABLE</td><td>If configured correctly (no RC4, no CBC)</td></tr>
+              <tr><td>TLS 1.3</td><td>2018</td><td style="color:#22c55e">RECOMMENDED</td><td>Fastest, most secure, 1-RTT handshake, forward secrecy</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Digital Certificates &amp; PKI</h3>
+        <div class="code-block">
+          <div class="code-label">SSL CERTIFICATE ANATOMY</div>
+          <pre><span class="c-dim"># What's in an SSL certificate (X.509 format):</span>
+<span class="c-cyan">Subject:</span>        CN=*.google.com, O=Google LLC, C=US
+<span class="c-cyan">Issuer:</span>         CN=GTS CA 1C3, O=Google Trust Services LLC
+<span class="c-cyan">Valid From:</span>     2024-01-15
+<span class="c-cyan">Valid To:</span>       2024-04-08
+<span class="c-cyan">Public Key:</span>     RSA 2048-bit / EC 256-bit
+<span class="c-cyan">Signature:</span>     SHA-256 with RSA  (signed by CA)
+<span class="c-cyan">SAN:</span>           *.google.com, google.com
+
+<span class="c-dim"># Certificate Trust Chain:</span>
+<span class="c-green">Root CA</span> (pre-installed in OS/browser)
+  └─▶ <span class="c-yellow">Intermediate CA</span>
+        └─▶ <span class="c-orange">Website Certificate</span> (google.com)
+
+<span class="c-red"># Certificate Attacks:</span>
+- <span class="c-red">Fake/self-signed cert</span> → Browser shows warning (heed it!)
+- <span class="c-red">Expired cert</span>        → Connection should be refused
+- <span class="c-red">Certificate pinning</span> → App checks specific cert fingerprint
+- <span class="c-red">CA compromise</span>      → DigiNotar (2011) — Iranian gov issued fake Google certs</pre>
+        </div>
+      </div>
+
+      <div class="info-box green">
+        <span class="box-icon">✅</span>
+        <div><strong>Free Certificates:</strong> Let's Encrypt (letsencrypt.org) provides free, automated TLS certificates, removing the excuse of "it's too expensive to use HTTPS." In 2024, ~82% of all web traffic is encrypted with HTTPS.</div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>What is the difference between symmetric and asymmetric encryption in TLS? Which is used for the key exchange and which for bulk data transfer?</li>
+          <li>A bank's website shows a padlock 🔒 but the certificate is from "PayPal-Security.suspicious-domain.com". Is this safe? Explain.</li>
+          <li>What is "forward secrecy" (Perfect Forward Secrecy) in TLS 1.3, and why does it matter?</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>HTTPS is non-negotiable for any site handling user data. A padlock icon does NOT mean a site is safe — it only means the connection is encrypted. The certificate must be from a trusted CA, the site content must be legitimate, and TLS 1.2+ must be used.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 29 ========================== -->
+  <div class="section" id="t29">
+    <div class="section-header">
+      <span class="sec-num">Topic 29</span>
+      <h2>Cookies &amp; Sessions</h2>
+      <span class="section-emoji">🍪</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>Definitions</h3>
+        <div class="compare-grid">
+          <div class="compare-panel blue">
+            <h4>🍪 Cookies</h4>
+            <p style="font-size:0.85rem;color:#a0bcd8;margin-bottom:8px">Small text files stored by browser, sent with every request to the domain that set them.</p>
+            <ul>
+              <li>Set by server via <code>Set-Cookie</code> header</li>
+              <li>Sent by browser via <code>Cookie</code> header</li>
+              <li>Can persist after browser closes (persistent)</li>
+              <li>Used for sessions, preferences, tracking</li>
+              <li>Max ~4KB per cookie</li>
+            </ul>
+          </div>
+          <div class="compare-panel orange">
+            <h4>🎫 Sessions</h4>
+            <p style="font-size:0.85rem;color:#a0bcd8;margin-bottom:8px">Server-side mechanism to remember state across stateless HTTP requests.</p>
+            <ul>
+              <li>Server stores session data (username, cart, role)</li>
+              <li>Client receives only a session ID (random token)</li>
+              <li>Ends when browser closes or times out</li>
+              <li>Session ID typically stored in a cookie</li>
+              <li>Invalidated on logout</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Cookie Security Flags</h3>
+        <div class="code-block">
+          <div class="code-label">SECURE COOKIE HEADER</div>
+          <pre><span class="c-dim"># Insecure cookie (vulnerable):</span>
+<span class="c-red">Set-Cookie: session=abc123</span>
+
+<span class="c-dim"># Secure cookie (hardened):</span>
+<span class="c-green">Set-Cookie: session=abc123; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600</span>
+
+<span class="c-dim">Flag explanation:</span>
+<span class="c-cyan">HttpOnly</span>    → JavaScript CANNOT read this cookie (prevents XSS cookie theft)
+<span class="c-cyan">Secure</span>      → Cookie ONLY sent over HTTPS (prevents MitM theft)
+<span class="c-cyan">SameSite=Strict</span> → Cookie NOT sent in cross-site requests (prevents CSRF)
+<span class="c-cyan">Max-Age=3600</span>    → Cookie expires after 1 hour
+<span class="c-cyan">Path=/</span>          → Cookie valid for entire site
+
+<span class="c-dim"># Attack: Session Hijacking</span>
+1. Attacker steals session cookie (XSS, sniffing, MitM)
+2. Attacker sends request with stolen cookie
+3. Server thinks attacker IS the victim user
+4. <span class="c-red">Attacker has full account access!</span>
+
+<span class="c-dim"># Defense: Bind session to IP + User-Agent + use HttpOnly + Secure</span></pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>CSRF — Cross-Site Request Forgery</h3>
+        <div class="info-box red">
+          <span class="box-icon">⚠️</span>
+          <div><strong>CSRF Attack:</strong> Victim is logged into bank.com. Attacker tricks victim into clicking a link to <code>evil.com</code>, which secretly submits a form to <code>bank.com/transfer?amount=10000&amp;to=attacker</code>. Browser automatically sends the session cookie! Defence: <strong>CSRF tokens</strong> (secret value in form that attacker can't guess) + <strong>SameSite cookies</strong>.</div>
+        </div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>A cookie is set without the <code>HttpOnly</code> flag. Write the JavaScript an attacker could use to steal it via XSS.</li>
+          <li>Why does <code>SameSite=Strict</code> prevent CSRF attacks? What is the trade-off?</li>
+          <li>What is the difference between a session cookie and a persistent cookie?</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>Cookies power web authentication — and are among the most attacked web assets. Always set <code>HttpOnly</code>, <code>Secure</code>, and <code>SameSite</code> flags. Use short session timeouts. Invalidate sessions on logout. Never put sensitive data directly in a cookie.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 30 ========================== -->
+  <div class="section" id="t30">
+    <div class="section-header">
+      <span class="sec-num">Topic 30</span>
+      <h2>DNS Basics</h2>
+      <span class="section-emoji">📖</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>Definition</h3>
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          <strong>DNS (Domain Name System)</strong> is the internet's "phone book" — it translates human-readable domain names (like <em>google.com</em>) into IP addresses (like <em>142.250.80.46</em>) that computers use to route traffic. Without DNS, you'd have to remember the IP addresses of every website.
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>DNS Resolution Process</h3>
+        <div class="flowchart">
+          <div class="flow-node start">User types: www.example.com</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">1️⃣ Check local cache + /etc/hosts file</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">2️⃣ Query Recursive Resolver (your ISP's DNS, e.g. 8.8.8.8)</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">3️⃣ Resolver queries Root Server (13 root servers globally)</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">4️⃣ Root says: "Ask .com TLD nameserver"</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">5️⃣ TLD (.com) says: "Ask example.com's authoritative NS"</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node">6️⃣ Authoritative NS returns IP: 93.184.216.34</div>
+          <div class="flow-arrow"><div class="line"></div><div class="tip"></div></div>
+          <div class="flow-node end">Browser connects to 93.184.216.34:443</div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>DNS Record Types</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Record</th><th>Purpose</th><th>Example</th><th>Security Note</th></tr></thead>
+            <tbody>
+              <tr><td>A</td><td>Domain → IPv4 address</td><td>example.com → 93.184.216.34</td><td>Target of DNS spoofing</td></tr>
+              <tr><td>AAAA</td><td>Domain → IPv6 address</td><td>example.com → 2606:2800:220:1::/32</td><td>IPv6 attack surface</td></tr>
+              <tr><td>CNAME</td><td>Alias → another domain</td><td>www → example.com</td><td>Subdomain takeover risk</td></tr>
+              <tr><td>MX</td><td>Mail server for domain</td><td>mail.example.com</td><td>Attackers target for phishing domains</td></tr>
+              <tr><td>TXT</td><td>Text data (SPF, DKIM, verification)</td><td>v=spf1 include:google.com ~all</td><td>SPF/DKIM prevent email spoofing</td></tr>
+              <tr><td>NS</td><td>Nameserver for domain</td><td>ns1.cloudflare.com</td><td>NS hijacking = full domain takeover</td></tr>
+              <tr><td>PTR</td><td>Reverse DNS (IP → domain)</td><td>34.216.184.93.in-addr.arpa</td><td>Used in spam filtering</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>DNS Attacks</h3>
+        <div class="code-block">
+          <div class="code-label">DNS ATTACK TYPES</div>
+          <pre><span class="c-red">1. DNS Cache Poisoning (Kaminsky Attack 2008)</span>
+   Attacker injects fake DNS record into resolver's cache
+   Victim queries resolver → gets FAKE IP → visits attacker's server
+   Defence: DNSSEC (digitally signed DNS records), DNS-over-HTTPS (DoH)
+
+<span class="c-red">2. DNS Hijacking</span>
+   Malware changes your router's DNS server to attacker-controlled server
+   All DNS lookups return attacker's IPs
+   Defence: Router strong password, check DNS settings regularly
+
+<span class="c-red">3. DNS Amplification (DDoS)</span>
+   Attacker sends small DNS queries with spoofed source IP (victim's IP)
+   DNS servers send 50-100x larger responses to victim
+   3000 Gbps DDoS attacks have been launched this way
+   Defence: Rate limiting, response rate limiting (RRL), BCP38
+
+<span class="c-red">4. DNS Tunnelling</span>
+   Malware encodes C2 data in DNS queries (base64 encoded)
+   Bypasses firewall — DNS port 53 is almost always open!
+   Detection: Unusually long DNS hostnames, high DNS query volume
+
+<span class="c-green">Tools for DNS Recon:</span>
+<span class="c-cyan">nslookup example.com</span>    → Basic DNS query
+<span class="c-cyan">dig example.com ANY</span>      → All DNS records
+<span class="c-cyan">dig -x 93.184.216.34</span>     → Reverse DNS lookup
+<span class="c-cyan">fierce -dns example.com</span>  → Subdomain enumeration</pre>
+        </div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>What is DNS cache poisoning and how does DNSSEC prevent it?</li>
+          <li>An attacker buys the domain "paypa1.com" (with the number 1 instead of the letter l). What attack technique is this? How does DNS make this possible?</li>
+          <li>Why is DNS tunnelling hard to block with a standard firewall?</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>DNS is critical infrastructure — if an attacker controls your DNS, they control where all your traffic goes. Enable DNSSEC, use trusted DNS servers (1.1.1.1, 8.8.8.8), use DNS-over-HTTPS for privacy, and monitor for unusual DNS activity.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 31 ========================== -->
+  <div class="section" id="t31">
+    <div class="section-header">
+      <span class="sec-num">Topic 31</span>
+      <h2>Internet Security Basics</h2>
+      <span class="section-emoji">🛡️</span>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <h3>Core Internet Security Controls</h3>
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-icon">🔥</div>
+            <div class="card-title">Firewall</div>
+            <div class="card-desc">Filters traffic based on rules (IP, port, protocol). <strong>Stateful firewalls</strong> track connection state. <strong>NGFW</strong> does deep packet inspection. Block inbound by default; allow outbound selectively.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🕵️</div>
+            <div class="card-title">IDS / IPS</div>
+            <div class="card-desc"><strong>IDS</strong> = detects attacks, alerts only. <strong>IPS</strong> = detects AND blocks. Signature-based (known attacks) vs anomaly-based (unusual behaviour). Snort, Suricata, Zeek.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🌐</div>
+            <div class="card-title">VPN</div>
+            <div class="card-desc">Virtual Private Network — encrypts all traffic between device and VPN server. Hides real IP, protects on public WiFi. Not a silver bullet — VPN provider can log traffic.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔍</div>
+            <div class="card-title">Web Proxy</div>
+            <div class="card-desc">Intermediary between client and internet. Caches content, filters malicious sites, inspects HTTPS (MITM proxy). Used by enterprises to control web access.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🚫</div>
+            <div class="card-title">Web Filter / DNS Filter</div>
+            <div class="card-desc">Blocks access to malicious/inappropriate sites by category. Cisco Umbrella, OpenDNS — blocks at DNS level before connection made.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">📧</div>
+            <div class="card-title">Email Security</div>
+            <div class="card-desc"><strong>SPF</strong> (who can send email for domain) + <strong>DKIM</strong> (email signing) + <strong>DMARC</strong> (policy on failures) = email authentication trinity preventing spoofing.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Common Internet Attacks (Summary)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Attack</th><th>How it Works</th><th>Layer</th><th>Defence</th></tr></thead>
+            <tbody>
+              <tr><td>Phishing</td><td>Fake emails/sites steal credentials</td><td>Human / App</td><td>Email filtering, security training, MFA</td></tr>
+              <tr><td>DDoS</td><td>Flood server with traffic, cause outage</td><td>Network / Transport</td><td>CDN, rate limiting, scrubbing centres</td></tr>
+              <tr><td>Man-in-the-Middle</td><td>Attacker intercepts communication</td><td>Network / Transport</td><td>HTTPS, certificate pinning, VPN</td></tr>
+              <tr><td>SQL Injection</td><td>Malicious SQL in web forms</td><td>Application</td><td>Parameterised queries, WAF, input validation</td></tr>
+              <tr><td>XSS</td><td>Injected JavaScript runs in victim's browser</td><td>Application</td><td>CSP, output encoding, HttpOnly cookies</td></tr>
+              <tr><td>CSRF</td><td>Trick authenticated user into unwanted action</td><td>Application</td><td>CSRF tokens, SameSite cookies</td></tr>
+              <tr><td>DNS Spoofing</td><td>Fake DNS responses redirect traffic</td><td>Application (DNS)</td><td>DNSSEC, DoH, monitor DNS changes</td></tr>
+              <tr><td>Drive-by Download</td><td>Visiting infected site auto-downloads malware</td><td>Application</td><td>Updated browser, NoScript, ad blockers</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Zero Trust Network Access (ZTNA)</h3>
+        <div class="info-box purple">
+          <span class="box-icon">🔐</span>
+          <div><strong>Zero Trust:</strong> Traditional security assumed everything inside the network perimeter was safe. Zero Trust assumes the network is always hostile — every access request must be authenticated and authorised, regardless of source. Principles: verify identity continuously, use least privilege, micro-segment networks, assume breach. Companies like Google (BeyondCorp), Microsoft, and Cloudflare have migrated to ZTNA.</div>
+        </div>
+      </div>
+
+      <div class="exercise-box">
+        <div class="ex-label">🔬 Exercise</div>
+        <ol>
+          <li>Explain the difference between an IDS and an IPS. Which generates more alerts that need investigation?</li>
+          <li>A company's server is hit by a DDoS attack generating 500 Gbps of traffic. What solutions can mitigate this?</li>
+          <li>Draw a simple network diagram showing where a firewall, IDS/IPS, and DMZ would be placed in a corporate network.</li>
+        </ol>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Conclusion</div>
+        <p>Internet security requires a defence-in-depth approach — no single tool is enough. Layer firewalls, IDS/IPS, email security, DNS filtering, VPN, and user training. Assume every layer will eventually be breached and ensure you can detect and respond quickly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================== TOPIC 32 — REVISION ========================== -->
+  <div class="section-group-title">📝 Revision</div>
+  <div class="section" id="t32">
+    <div class="section-header">
+      <span class="sec-num">Topic 32</span>
+      <h2>Unit 2 Revision Notes</h2>
+      <span class="section-emoji">📝</span>
+    </div>
+    <div class="section-body">
+
+      <div class="subsection">
+        <h3>Quick Reference Glossary</h3>
+        <div class="revision-grid">
+          <div class="revision-item"><span class="r-term">CPU</span><span class="r-def">Brain of computer. Executes instructions. Speed in GHz, measured in cores.</span></div>
+          <div class="revision-item"><span class="r-term">RAM</span><span class="r-def">Temporary fast memory. Lost on power off. More RAM = more apps can run.</span></div>
+          <div class="revision-item"><span class="r-term">OS (Kernel)</span><span class="r-def">Manages hardware. Kernel runs Ring 0 (highest privilege). Compromising kernel = full control.</span></div>
+          <div class="revision-item"><span class="r-term">Buffer Overflow</span><span class="r-def">Writing beyond allocated buffer overwrites memory. Can redirect code execution to attacker's payload.</span></div>
+          <div class="revision-item"><span class="r-term">File System</span><span class="r-def">Organises storage. NTFS (Windows), ext4 (Linux), APFS (Mac). Controls permissions.</span></div>
+          <div class="revision-item"><span class="r-term">TCP vs UDP</span><span class="r-def">TCP = reliable, ordered, slow. UDP = fast, unreliable. HTTP uses TCP; DNS/VoIP use UDP.</span></div>
+          <div class="revision-item"><span class="r-term">OSI Model</span><span class="r-def">7 layers. Each layer = different attacks. Firewall = layer 3/4. XSS = layer 7 (application).</span></div>
+          <div class="revision-item"><span class="r-term">DNS</span><span class="r-def">Translates domain names to IPs. Port 53. Vulnerable to cache poisoning, hijacking, tunnelling.</span></div>
+          <div class="revision-item"><span class="r-term">HTTP</span><span class="r-def">Web protocol. Plaintext (dangerous). Methods: GET, POST, PUT, DELETE. Stateless (needs cookies).</span></div>
+          <div class="revision-item"><span class="r-term">HTTPS / TLS</span><span class="r-def">HTTP + encryption. TLS 1.3 is current standard. Certificate verifies server identity.</span></div>
+          <div class="revision-item"><span class="r-term">Cookie Flags</span><span class="r-def">HttpOnly (no JS access), Secure (HTTPS only), SameSite (no CSRF). All three = hardened cookie.</span></div>
+          <div class="revision-item"><span class="r-term">Session Hijacking</span><span class="r-def">Steal session cookie → impersonate user. Prevented by HttpOnly + Secure + short timeouts.</span></div>
+          <div class="revision-item"><span class="r-term">XSS</span><span class="r-def">Inject JavaScript into page. Runs in victim's browser. Steals cookies, redirects, keylogging.</span></div>
+          <div class="revision-item"><span class="r-term">CSRF</span><span class="r-def">Trick authenticated user's browser to make request. Prevented by CSRF tokens + SameSite=Strict.</span></div>
+          <div class="revision-item"><span class="r-term">DNS Poisoning</span><span class="r-def">Fake DNS records redirect traffic to attacker. DNSSEC/DoH prevents this.</span></div>
+          <div class="revision-item"><span class="r-term">Firewall</span><span class="r-def">Filters traffic by rules. Stateful tracks connection. NGFW does deep inspection.</span></div>
+          <div class="revision-item"><span class="r-term">VPN</span><span class="r-def">Encrypts tunnel to VPN server. Hides real IP. Protects on public WiFi. Not anonymous.</span></div>
+          <div class="revision-item"><span class="r-term">Zero Trust</span><span class="r-def">Never trust, always verify. Every access request authenticated regardless of network location.</span></div>
+          <div class="revision-item"><span class="r-term">ASLR / DEP</span><span class="r-def">Address Space Layout Randomisation + Data Execution Prevention — OS defences against buffer overflows.</span></div>
+          <div class="revision-item"><span class="r-term">SPF/DKIM/DMARC</span><span class="r-def">Email authentication. SPF = allowed senders. DKIM = signing. DMARC = policy. Together prevent spoofing.</span></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="subsection">
+        <h3>Key Formulas &amp; Relationships</h3>
+        <div class="code-block">
+          <div class="code-label">UNIT 2 FORMULAS</div>
+          <pre><span class="c-cyan">HTTPS</span> = HTTP + TLS (encryption + authentication + integrity)
+
+<span class="c-cyan">Secure Cookie</span> = HttpOnly + Secure + SameSite=Strict
+
+<span class="c-cyan">Email Authentication</span> = SPF + DKIM + DMARC
+
+<span class="c-cyan">Browser Security</span> = Same-Origin Policy + CSP + HSTS + Sandbox
+
+<span class="c-cyan">OSI Attack Map:</span>
+Layer 7 (App)       → XSS, SQLi, CSRF, phishing
+Layer 4 (Transport) → SYN flood, port scanning
+Layer 3 (Network)   → IP spoofing, routing attacks
+Layer 2 (Data Link) → ARP poisoning, MAC flooding
+Layer 1 (Physical)  → Wire tapping, physical access
+
+<span class="c-cyan">Defence in Depth:</span>
+Firewall → IDS/IPS → WAF → App Security → Encryption → Monitoring
+
+<span class="c-cyan">DNS Resolution Order:</span>
+Local cache → /etc/hosts → Recursive resolver → Root → TLD → Authoritative
+
+<span class="c-cyan">TLS Handshake Summary:</span>
+ClientHello → ServerHello + Cert → Key Exchange → Finished → Encrypted Session</pre>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="subsection">
+        <h3>📋 Exam Practice Questions</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Question</th><th>Marks</th><th>Key Answer Points</th></tr></thead>
+            <tbody>
+              <tr><td>Q1</td><td>Explain the difference between hardware and software, giving two examples of each.</td><td>4</td><td>Hardware=physical (CPU, RAM), Software=intangible (OS, application)</td></tr>
+              <tr><td>Q2</td><td>Describe the purpose of an operating system and name three of its core functions.</td><td>5</td><td>Manages hardware resources; process mgmt, memory mgmt, file system, security</td></tr>
+              <tr><td>Q3</td><td>What is a buffer overflow attack? Describe two OS defences against it.</td><td>6</td><td>Writing beyond buffer overwrites memory; ASLR, DEP, stack canaries</td></tr>
+              <tr><td>Q4</td><td>Compare HTTP and HTTPS. Why must sensitive data always use HTTPS?</td><td>4</td><td>HTTP=plaintext, HTTPS=encrypted+authenticated; password/data theft over HTTP</td></tr>
+              <tr><td>Q5</td><td>Describe the DNS resolution process for "www.example.com" from start to finish.</td><td>6</td><td>Cache → hosts file → recursive resolver → root → TLD → authoritative NS → IP returned</td></tr>
+              <tr><td>Q6</td><td>What cookie flags should always be set for session cookies? Explain what each prevents.</td><td>6</td><td>HttpOnly (XSS theft), Secure (network sniffing), SameSite=Strict (CSRF)</td></tr>
+              <tr><td>Q7</td><td>Explain what a Man-in-the-Middle attack is and how HTTPS prevents it.</td><td>5</td><td>Attacker intercepts traffic; HTTPS encrypts + cert authentication prevents impersonation</td></tr>
+              <tr><td>Q8</td><td>What is DNS cache poisoning? How does DNSSEC protect against it?</td><td>5</td><td>Injecting fake DNS records; DNSSEC uses digital signatures to verify DNS responses</td></tr>
+              <tr><td>Q9</td><td>Describe the OSI model. At which layer does each of the following operate: firewall, XSS attack, ARP spoofing?</td><td>7</td><td>Firewall=3/4, XSS=7, ARP spoofing=2</td></tr>
+              <tr><td>Q10</td><td>What is Zero Trust architecture? How does it differ from traditional perimeter security?</td><td>5</td><td>Traditional=trust internal network; ZT=verify every request; never trust, always verify</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="subsection">
+        <h3>🗺️ Unit 2 Mind Map</h3>
+        <div class="code-block">
+          <div class="code-label">UNIT 2 STRUCTURE</div>
+          <pre>                    <span class="c-blue">UNIT 2: Computer &amp; Internet Basics</span>
+                              │
+          ┌───────────────────┼──────────────────────┐
+          ▼                   ▼                      ▼
+   <span class="c-orange">COMPUTER SYSTEMS</span>     <span class="c-cyan">NETWORKING</span>            <span class="c-green">WEB PROTOCOLS</span>
+   ┌─────────────┐    ┌─────────────┐         ┌───────────────┐
+   │ Fundamentals│    │ Internet    │         │ HTTP          │
+   │ Hardware/SW │    │ OSI Model   │         │ HTTPS/TLS     │
+   │ OS Basics   │    │ TCP/IP      │         │ Cookies       │
+   │ OS Types    │    │ Client-Serv │         │ DNS           │
+   │ File Systems│    │ Browsers    │         │ Internet Sec  │
+   │ Memory Mgmt │    └─────────────┘         └───────────────┘
+   └─────────────┘
+
+   <span class="c-purple">KEY SECURITY ATTACKS PER AREA:</span>
+   Fundamentals → Buffer overflow, cold boot, UEFI rootkit
+   OS           → Privilege escalation, kernel exploit
+   File Systems → NTFS ADS, shadow file theft
+   Networking   → SYN flood, ARP spoof, MitM
+   Browser      → XSS, clickjacking, fingerprinting
+   HTTP         → Header injection, method tampering
+   HTTPS        → Cert forgery, downgrade (POODLE)
+   Cookies      → Session hijacking, CSRF
+   DNS          → Cache poisoning, tunnelling, hijacking
+   Internet Sec → DDoS, phishing, drive-by download</pre>
+        </div>
+      </div>
+
+      <div class="key-points">
+        <span class="key-pill">💡 HTTP = plaintext danger</span>
+        <span class="key-pill orange">🔒 Always use HTTPS + TLS 1.3</span>
+        <span class="key-pill purple">🍪 HttpOnly + Secure + SameSite</span>
+        <span class="key-pill green">📖 DNS = internet phone book</span>
+        <span class="key-pill">🧠 OSI Layer = attack location</span>
+        <span class="key-pill orange">🛡️ Defence in Depth</span>
+        <span class="key-pill purple">🔐 Zero Trust = verify everything</span>
+        <span class="key-pill green">⚙️ Patch OS + firmware regularly</span>
+      </div>
+
+      <div class="conclusion">
+        <div class="c-label">📌 Unit 2 Final Takeaway</div>
+        <p>Computers and the internet were built for function, not security. Every layer — from the hardware to the browser — has known vulnerabilities. A cybersecurity professional must understand all of these layers: how data moves from a keyboard press to a web server response and back. Only by understanding the full stack can you defend the full stack. <strong>The internet works because of trust — attackers exploit that trust at every layer.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="text-align:center;padding:40px 0 60px;opacity:0.4;font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:#4a6a8a;letter-spacing:2px;">
+    UNIT 2 // COMPUTER &amp; INTERNET BASICS // TOPICS 17–32 // COMPLETE STUDY GUIDE
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// Particle / floating data animation
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const particles = [];
+const NUM = 60;
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = (Math.random() - 0.5) * 0.4;
+    this.size = Math.random() * 2 + 0.5;
+    this.alpha = Math.random() * 0.5 + 0.1;
+    this.color = Math.random() > 0.5 ? '#00c8ff' : '#00ffd5';
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.globalAlpha = this.alpha;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+
+for (let i = 0; i < NUM; i++) particles.push(new Particle());
+
+function drawConnections() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i+1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = '#00c8ff';
+        ctx.globalAlpha = (1 - dist/100) * 0.08;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+    }
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawConnections();
+  requestAnimationFrame(animate);
+}
+animate();
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+// Smooth scroll for TOC
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
