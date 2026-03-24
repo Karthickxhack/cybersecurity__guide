@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 1: Introduction to Cybersecurity</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyber-green: #00ff88;
+    --cyber-blue: #00cfff;
+    --cyber-red: #ff4466;
+    --cyber-yellow: #ffdd00;
+    --cyber-purple: #aa44ff;
+    --bg-dark: #050a14;
+    --bg-card: #0a1628;
+    --bg-card2: #0d1f3c;
+    --text-main: #c8e6ff;
+    --text-dim: #6a9abc;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Exo 2', sans-serif;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse at 10% 20%, rgba(0,100,255,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(0,255,136,0.06) 0%, transparent 50%);
+  }
+  #matrix-canvas { position:fixed; top:0; left:0; width:100%; height:100%; opacity:0.04; pointer-events:none; z-index:0; }
+  .container { max-width:1200px; margin:0 auto; padding:20px; position:relative; z-index:1; }
+
+  /* HERO */
+  .hero { text-align:center; padding:60px 20px 40px; position:relative; }
+  .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at center, rgba(0,207,255,0.12) 0%,transparent 70%); pointer-events:none; }
+  .unit-badge { display:inline-block; background:linear-gradient(135deg,#00cfff22,#00ff8822); border:1px solid var(--cyber-blue); color:var(--cyber-blue); font-family:'Orbitron',monospace; font-size:0.75rem; letter-spacing:4px; padding:6px 20px; border-radius:2px; margin-bottom:16px; }
+  .hero h1 { font-family:'Orbitron',monospace; font-size:clamp(2rem,5vw,3.5rem); font-weight:900; background:linear-gradient(135deg,var(--cyber-blue),var(--cyber-green)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1.2; margin-bottom:12px; filter:drop-shadow(0 0 30px rgba(0,207,255,0.4)); }
+  .hero p { color:var(--text-dim); font-size:1rem; letter-spacing:2px; font-family:'Share Tech Mono',monospace; }
+
+  /* TOC */
+  .toc { background:var(--bg-card); border:1px solid rgba(0,207,255,0.2); border-radius:8px; padding:28px; margin:30px 0; position:relative; overflow:hidden; }
+  .toc::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--cyber-blue),var(--cyber-green),transparent); }
+  .toc-title { font-family:'Orbitron',monospace; color:var(--cyber-green); font-size:0.85rem; letter-spacing:3px; margin-bottom:18px; }
+  .toc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:8px; }
+  .toc-item { display:flex; align-items:center; gap:10px; padding:8px 12px; border-radius:4px; background:rgba(0,207,255,0.04); border:1px solid transparent; cursor:pointer; transition:all 0.2s; text-decoration:none; color:var(--text-dim); font-size:0.9rem; }
+  .toc-item:hover { background:rgba(0,255,136,0.08); border-color:rgba(0,255,136,0.3); color:var(--cyber-green); }
+  .toc-num { font-family:'Orbitron',monospace; font-size:0.7rem; color:var(--cyber-blue); min-width:24px; }
+
+  /* SECTIONS */
+  .section { background:var(--bg-card); border:1px solid rgba(0,207,255,0.15); border-radius:10px; margin:28px 0; overflow:hidden; position:relative; }
+  .section:hover { border-color:rgba(0,255,136,0.3); }
+  .section::before { content:''; position:absolute; top:0; left:0; bottom:0; width:3px; background:linear-gradient(180deg,var(--cyber-blue),var(--cyber-green)); }
+  .section-header { padding:22px 28px 18px; background:linear-gradient(135deg,rgba(0,207,255,0.06),transparent); border-bottom:1px solid rgba(0,207,255,0.1); display:flex; align-items:center; gap:16px; }
+  .section-num { font-family:'Orbitron',monospace; font-size:1.4rem; font-weight:900; color:var(--cyber-blue); min-width:50px; filter:drop-shadow(0 0 8px var(--cyber-blue)); }
+  .section-emoji { font-size:2rem; }
+  .section-title { font-family:'Orbitron',monospace; font-size:clamp(1rem,2.5vw,1.3rem); font-weight:700; color:var(--cyber-green); filter:drop-shadow(0 0 6px rgba(0,255,136,0.4)); }
+  .section-body { padding:24px 28px; }
+
+  /* BOXES */
+  .def-box { background:rgba(0,207,255,0.06); border-left:3px solid var(--cyber-blue); border-radius:0 6px 6px 0; padding:14px 18px; margin:14px 0; }
+  .def-label { font-family:'Share Tech Mono',monospace; font-size:0.7rem; color:var(--cyber-blue); letter-spacing:2px; margin-bottom:6px; }
+  .def-text { color:var(--text-main); line-height:1.7; font-size:0.95rem; }
+  .example-box { background:rgba(0,255,136,0.05); border:1px solid rgba(0,255,136,0.2); border-radius:6px; padding:14px 18px; margin:14px 0; }
+  .example-label { font-family:'Share Tech Mono',monospace; font-size:0.7rem; color:var(--cyber-green); letter-spacing:2px; margin-bottom:6px; }
+  .warn-box { background:rgba(255,68,102,0.07); border-left:3px solid var(--cyber-red); border-radius:0 6px 6px 0; padding:14px 18px; margin:14px 0; }
+  .warn-label { font-family:'Share Tech Mono',monospace; font-size:0.7rem; color:var(--cyber-red); letter-spacing:2px; margin-bottom:6px; }
+
+  h3 { font-family:'Orbitron',monospace; font-size:0.85rem; letter-spacing:2px; color:var(--cyber-yellow); margin:20px 0 10px; text-transform:uppercase; }
+  p { color:var(--text-main); line-height:1.75; margin:8px 0; font-size:0.95rem; }
+  ul,ol { padding-left:20px; }
+  li { color:var(--text-main); line-height:1.8; font-size:0.94rem; margin:4px 0; }
+  li::marker { color:var(--cyber-green); }
+
+  /* TABLE */
+  .table-wrap { overflow-x:auto; margin:16px 0; border-radius:8px; }
+  table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+  thead tr { background:linear-gradient(135deg,rgba(0,207,255,0.15),rgba(0,255,136,0.1)); }
+  th { padding:12px 16px; text-align:left; font-family:'Orbitron',monospace; font-size:0.7rem; letter-spacing:1.5px; color:var(--cyber-blue); border-bottom:1px solid rgba(0,207,255,0.3); white-space:nowrap; }
+  td { padding:11px 16px; border-bottom:1px solid rgba(0,207,255,0.08); color:var(--text-main); vertical-align:top; }
+  tr:hover td { background:rgba(0,207,255,0.04); }
+  tr:last-child td { border-bottom:none; }
+
+  /* FLOWCHART */
+  .flowchart { display:flex; flex-direction:column; align-items:center; gap:0; margin:20px 0; }
+  .flow-node { background:var(--bg-card2); border:1px solid rgba(0,207,255,0.3); border-radius:8px; padding:12px 24px; text-align:center; color:var(--text-main); font-size:0.9rem; min-width:220px; max-width:340px; transition:all 0.2s; }
+  .flow-node:hover { border-color:var(--cyber-green); }
+  .flow-node.start { background:rgba(0,207,255,0.12); border-color:var(--cyber-blue); }
+  .flow-node.end { background:rgba(0,255,136,0.12); border-color:var(--cyber-green); }
+  .flow-arrow { font-size:1.4rem; color:var(--cyber-blue); margin:2px 0; }
+
+  /* CODE */
+  .code-block { background:#020810; border:1px solid rgba(0,207,255,0.2); border-radius:6px; padding:16px 20px; font-family:'Share Tech Mono',monospace; font-size:0.85rem; color:var(--cyber-green); margin:14px 0; overflow-x:auto; line-height:1.8; position:relative; }
+  .code-block::before { content:attr(data-lang); position:absolute; top:6px; right:12px; font-size:0.65rem; color:var(--text-dim); letter-spacing:2px; font-family:'Orbitron',monospace; }
+  .kw { color:var(--cyber-blue); }
+  .str { color:var(--cyber-yellow); }
+  .cm { color:#4a7a9b; }
+
+  /* BADGES */
+  .badge { display:inline-block; padding:3px 10px; border-radius:3px; font-size:0.75rem; font-family:'Share Tech Mono',monospace; margin:2px; }
+  .badge-blue { background:rgba(0,207,255,0.15); color:var(--cyber-blue); border:1px solid rgba(0,207,255,0.3); }
+  .badge-green { background:rgba(0,255,136,0.1); color:var(--cyber-green); border:1px solid rgba(0,255,136,0.3); }
+  .badge-red { background:rgba(255,68,102,0.1); color:var(--cyber-red); border:1px solid rgba(255,68,102,0.3); }
+  .badge-yellow { background:rgba(255,221,0,0.1); color:var(--cyber-yellow); border:1px solid rgba(255,221,0,0.3); }
+  .badge-purple { background:rgba(170,68,255,0.1); color:var(--cyber-purple); border:1px solid rgba(170,68,255,0.3); }
+
+  /* CARDS */
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:14px; margin:16px 0; }
+  .card-item { background:var(--bg-card2); border:1px solid rgba(0,207,255,0.15); border-radius:8px; padding:16px; text-align:center; transition:all 0.2s; }
+  .card-item:hover { border-color:var(--cyber-green); transform:translateY(-2px); }
+  .card-item .ci { font-size:1.8rem; margin-bottom:8px; }
+  .card-item .ct { font-family:'Orbitron',monospace; font-size:0.75rem; color:var(--cyber-blue); margin-bottom:6px; }
+  .card-item .cd { font-size:0.82rem; color:var(--text-dim); line-height:1.5; }
+
+  /* EXERCISE */
+  .exercise { background:rgba(170,68,255,0.06); border:1px dashed rgba(170,68,255,0.3); border-radius:8px; padding:18px 20px; margin:16px 0; }
+  .exercise-title { font-family:'Orbitron',monospace; font-size:0.75rem; color:var(--cyber-purple); letter-spacing:2px; margin-bottom:10px; }
+
+  /* ADV/DIS */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0; }
+  @media(max-width:600px) { .two-col { grid-template-columns:1fr; } }
+  .adv-box { background:rgba(0,255,136,0.05); border:1px solid rgba(0,255,136,0.2); border-radius:6px; padding:14px; }
+  .dis-box { background:rgba(255,68,102,0.05); border:1px solid rgba(255,68,102,0.2); border-radius:6px; padding:14px; }
+  .adv-box h4 { color:var(--cyber-green); font-family:'Orbitron',monospace; font-size:0.75rem; letter-spacing:2px; margin-bottom:8px; }
+  .dis-box h4 { color:var(--cyber-red); font-family:'Orbitron',monospace; font-size:0.75rem; letter-spacing:2px; margin-bottom:8px; }
+
+  /* CONCLUSION */
+  .conclusion { background:linear-gradient(135deg,rgba(0,207,255,0.08),rgba(0,255,136,0.06)); border:1px solid rgba(0,255,136,0.25); border-radius:8px; padding:18px 20px; margin:18px 0; }
+  .conclusion-label { font-family:'Orbitron',monospace; font-size:0.7rem; color:var(--cyber-green); letter-spacing:2px; margin-bottom:8px; }
+
+  /* CIA */
+  .cia-diagram { display:flex; gap:14px; flex-wrap:wrap; margin:16px 0; }
+  .cia-box { flex:1; min-width:160px; background:var(--bg-card2); border-radius:8px; padding:18px; text-align:center; border-top:3px solid; }
+  .cia-c { border-top-color:var(--cyber-blue); }
+  .cia-i { border-top-color:var(--cyber-green); }
+  .cia-a { border-top-color:var(--cyber-red); }
+  .cia-icon { font-size:2.2rem; margin-bottom:8px; }
+  .cia-name { font-family:'Orbitron',monospace; font-size:0.75rem; color:var(--cyber-yellow); margin-bottom:6px; }
+  .cia-def { font-size:0.82rem; color:var(--text-dim); line-height:1.5; }
+
+  /* HACKERS */
+  .hacker-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:16px 0; }
+  @media(max-width:500px) { .hacker-grid { grid-template-columns:1fr; } }
+  .hacker-card { border-radius:8px; padding:16px; text-align:center; }
+  .white-hat { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.15); }
+  .black-hat { background:rgba(255,68,102,0.06); border:1px solid rgba(255,68,102,0.2); }
+  .grey-hat { background:rgba(170,68,255,0.06); border:1px solid rgba(170,68,255,0.2); }
+  .hc-icon { font-size:2rem; margin-bottom:8px; }
+  .hc-name { font-family:'Orbitron',monospace; font-size:0.8rem; margin-bottom:8px; }
+  .white-hat .hc-name { color:#fff; }
+  .black-hat .hc-name { color:var(--cyber-red); }
+  .grey-hat .hc-name { color:var(--cyber-purple); }
+
+  /* LIFECYCLE */
+  .lifecycle-steps { display:flex; flex-wrap:wrap; gap:0; margin:16px 0; }
+  .ls-step { flex:1; min-width:100px; background:var(--bg-card2); border:1px solid rgba(0,207,255,0.15); padding:14px 10px; text-align:center; position:relative; }
+  .ls-step:not(:last-child)::after { content:'→'; position:absolute; right:-10px; top:50%; transform:translateY(-50%); color:var(--cyber-blue); font-size:1.2rem; z-index:1; }
+  @media(max-width:600px) { .ls-step:not(:last-child)::after { display:none; } .lifecycle-steps { flex-direction:column; } }
+  .ls-num { font-family:'Orbitron',monospace; font-size:0.65rem; color:var(--cyber-blue); margin-bottom:4px; }
+  .ls-name { font-size:0.82rem; color:var(--text-main); }
+  .ls-icon { font-size:1.4rem; margin-bottom:4px; }
+
+  /* SUMMARY */
+  .summary-section { background:var(--bg-card); border:1px solid rgba(0,255,136,0.3); border-radius:10px; padding:28px; margin:40px 0; position:relative; overflow:hidden; }
+  .summary-section::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--cyber-blue),var(--cyber-green),var(--cyber-yellow),var(--cyber-red),var(--cyber-purple)); }
+  .summary-title { font-family:'Orbitron',monospace; font-size:1.1rem; font-weight:900; color:var(--cyber-green); text-align:center; margin-bottom:24px; letter-spacing:3px; filter:drop-shadow(0 0 8px rgba(0,255,136,0.4)); }
+
+  .footer { text-align:center; padding:40px 20px; font-family:'Share Tech Mono',monospace; font-size:0.8rem; color:var(--text-dim); border-top:1px solid rgba(0,207,255,0.1); margin-top:40px; }
+  .footer span { color:var(--cyber-green); }
+
+  body::after { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px); pointer-events:none; z-index:999; }
+</style>
+</head>
+<body>
+<canvas id="matrix-canvas"></canvas>
+<div class="container">
+
+<div class="hero">
+  <div class="unit-badge">🔐 UNIT 1 · CYBERSECURITY FUNDAMENTALS</div>
+  <h1>Introduction to<br>Cybersecurity</h1>
+  <p>// 16 Topics · Complete Guide · Definitions · Examples · Exercises · Flowcharts</p>
+</div>
+
+<div class="toc">
+  <div class="toc-title">📋 TABLE OF CONTENTS</div>
+  <div class="toc-grid">
+    <a href="#t1" class="toc-item"><span class="toc-num">01</span>🛡️ What is Cybersecurity</a>
+    <a href="#t2" class="toc-item"><span class="toc-num">02</span>📜 History of Cyber Attacks</a>
+    <a href="#t3" class="toc-item"><span class="toc-num">03</span>⚔️ Types of Cyber Threats</a>
+    <a href="#t4" class="toc-item"><span class="toc-num">04</span>🌟 Importance of Cybersecurity</a>
+    <a href="#t5" class="toc-item"><span class="toc-num">05</span>🗂️ Cybersecurity Domains</a>
+    <a href="#t6" class="toc-item"><span class="toc-num">06</span>🔺 CIA Triad</a>
+    <a href="#t7" class="toc-item"><span class="toc-num">07</span>⚙️ Security Principles</a>
+    <a href="#t8" class="toc-item"><span class="toc-num">08</span>⚠️ Risk, Threat, Vulnerability</a>
+    <a href="#t9" class="toc-item"><span class="toc-num">09</span>🎩 Types of Hackers</a>
+    <a href="#t10" class="toc-item"><span class="toc-num">10</span>⚖️ Cyber Laws &amp; Ethics</a>
+    <a href="#t11" class="toc-item"><span class="toc-num">11</span>🔄 Cyber Attack Lifecycle</a>
+    <a href="#t12" class="toc-item"><span class="toc-num">12</span>🚧 Security Challenges</a>
+    <a href="#t13" class="toc-item"><span class="toc-num">13</span>📰 Famous Cyber Attacks</a>
+    <a href="#t14" class="toc-item"><span class="toc-num">14</span>🧠 Security Awareness</a>
+    <a href="#t15" class="toc-item"><span class="toc-num">15</span>🚀 Future of Cybersecurity</a>
+    <a href="#t16" class="toc-item"><span class="toc-num">16</span>📝 Revision Notes</a>
+  </div>
+</div>
+
+<!-- T1 -->
+<div class="section" id="t1">
+  <div class="section-header"><span class="section-num">01</span><span class="section-emoji">🛡️</span><span class="section-title">What is Cybersecurity?</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 DEFINITION</div><div class="def-text"><strong>Cybersecurity</strong> is the practice of protecting computers, servers, mobile devices, networks, and data from digital attacks, unauthorized access, or damage. It involves technologies, processes, and people working together to defend information assets.</div></div>
+    <h3>🔑 Key Areas</h3>
+    <div class="card-grid">
+      <div class="card-item"><div class="ci">💻</div><div class="ct">Endpoint</div><div class="cd">Laptops, phones, tablets protection</div></div>
+      <div class="card-item"><div class="ci">🌐</div><div class="ct">Network</div><div class="cd">Firewalls, VPNs, IDS systems</div></div>
+      <div class="card-item"><div class="ci">☁️</div><div class="ct">Cloud</div><div class="cd">Cloud data and service protection</div></div>
+      <div class="card-item"><div class="ci">📱</div><div class="ct">Mobile</div><div class="cd">Smartphone app and OS security</div></div>
+      <div class="card-item"><div class="ci">🏭</div><div class="ct">OT/ICS</div><div class="cd">Industrial control systems</div></div>
+      <div class="card-item"><div class="ci">👤</div><div class="ct">Identity</div><div class="cd">User authentication and access</div></div>
+    </div>
+    <div class="example-box"><div class="example-label">💡 REAL-WORLD EXAMPLE</div><p>🏦 When you log into your bank app, cybersecurity ensures your password is encrypted, session is authenticated, and hackers cannot intercept your transaction. Every SSL padlock (🔒) in your browser is cybersecurity at work.</p></div>
+    <div class="two-col">
+      <div class="adv-box"><h4>✅ BENEFITS</h4><ul><li>Protects sensitive data</li><li>Prevents financial loss</li><li>Maintains trust &amp; reputation</li><li>Ensures business continuity</li></ul></div>
+      <div class="dis-box"><h4>⚠️ CHALLENGES</h4><ul><li>Constantly evolving threats</li><li>High implementation cost</li><li>Skill shortage globally</li><li>Complexity of modern systems</li></ul></div>
+    </div>
+    <div class="exercise"><div class="exercise-title">🎯 EXERCISE</div><p>List 5 devices in your home that need cybersecurity protection. For each, write one potential threat it faces and one defence measure.</p></div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>Cybersecurity is not just for IT professionals — it is a fundamental requirement for every individual and organization operating in the digital world today. Everyone is both a potential victim and a potential defender.</p></div>
+  </div>
+</div>
+
+<!-- T2 -->
+<div class="section" id="t2">
+  <div class="section-header"><span class="section-num">02</span><span class="section-emoji">📜</span><span class="section-title">History of Cyber Attacks</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 DEFINITION</div><div class="def-text">The history of cyber attacks traces from early experiments on primitive networks to sophisticated, state-sponsored digital warfare targeting critical global infrastructure. Understanding history helps predict future threat patterns.</div></div>
+    <h3>📅 Timeline of Major Cyber Events</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Year</th><th>Event</th><th>Impact</th><th>Type</th></tr></thead>
+        <tbody>
+          <tr><td>1971</td><td>🐛 Creeper Virus</td><td>First self-replicating program on ARPANET</td><td><span class="badge badge-yellow">Worm</span></td></tr>
+          <tr><td>1988</td><td>🪱 Morris Worm</td><td>Crashed ~6,000 computers (10% of internet)</td><td><span class="badge badge-red">Worm</span></td></tr>
+          <tr><td>1999</td><td>📧 Melissa Virus</td><td>Overwhelmed email servers worldwide</td><td><span class="badge badge-red">Virus</span></td></tr>
+          <tr><td>2000</td><td>❤️‍🔥 ILOVEYOU</td><td>$10B damage, 50M+ computers infected</td><td><span class="badge badge-red">Worm</span></td></tr>
+          <tr><td>2007</td><td>🇪🇪 Estonia Attack</td><td>First nation-state cyber attack on a country</td><td><span class="badge badge-purple">DDoS</span></td></tr>
+          <tr><td>2010</td><td>☢️ Stuxnet</td><td>Destroyed Iran's nuclear centrifuges</td><td><span class="badge badge-blue">Cyberweapon</span></td></tr>
+          <tr><td>2013</td><td>🎯 Target Breach</td><td>40M credit cards stolen via HVAC vendor</td><td><span class="badge badge-red">Data Breach</span></td></tr>
+          <tr><td>2017</td><td>💀 WannaCry</td><td>200K+ computers in 150 countries, $4–8B loss</td><td><span class="badge badge-red">Ransomware</span></td></tr>
+          <tr><td>2020</td><td>🌞 SolarWinds</td><td>18,000+ orgs including US government breached</td><td><span class="badge badge-purple">Supply Chain</span></td></tr>
+          <tr><td>2021</td><td>🛢️ Colonial Pipeline</td><td>US fuel shortages, $4.4M ransom paid</td><td><span class="badge badge-red">Ransomware</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="example-box"><div class="example-label">💡 DEEP DIVE: WannaCry 2017</div><p>🦠 WannaCry encrypted files on infected Windows machines and demanded Bitcoin ransom. It exploited the <strong>EternalBlue</strong> vulnerability (stolen from the NSA) and spread automatically across networks. The UK's NHS was severely impacted — surgeries cancelled, ambulances diverted. <strong>One patch (MS17-010)</strong> released 2 months earlier could have prevented all of it.</p></div>
+    <div class="exercise"><div class="exercise-title">🎯 EXERCISE</div><p>Research the "Stuxnet" worm. Answer: (a) Who created it? (b) What was its target? (c) How did it enter an air-gapped network? (d) What 4 zero-day vulnerabilities did it use? (e) What does it teach us?</p></div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>Cyber attacks have evolved from curiosities to weapons of mass disruption. The pattern is consistent: unpatched systems, human error, and underestimated threats lead to catastrophic breaches. History is the best teacher.</p></div>
+  </div>
+</div>
+
+<!-- T3 -->
+<div class="section" id="t3">
+  <div class="section-header"><span class="section-num">03</span><span class="section-emoji">⚔️</span><span class="section-title">Types of Cyber Threats</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 DEFINITION</div><div class="def-text">A <strong>cyber threat</strong> is any malicious act that seeks to damage data, steal information, or disrupt digital systems. Threats can originate from individuals, criminal groups, or nation-states and take many technical forms.</div></div>
+    <h3>🧩 Major Threat Categories</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Threat</th><th>Definition</th><th>Real Example</th><th>Prevention</th></tr></thead>
+        <tbody>
+          <tr><td>🦠 <strong>Malware</strong></td><td>Malicious software designed to harm (virus, worm, trojan, spyware, ransomware)</td><td>WannaCry ransomware 2017</td><td>Antivirus, patches, EDR</td></tr>
+          <tr><td>🎣 <strong>Phishing</strong></td><td>Deceptive emails/sites to steal credentials or install malware</td><td>Fake PayPal email steals login</td><td>User training, spam filters</td></tr>
+          <tr><td>🌊 <strong>DDoS</strong></td><td>Overwhelming a server with traffic to knock it offline</td><td>Mirai botnet took down Twitter/Netflix</td><td>CDN, rate limiting, scrubbing</td></tr>
+          <tr><td>👤 <strong>Man-in-Middle</strong></td><td>Silently intercepting communications between two parties</td><td>Eavesdropping on public Wi-Fi</td><td>TLS/SSL, VPN, HSTS</td></tr>
+          <tr><td>💉 <strong>SQL Injection</strong></td><td>Inserting malicious SQL code into input fields</td><td>' OR 1=1 -- bypasses login</td><td>Parameterized queries, WAF</td></tr>
+          <tr><td>0️⃣ <strong>Zero-Day</strong></td><td>Exploit for an unknown, unpatched vulnerability</td><td>Stuxnet used 4 zero-days</td><td>Sandboxing, behavior analysis</td></tr>
+          <tr><td>🎭 <strong>Social Engineering</strong></td><td>Manipulating people psychologically to reveal information</td><td>Fake IT support phone call</td><td>Awareness training, verification</td></tr>
+          <tr><td>🔒 <strong>Ransomware</strong></td><td>Encrypts victim data and demands payment for decryption key</td><td>Colonial Pipeline 2021</td><td>Backups, patching, MFA</td></tr>
+          <tr><td>🕵️ <strong>Insider Threat</strong></td><td>Malicious or careless action by an employee or contractor</td><td>Edward Snowden NSA leaks</td><td>RBAC, monitoring, UEBA</td></tr>
+          <tr><td>🎯 <strong>APT</strong></td><td>Advanced Persistent Threat — long-term stealth infiltration</td><td>SolarWinds 9-month undetected</td><td>Threat intelligence, SIEM, SOC</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="example-box"><div class="example-label">💡 PHISHING EMAIL — ANATOMY OF AN ATTACK</div>
+      <div class="code-block" data-lang="PHISHING">
+<span class="cm">From: security@paypa1.com   ← FAKE: "1" not "l"</span>
+<span class="cm">Subject: ⚠️ URGENT: Account will be suspended in 24hrs!</span>
+<span class="kw">Body:</span> <span class="str">"Dear Customer, verify your account: http://paypa1-secure.xyz/login"</span>
+
+<span class="cm">RED FLAGS:
+  ✗ Misspelled domain (paypa1 vs paypal)
+  ✗ Urgency / fear tactics
+  ✗ Suspicious external link domain
+  ✗ Generic greeting (not your name)
+  ✗ Requests immediate action</span>
+
+<span class="kw">CORRECT ACTION:</span> <span class="str">Do NOT click. Report to IT. Go directly to paypal.com manually.</span>
+      </div>
+    </div>
+    <div class="exercise"><div class="exercise-title">🎯 EXERCISE</div><p>You receive: <em>"Congratulations! You won an iPhone 15! Click here NOW — offer expires in 10 minutes."</em><br>Identify: (a) The threat type (b) 4 red flags (c) What you should do (d) What happens if you click?</p></div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>Every threat type has a distinct attack vector, target, and technique. Understanding each threat is the prerequisite to building defences against it. Know your enemy before choosing your weapons.</p></div>
+  </div>
+</div>
+
+<!-- T4 -->
+<div class="section" id="t4">
+  <div class="section-header"><span class="section-num">04</span><span class="section-emoji">🌟</span><span class="section-title">Importance of Cybersecurity</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 DEFINITION</div><div class="def-text">Cybersecurity's importance stems from the total digitization of modern society. Every sector — healthcare, finance, government, defence, education — relies on digital systems. Protecting these systems is both a business necessity and a matter of national security.</div></div>
+    <h3>💎 Why Cybersecurity is Critical</h3>
+    <div class="card-grid">
+      <div class="card-item"><div class="ci">💰</div><div class="ct">Financial</div><div class="cd">Global cybercrime costs $8 trillion/year (2023)</div></div>
+      <div class="card-item"><div class="ci">🏥</div><div class="ct">Healthcare</div><div class="cd">Hospital breaches can directly cost human lives</div></div>
+      <div class="card-item"><div class="ci">🏛️</div><div class="ct">Government</div><div class="cd">State secrets and citizen data must be protected</div></div>
+      <div class="card-item"><div class="ci">🏢</div><div class="ct">Business</div><div class="cd">IBM: average breach costs $4.45M in 2023</div></div>
+      <div class="card-item"><div class="ci">🔏</div><div class="ct">Privacy</div><div class="cd">Protects personal data from exploitation</div></div>
+      <div class="card-item"><div class="ci">⚡</div><div class="ct">Infrastructure</div><div class="cd">Power grids, water systems, transport need protection</div></div>
+    </div>
+    <div class="example-box"><div class="example-label">💡 REAL IMPACT: Colonial Pipeline (2021)</div><p>🛢️ A ransomware attack shut down the Colonial Pipeline supplying 45% of US East Coast fuel. Gas stations ran dry across 5 states, prices spiked, emergency declared. The company paid <strong>$4.4 million Bitcoin ransom</strong>. Root cause: one compromised VPN account with no MFA. Cybersecurity failure = real-world physical crisis.</p></div>
+    <div class="two-col">
+      <div class="adv-box"><h4>✅ WITH CYBERSECURITY</h4><ul><li>Customer trust maintained</li><li>GDPR/regulatory compliance</li><li>Intellectual property safe</li><li>Business continuity ensured</li><li>Reputation protected</li><li>Competitive advantage</li></ul></div>
+      <div class="dis-box"><h4>❌ WITHOUT CYBERSECURITY</h4><ul><li>Data breaches &amp; lawsuits</li><li>Heavy regulatory penalties</li><li>Brand damage &amp; customer loss</li><li>Critical service disruptions</li><li>National security compromised</li><li>Human life at risk</li></ul></div>
+    </div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>Cybersecurity is no longer optional — it is a strategic business necessity, legal obligation, and national security imperative. The question is no longer "if" an organization will be attacked, but "when" and "how prepared are they."</p></div>
+  </div>
+</div>
+
+<!-- T5 -->
+<div class="section" id="t5">
+  <div class="section-header"><span class="section-num">05</span><span class="section-emoji">🗂️</span><span class="section-title">Cybersecurity Domains</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 DEFINITION</div><div class="def-text">Cybersecurity domains are major specialization areas within the field. Each domain focuses on protecting a specific layer of the digital ecosystem. Security professionals typically specialize in one or more domains as career paths.</div></div>
+    <h3>🏛️ Core Cybersecurity Domains</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Domain</th><th>Focus</th><th>Tools/Skills</th><th>Career Role</th></tr></thead>
+        <tbody>
+          <tr><td>🌐 Network Security</td><td>Securing communication networks</td><td>Firewalls, IDS/IPS, Wireshark, VPN</td><td>Network Security Engineer</td></tr>
+          <tr><td>☁️ Cloud Security</td><td>Protecting cloud infrastructure</td><td>AWS Security Hub, Azure Defender, CASB</td><td>Cloud Security Architect</td></tr>
+          <tr><td>💾 Application Security</td><td>Securing software in development</td><td>OWASP, Burp Suite, SAST/DAST tools</td><td>AppSec Engineer, Pen Tester</td></tr>
+          <tr><td>🔑 IAM</td><td>Identity &amp; Access Management</td><td>OAuth, LDAP, Active Directory, MFA</td><td>IAM Engineer</td></tr>
+          <tr><td>🚨 Incident Response</td><td>Detecting and responding to breaches</td><td>SIEM (Splunk), SOAR, DFIR tools</td><td>SOC Analyst, DFIR Specialist</td></tr>
+          <tr><td>📋 GRC</td><td>Governance, Risk &amp; Compliance</td><td>ISO 27001, NIST, SOC 2, GDPR</td><td>GRC Analyst, CISO</td></tr>
+          <tr><td>🔍 Threat Intelligence</td><td>Researching attacker tactics</td><td>MITRE ATT&amp;CK, VirusTotal, dark web monitoring</td><td>Threat Intelligence Analyst</td></tr>
+          <tr><td>🔐 Cryptography</td><td>Securing data through encryption</td><td>AES, RSA, TLS, PKI, Hash functions</td><td>Cryptographer, Security Architect</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="exercise"><div class="exercise-title">🎯 EXERCISE</div><p>Match these scenarios to their domain: (a) Fixing a SQL injection in a web app (b) Setting up a SIEM to detect breaches (c) Ensuring company meets GDPR requirements (d) Monitoring firewall logs for suspicious traffic. Then research the average salary for each domain.</p></div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>Cybersecurity is a vast discipline with high-demand specializations. No single person can master all domains — organizations need teams of specialists working together. Understanding domains helps you plan your career path strategically.</p></div>
+  </div>
+</div>
+
+<!-- T6 -->
+<div class="section" id="t6">
+  <div class="section-header"><span class="section-num">06</span><span class="section-emoji">🔺</span><span class="section-title">CIA Triad — Confidentiality, Integrity, Availability</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 DEFINITION</div><div class="def-text">The <strong>CIA Triad</strong> is the fundamental model of information security. It defines three core objectives that every security control, policy, and system must aim to protect. ALL of information security theory flows from this model.</div></div>
+    <div class="cia-diagram">
+      <div class="cia-box cia-c"><div class="cia-icon">🔒</div><div class="cia-name">CONFIDENTIALITY</div><div class="cia-def">Only authorized users can access data. Information must be kept private from those without permission.</div><div style="margin-top:10px"><span class="badge badge-blue">Encryption</span><span class="badge badge-blue">Access Control</span><span class="badge badge-blue">MFA</span></div></div>
+      <div class="cia-box cia-i"><div class="cia-icon">✅</div><div class="cia-name">INTEGRITY</div><div class="cia-def">Data must remain accurate and unaltered unless by an authorized party. No unauthorized tampering.</div><div style="margin-top:10px"><span class="badge badge-green">Hashing</span><span class="badge badge-green">Digital Signatures</span><span class="badge badge-green">Checksums</span></div></div>
+      <div class="cia-box cia-a"><div class="cia-icon">🌐</div><div class="cia-name">AVAILABILITY</div><div class="cia-def">Systems and data must be accessible to authorized users when needed. Uptime is a security requirement.</div><div style="margin-top:10px"><span class="badge badge-red">Backups</span><span class="badge badge-red">Redundancy</span><span class="badge badge-red">DDoS Protection</span></div></div>
+    </div>
+    <div class="example-box"><div class="example-label">💡 CIA FORMULA</div>
+      <div class="code-block" data-lang="FORMULA">
+<span class="kw">Security</span> = <span class="str">Confidentiality</span> ∩ <span class="str">Integrity</span> ∩ <span class="str">Availability</span>
+
+<span class="cm">Example: Hospital Electronic Health Records (EHR)</span>
+<span class="kw">C</span> → Patient records encrypted with AES-256 (only doctors see patient data)
+<span class="kw">I</span> → Records hash-verified (SHA-256) before display — no tampering
+<span class="kw">A</span> → 99.99% uptime SLA with redundant failover servers
+
+<span class="cm">If ANY pillar fails → Security incident occurs!</span>
+<span class="str">C violated</span> = Data breach (hacker reads records)
+<span class="str">I violated</span> = Data tampering (hacker changes prescription)
+<span class="str">A violated</span> = Downtime (ransomware blocks access to ICU records)</span>
+      </div>
+    </div>
+    <h3>📋 CIA Violations — Real Examples</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Pillar Violated</th><th>Attack Type</th><th>Real Example</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>🔒 Confidentiality</td><td>Data breach, eavesdropping, phishing</td><td>Facebook 2021: 533M records leaked publicly</td><td>Encrypt all data at rest and in transit</td></tr>
+          <tr><td>✅ Integrity</td><td>Data tampering, man-in-middle, malware</td><td>Hacker changes bank transfer destination</td><td>Hash verification, digital signatures</td></tr>
+          <tr><td>🌐 Availability</td><td>DDoS, ransomware, hardware failure</td><td>AWS outage 2021 — Netflix, Disney+ went down</td><td>Load balancers, CDN, backups, DR plans</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="exercise"><div class="exercise-title">🎯 EXERCISE</div><p>Which CIA pillar is violated in each scenario?<br>(a) A hacker encrypts your files with ransomware 🔒<br>(b) An employee reads the CEO's salary file without permission 👀<br>(c) A scammer intercepts and changes your invoice amount from $100 to $10,000 💸<br>(d) An admin accidentally deletes the company database 💥</p></div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>The CIA Triad is the universal language of information security. Every security policy, control, and investment decision maps directly to protecting one or more of these three pillars. Master this and you understand the heart of cybersecurity.</p></div>
+  </div>
+</div>
+
+<!-- T7 -->
+<div class="section" id="t7">
+  <div class="section-header"><span class="section-num">07</span><span class="section-emoji">⚙️</span><span class="section-title">Cybersecurity Principles</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 DEFINITION</div><div class="def-text">Cybersecurity principles are fundamental, timeless guidelines for designing and implementing secure systems. These principles guide every architecture decision and remain relevant regardless of changing technology.</div></div>
+    <h3>🏛️ Core Security Principles</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Principle</th><th>Meaning</th><th>Example in Practice</th></tr></thead>
+        <tbody>
+          <tr><td>🔑 Least Privilege</td><td>Give only minimum access needed for the task</td><td>HR staff cannot access server configurations</td></tr>
+          <tr><td>🛡️ Defence in Depth</td><td>Multiple overlapping layers of security controls</td><td>Firewall + IDS + Antivirus + MFA + Encryption</td></tr>
+          <tr><td>🔒 Fail Secure</td><td>System defaults to locked/safe state on failure</td><td>Security door locks (not opens) on power failure</td></tr>
+          <tr><td>👥 Separation of Duties</td><td>No single person controls an entire critical process</td><td>Two employees needed to approve a wire transfer</td></tr>
+          <tr><td>📖 Open Design</td><td>Security via strong algorithm, not secret design</td><td>AES encryption algorithm is public and still secure</td></tr>
+          <tr><td>🔄 Zero Trust</td><td>"Never trust, always verify" — no implicit trust</td><td>Every request verified even from inside the network</td></tr>
+          <tr><td>🕵️ Psychological Acceptability</td><td>Security must be usable or users will bypass it</td><td>Password managers make strong passwords easy</td></tr>
+          <tr><td>📏 Economy of Mechanism</td><td>Keep security designs simple — complexity = bugs</td><td>Use established libraries, not custom cryptography</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="example-box"><div class="example-label">💡 ZERO TRUST — MODERN PRINCIPLE FLOWCHART</div>
+      <div class="flowchart">
+        <div class="flow-node start">👤 User Requests Access to Resource</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">🔍 Verify Identity (Username + Password + MFA)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">📱 Check Device Health (patched? compliant? managed?)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">📍 Verify Location + Context (unusual time/place?)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">🔑 Grant MINIMUM Required Access Only</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node end">✅ Continuous Monitoring Active — Re-verify if anomaly detected</div>
+      </div>
+    </div>
+    <div class="exercise"><div class="exercise-title">🎯 EXERCISE</div><p>Your company's single IT admin has full root access to all systems, all databases, and all backups. Apply "Least Privilege" and "Separation of Duties": How would you redesign the access model? Who else would share responsibilities? What would each person be able to do?</p></div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>These principles are technology-agnostic and timeless. They apply equally to mainframe computers in 1970 and cloud microservices today. Learning principles means your knowledge never becomes obsolete.</p></div>
+  </div>
+</div>
+
+<!-- T8 -->
+<div class="section" id="t8">
+  <div class="section-header"><span class="section-num">08</span><span class="section-emoji">⚠️</span><span class="section-title">Risk, Threat &amp; Vulnerability</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 DEFINITIONS</div><div class="def-text">
+      🎯 <strong>Threat:</strong> Any potential danger or actor that could cause harm (hacker, malware, natural disaster, insider).<br><br>
+      🕳️ <strong>Vulnerability:</strong> A weakness or flaw in a system that could be exploited (unpatched software, weak password, misconfiguration).<br><br>
+      📊 <strong>Risk:</strong> The probability that a threat will exploit a vulnerability and the magnitude of the resulting damage.<br><br>
+      🛡️ <strong>Control:</strong> A measure implemented to reduce or eliminate risk (firewall, encryption, training, patching).
+    </div></div>
+    <div class="example-box"><div class="example-label">💡 RISK FORMULA</div>
+      <div class="code-block" data-lang="FORMULA">
+<span class="kw">Risk</span> = <span class="str">Threat</span> × <span class="str">Vulnerability</span> × <span class="str">Asset Value</span>
+<span class="cm">OR simplified: Risk = Likelihood × Impact</span>
+
+<span class="cm">Example Calculation:</span>
+<span class="kw">Asset:</span>        <span class="str">Company customer database (Value = HIGH = 10)</span>
+<span class="kw">Threat:</span>       <span class="str">Hacker (Likelihood = MEDIUM = 5)</span>
+<span class="kw">Vulnerability:</span><span class="str">Unpatched SQL Server 2008 (Severity = HIGH = 8)</span>
+<span class="kw">Risk Score:</span>   <span class="str">5 × 8 × 10 = 400/1000 → HIGH RISK</span>
+
+<span class="cm">After applying firewall + patch:</span>
+<span class="kw">Residual Risk:</span><span class="str">5 × 2 × 10 = 100/1000 → LOW RISK</span>
+
+<span class="cm">Residual Risk = Risk After Controls Are Applied</span>
+      </div>
+    </div>
+    <h3>📊 Risk Matrix (5×5 Standard)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Likelihood \ Impact</th><th>Negligible</th><th>Minor</th><th>Moderate</th><th>Major</th><th>Critical</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Almost Certain</strong></td><td style="color:#ffdd00">Medium</td><td style="color:#ff8800">High</td><td style="color:#ff4466">Critical</td><td style="color:#ff4466">Critical</td><td style="color:#ff0000">🔴 EXTREME</td></tr>
+          <tr><td><strong>Likely</strong></td><td style="color:#00ff88">Low</td><td style="color:#ffdd00">Medium</td><td style="color:#ff8800">High</td><td style="color:#ff4466">Critical</td><td style="color:#ff4466">Critical</td></tr>
+          <tr><td><strong>Possible</strong></td><td style="color:#00ff88">Low</td><td style="color:#ffdd00">Medium</td><td style="color:#ffdd00">Medium</td><td style="color:#ff8800">High</td><td style="color:#ff4466">Critical</td></tr>
+          <tr><td><strong>Unlikely</strong></td><td style="color:#00ff88">Low</td><td style="color:#00ff88">Low</td><td style="color:#ffdd00">Medium</td><td style="color:#ff8800">High</td><td style="color:#ff8800">High</td></tr>
+          <tr><td><strong>Rare</strong></td><td style="color:#00ff88">Negligible</td><td style="color:#00ff88">Low</td><td style="color:#00ff88">Low</td><td style="color:#ffdd00">Medium</td><td style="color:#ffdd00">Medium</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>🏠 The House Analogy — Easy to Remember</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Concept</th><th>House Analogy 🏠</th><th>Cyber Example</th></tr></thead>
+        <tbody>
+          <tr><td>🎯 Threat</td><td>A burglar watching your house</td><td>Hacker scanning your network for open ports</td></tr>
+          <tr><td>🕳️ Vulnerability</td><td>A broken window lock</td><td>Unpatched Windows Server with EternalBlue exposed</td></tr>
+          <tr><td>📊 Risk</td><td>Chance burglar uses that window to enter</td><td>Probability exploit succeeds × damage value</td></tr>
+          <tr><td>🛡️ Control</td><td>Installing window bars + alarm system</td><td>Firewall + patch management + IDS monitoring</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="exercise"><div class="exercise-title">🎯 EXERCISE</div><p>Your company has an old Windows XP server with customer payment data, directly internet-connected.<br>(a) Identify the asset and its value<br>(b) List 3 specific threats<br>(c) List 3 specific vulnerabilities<br>(d) Calculate a risk score<br>(e) Propose 3 controls and show how each reduces the risk score</p></div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>Risk management is the heart of cybersecurity strategy. By quantifying risk, organizations can prioritize where to invest limited security budgets for maximum impact — protecting what matters most, most effectively.</p></div>
+  </div>
+</div>
+
+<!-- T9 -->
+<div class="section" id="t9">
+  <div class="section-header"><span class="section-num">09</span><span class="section-emoji">🎩</span><span class="section-title">Types of Hackers (White, Black, Grey)</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 DEFINITION</div><div class="def-text">A <strong>hacker</strong> is someone with advanced computing skills who attempts to access systems or networks. The "hat" color classification describes their <em>intent and ethical stance</em> — not their technical skill level. The same skills can serve completely different purposes.</div></div>
+    <div class="hacker-grid">
+      <div class="hacker-card white-hat"><div class="hc-icon">🤍</div><div class="hc-name">WHITE HAT</div><p>Ethical hackers hired with permission to test and improve security. Report vulnerabilities to fix them. Fully legal.</p><div style="margin-top:10px"><span class="badge badge-green">✅ Legal</span><span class="badge badge-green">Penetration Tester</span><span class="badge badge-green">Bug Bounty</span></div></div>
+      <div class="hacker-card black-hat"><div class="hc-icon">🖤</div><div class="hc-name">BLACK HAT</div><p>Malicious hackers who break into systems illegally for financial gain, data theft, espionage, or sabotage. Criminal.</p><div style="margin-top:10px"><span class="badge badge-red">❌ Illegal</span><span class="badge badge-red">Cybercriminal</span><span class="badge badge-red">Threat Actor</span></div></div>
+      <div class="hacker-card grey-hat"><div class="hc-icon">🩶</div><div class="hc-name">GREY HAT</div><p>Operates between white and black. May hack without permission but discloses findings. Ethically ambiguous, legally risky.</p><div style="margin-top:10px"><span class="badge badge-yellow">⚠️ Grey Area</span><span class="badge badge-purple">Vigilante</span></div></div>
+    </div>
+    <h3>🎯 Extended Hacker Classification</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>Description</th><th>Motivation</th><th>Legal Status</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>👶 Script Kiddie</td><td>Uses existing hacking tools without understanding them</td><td>Fun, reputation</td><td>❌ Illegal</td><td>Using Metasploit without understanding it</td></tr>
+          <tr><td>✊ Hacktivist</td><td>Hacks for political or social causes</td><td>Ideology, protest</td><td>❌ Illegal</td><td>Anonymous hacking government sites</td></tr>
+          <tr><td>🏴 Nation-State</td><td>Government-sponsored cyber espionage units</td><td>National interests</td><td>Classified</td><td>APT29 (Russia), Lazarus Group (N.Korea)</td></tr>
+          <tr><td>🕵️ Insider Threat</td><td>Employee misusing legitimate system access</td><td>Revenge, money, ideology</td><td>❌ Illegal</td><td>Employee selling data before quitting</td></tr>
+          <tr><td>💣 Cyber Terrorist</td><td>Attacks critical infrastructure to cause fear/disruption</td><td>Terror, political</td><td>❌ Illegal</td><td>Attacking power grid of an enemy nation</td></tr>
+          <tr><td>🏆 Bug Bounty Hunter</td><td>Finds &amp; reports vulnerabilities legally for rewards</td><td>Money, recognition</td><td>✅ Legal</td><td>HackerOne, Bugcrowd platforms</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="example-box"><div class="example-label">💡 WHITE HAT IN ACTION — Bug Bounty Success</div><p>🏆 In 2022, a security researcher discovered a critical vulnerability in Apple's Sign-in system that could allow anyone to take over any Apple account. Instead of exploiting it, they reported it through Apple's Bug Bounty Program and received a <strong>$100,000 reward</strong>. This is white-hat hacking — protecting millions of users while being legally compensated. Apple patched the bug within days.</p></div>
+    <div class="exercise"><div class="exercise-title">🎯 EXERCISE</div><p>Scenario: While using your university's online portal, you discover a URL parameter you can change to view any student's grades: <code>grades.php?student_id=12345</code><br>What would a <strong>White Hat</strong>, <strong>Grey Hat</strong>, and <strong>Black Hat</strong> each do?<br>What <strong>should YOU do</strong>? Which cyber law protects you? Which law could prosecute you if you act incorrectly?</p></div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>Intent and authorization define the difference between criminal hacking and ethical hacking. The cybersecurity industry desperately needs white-hat professionals — it's one of the most impactful, well-paid careers you can choose.</p></div>
+  </div>
+</div>
+
+<!-- T10 -->
+<div class="section" id="t10">
+  <div class="section-header"><span class="section-num">10</span><span class="section-emoji">⚖️</span><span class="section-title">Cyber Laws &amp; Ethics</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 DEFINITION</div><div class="def-text"><strong>Cyber Law</strong> is the legal framework governing use of the internet and digital technologies. <strong>Cyber Ethics</strong> is the moral code guiding responsible behavior in cyberspace. Together they create accountability and trust in the digital world.</div></div>
+    <h3>🌐 Major Global Cyber Laws</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Law</th><th>Country</th><th>Purpose</th><th>Key Penalty</th></tr></thead>
+        <tbody>
+          <tr><td>CFAA 1986</td><td>🇺🇸 USA</td><td>Computer Fraud and Abuse Act — unauthorized access to computers</td><td>Up to 20 years prison</td></tr>
+          <tr><td>GDPR 2018</td><td>🇪🇺 EU</td><td>General Data Protection Regulation — data privacy and rights</td><td>4% of global annual revenue</td></tr>
+          <tr><td>IT Act 2000</td><td>🇮🇳 India</td><td>Information Technology Act — cybercrime and e-commerce</td><td>Up to 3 years prison + fine</td></tr>
+          <tr><td>CMA 1990</td><td>🇬🇧 UK</td><td>Computer Misuse Act — unauthorized computer access</td><td>Up to 10 years prison</td></tr>
+          <tr><td>HIPAA</td><td>🇺🇸 USA</td><td>Health Insurance Portability — healthcare data protection</td><td>Up to $1.9M/year fines</td></tr>
+          <tr><td>PDPA</td><td>🇸🇬 Singapore</td><td>Personal Data Protection Act</td><td>SGD $1 million fine</td></tr>
+          <tr><td>CCPA 2020</td><td>🇺🇸 California</td><td>Consumer privacy rights and data control</td><td>$7,500 per intentional violation</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>⚖️ Core Cyber Ethics Principles</h3>
+    <ul>
+      <li>🤝 <strong>Informed Consent:</strong> Always obtain written permission before testing any system</li>
+      <li>🔒 <strong>Confidentiality:</strong> Protect sensitive information discovered during security work</li>
+      <li>🎯 <strong>Responsible Disclosure:</strong> Report vulnerabilities to vendors privately before public release</li>
+      <li>🚫 <strong>Do No Harm:</strong> Security testing must never damage systems or compromise users</li>
+      <li>📢 <strong>Transparency:</strong> Be honest about findings, limitations, and methodology</li>
+      <li>⚖️ <strong>Non-Discrimination:</strong> Security protections must be fair and equitable</li>
+    </ul>
+    <div class="warn-box"><div class="warn-label">🚨 CRITICAL LEGAL WARNING</div><p>Accessing ANY computer system without explicit written authorization is <strong>ILLEGAL</strong> in most countries, even if you intend to "help" or discover vulnerabilities. Good intentions are NOT a legal defence. Before any security testing: get written authorization signed by the system owner.</p></div>
+    <div class="example-box"><div class="example-label">💡 GDPR CASE STUDY — British Airways 2019</div><p>📋 British Airways suffered a data breach affecting 500,000+ customers. Hackers stole personal and financial data through a malicious script injected into the website. Under GDPR, the UK ICO fined British Airways <strong>£183 million (~$230M)</strong> — 1.5% of their annual revenue. This was the first major GDPR fine and sent a clear message: poor cybersecurity has direct legal consequences.</p></div>
+    <div class="exercise"><div class="exercise-title">🎯 EXERCISE</div><p>Your friend asks: "Can you just quickly check if my ex is using their email? I just want to see." Is this legal? Is it ethical? Which law applies? What would you tell your friend, and why? Draft a response that is both honest and respectful.</p></div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>Cyber law creates legal accountability while cyber ethics creates moral culture. Both together ensure that the digital world remains trustworthy. As a security professional, knowing the law is as important as knowing the technology.</p></div>
+  </div>
+</div>
+
+<!-- T11 -->
+<div class="section" id="t11">
+  <div class="section-header"><span class="section-num">11</span><span class="section-emoji">🔄</span><span class="section-title">Cyber Attack Lifecycle (Kill Chain)</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 DEFINITION</div><div class="def-text">The <strong>Cyber Kill Chain</strong> (Lockheed Martin, 2011) describes the 7 sequential stages of a cyber attack from initial planning to final objective. Defenders can interrupt an attack at ANY stage — stopping the chain at any point prevents the attack's success.</div></div>
+    <h3>⚔️ The 7-Stage Kill Chain</h3>
+    <div class="lifecycle-steps">
+      <div class="ls-step"><div class="ls-icon">🔍</div><div class="ls-num">STAGE 1</div><div class="ls-name">Reconnaissance</div></div>
+      <div class="ls-step"><div class="ls-icon">🔧</div><div class="ls-num">STAGE 2</div><div class="ls-name">Weaponization</div></div>
+      <div class="ls-step"><div class="ls-icon">📧</div><div class="ls-num">STAGE 3</div><div class="ls-name">Delivery</div></div>
+      <div class="ls-step"><div class="ls-icon">💥</div><div class="ls-num">STAGE 4</div><div class="ls-name">Exploitation</div></div>
+      <div class="ls-step"><div class="ls-icon">⚙️</div><div class="ls-num">STAGE 5</div><div class="ls-name">Installation</div></div>
+      <div class="ls-step"><div class="ls-icon">📡</div><div class="ls-num">STAGE 6</div><div class="ls-name">C2 Command</div></div>
+      <div class="ls-step"><div class="ls-icon">🎯</div><div class="ls-num">STAGE 7</div><div class="ls-name">Objectives</div></div>
+    </div>
+    <h3>📋 Stage Details + Defences</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Stage</th><th>Attacker Action</th><th>Defender Countermeasure</th></tr></thead>
+        <tbody>
+          <tr><td>🔍 Reconnaissance</td><td>OSINT research, LinkedIn scraping, port scanning, Shodan</td><td>Limit public info, monitor for port scans, threat intelligence</td></tr>
+          <tr><td>🔧 Weaponization</td><td>Build malware payload tailored to discovered vulnerability</td><td>Threat intel feeds, monitor dark web for new exploits</td></tr>
+          <tr><td>📧 Delivery</td><td>Send via phishing email, watering hole site, infected USB</td><td>Email filtering, web proxies, URL sandboxing, USB policies</td></tr>
+          <tr><td>💥 Exploitation</td><td>Triggers vulnerability to execute malicious code</td><td>Patch management, EDR, application sandboxing</td></tr>
+          <tr><td>⚙️ Installation</td><td>Installs backdoor, RAT, or rootkit for persistence</td><td>Application whitelisting, host-based IDS, endpoint monitoring</td></tr>
+          <tr><td>📡 C2 (Command &amp; Control)</td><td>Establishes encrypted remote-control channel to C2 server</td><td>Network monitoring, DNS filtering, outbound traffic inspection</td></tr>
+          <tr><td>🎯 Actions on Objectives</td><td>Data theft, ransomware deploy, lateral movement, sabotage</td><td>DLP, encryption, network segmentation, incident response</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="example-box"><div class="example-label">💡 RANSOMWARE KILL CHAIN — COMPLETE WALKTHROUGH</div>
+      <div class="code-block" data-lang="KILL CHAIN">
+<span class="cm">Stage 1: Recon    → Attacker finds IT Manager on LinkedIn → gets email from company site</span>
+<span class="cm">Stage 2: Weapon   → Builds malicious Word macro that downloads Ryuk ransomware payload</span>
+<span class="kw">Stage 3: Deliver  → Sends spear-phishing email: "Q4 Bonus Details.docx" — very convincing</span>
+<span class="str">Stage 4: Exploit  → Victim opens doc → Macro executes → Downloads Ryuk from C2 server</span>
+<span class="str">Stage 5: Install  → Ryuk installs → Disables Windows Defender → Sets registry persistence</span>
+<span class="kw">Stage 6: C2       → Calls back to hacker server → receives AES encryption key</span>
+<span class="cm">Stage 7: Execute  → Encrypts all files on all network shares → Drops ransom note</span>
+
+<span class="cm">💡 KEY INSIGHT: Good email filtering at Stage 3 = entire attack stopped!</span>
+<span class="str">Defenders need to stop it ONCE. Attackers need to succeed at ALL 7 stages.</span>
+      </div>
+    </div>
+    <div class="exercise"><div class="exercise-title">🎯 EXERCISE</div><p>Map this attack across the Kill Chain: A nation-state wants to steal blueprints from an aerospace company.<br>For each of the 7 stages: (a) Write the specific attacker action (b) Identify one defensive control that would stop it at that stage. Which stage do you think is the most effective to defend and why?</p></div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>The Kill Chain gives defenders a decisive strategic advantage: attackers must succeed at all 7 stages while defenders only need to stop them at ONE. Understanding this transforms reactive defence into proactive disruption of attacker operations.</p></div>
+  </div>
+</div>
+
+<!-- T12 -->
+<div class="section" id="t12">
+  <div class="section-header"><span class="section-num">12</span><span class="section-emoji">🚧</span><span class="section-title">Security Challenges</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 DEFINITION</div><div class="def-text">Security challenges are the ever-evolving obstacles that make defending digital systems increasingly difficult. These challenges arise from technology shifts, human behavior, business pressures, and the constantly adapting nature of threat actors.</div></div>
+    <h3>🌊 Major Security Challenges Today</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Challenge</th><th>Description</th><th>Scale/Impact</th><th>Response Strategy</th></tr></thead>
+        <tbody>
+          <tr><td>👥 Human Error</td><td>People are the most exploitable attack vector</td><td>95% of all breaches involve human mistakes</td><td>Security awareness training, phishing simulations</td></tr>
+          <tr><td>🌐 Expanding Attack Surface</td><td>IoT, cloud, remote work adds millions of new entry points</td><td>Each new device = potential breach point</td><td>Asset inventory management, Zero Trust</td></tr>
+          <tr><td>⚡ Rapid Tech Innovation</td><td>Technology outpaces security by years</td><td>New vulnerabilities appear daily</td><td>DevSecOps, continuous security testing</td></tr>
+          <tr><td>🤖 AI-Powered Attacks</td><td>Attackers use AI for smarter, faster, scaled attacks</td><td>Deepfake fraud, AI-generated phishing</td><td>AI-powered defences, behavioral analytics</td></tr>
+          <tr><td>👨‍💻 Talent Shortage</td><td>3.5M+ unfilled cybersecurity positions globally in 2023</td><td>Understaffed teams = more undetected threats</td><td>Education initiatives, automation, MSSP</td></tr>
+          <tr><td>🔗 Supply Chain Risk</td><td>Third-party vendors introduce uncontrolled vulnerabilities</td><td>SolarWinds: one vendor, 18,000 organizations breached</td><td>Vendor assessments, SBOM, ZTNA</td></tr>
+          <tr><td>☁️ Cloud Misconfiguration</td><td>Improperly configured cloud services expose data publicly</td><td>#1 cause of cloud data breaches (Gartner)</td><td>CSPM tools, infrastructure-as-code scanning</td></tr>
+          <tr><td>🔄 Ransomware Evolution</td><td>Double extortion: encrypt data AND threaten to publish it</td><td>Average ransom payment: $1.5M (2023)</td><td>3-2-1 backups, EDR, IR planning, no payment policy</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn-box"><div class="warn-label">⚠️ THE BIGGEST CHALLENGE: HUMANS</div><p>A technically perfect, multi-million-dollar security system can be compromised in minutes by an attacker who tricks one employee into clicking a phishing link. The human element consistently remains the most critical, most difficult, and most underinvested security challenge.</p></div>
+    <div class="example-box"><div class="example-label">💡 IoT ATTACK SURFACE — Mirai Botnet 2016</div><p>🏠 The Mirai botnet infected 600,000+ IoT devices (cameras, DVRs, routers) — all using default passwords like "admin/password". These compromised devices were weaponized to launch a 1.2Tbps DDoS attack — the largest in history at the time — taking down Twitter, Netflix, Reddit, CNN, and 70+ major websites simultaneously. <strong>All preventable with changed default passwords.</strong></p></div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>Security challenges are not problems to be solved permanently — they are an ongoing arms race requiring continuous adaptation, investment, and vigilance. The landscape shifts daily, and so must your defences.</p></div>
+  </div>
+</div>
+
+<!-- T13 -->
+<div class="section" id="t13">
+  <div class="section-header"><span class="section-num">13</span><span class="section-emoji">📰</span><span class="section-title">Case Study: Famous Cyber Attacks</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 PURPOSE</div><div class="def-text">Studying real-world attacks provides irreplaceable lessons on attacker techniques, defender failures, and the true magnitude of poor cybersecurity. Each case study is both a warning and a blueprint for building better defences.</div></div>
+    <h3>🏆 5 Most Impactful Cyber Attacks</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Attack</th><th>Year</th><th>Type</th><th>Impact</th><th>Root Cause</th><th>Key Lesson</th></tr></thead>
+        <tbody>
+          <tr><td>💀 WannaCry</td><td>2017</td><td>Ransomware/Worm</td><td>200K+ systems, 150 countries, $4–8B loss, NHS paralyzed</td><td>Unpatched MS17-010 EternalBlue vulnerability</td><td>Patch systems immediately after release</td></tr>
+          <tr><td>🎯 Target</td><td>2013</td><td>Data Breach</td><td>40M credit cards, $162M total cost, CEO resigned</td><td>Third-party HVAC vendor compromised, poor network segmentation</td><td>Secure and monitor all third-party access</td></tr>
+          <tr><td>☢️ Stuxnet</td><td>2010</td><td>Nation-State Weapon</td><td>1,000+ Iranian nuclear centrifuges physically destroyed</td><td>USB delivery to air-gapped ICS network</td><td>Even isolated systems can be attacked; ICS security is critical</td></tr>
+          <tr><td>🌞 SolarWinds</td><td>2020</td><td>Supply Chain APT</td><td>18,000+ orgs, US Treasury, Pentagon, Microsoft breached</td><td>Malicious code injected into software update package</td><td>Verify software integrity; zero-trust all updates</td></tr>
+          <tr><td>🛢️ Colonial Pipeline</td><td>2021</td><td>Ransomware</td><td>US East Coast fuel shortage, $4.4M ransom paid</td><td>Leaked VPN password on dark web, no MFA enabled</td><td>Enable MFA on every remote access point, no exceptions</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="example-box"><div class="example-label">💡 COLONIAL PIPELINE — A Completely Preventable Disaster</div>
+      <div class="flowchart">
+        <div class="flow-node start">🔑 Attacker finds leaked VPN password on dark web (credential stuffing)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">🔓 Logs into Colonial's VPN — no MFA required on this legacy account</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">🦠 DarkSide ransomware deployed across Colonial's IT network</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">🛢️ Colonial proactively shuts down OT pipeline operations (fear of spread)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">⛽ 5-state fuel shortage declared. Gas stations run dry.</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node end">💸 $4.4M Bitcoin paid. FBI later recovers $2.3M. Company still lost $2.1M+.</div>
+      </div>
+      <p style="margin-top:12px">🎯 <strong>ONE control — Multi-Factor Authentication</strong> — would have completely prevented this entire crisis.</p>
+    </div>
+    <div class="exercise"><div class="exercise-title">🎯 EXERCISE — EQUIFAX 2017</div><p>Research the Equifax breach (147 million people's data exposed):<br>(a) What vulnerability was exploited? (Apache Struts CVE-____)<br>(b) How long was the vulnerability unpatched before the breach?<br>(c) How long did the breach go undetected?<br>(d) What was the total financial penalty?<br>(e) What 3 simple controls could have prevented it?<br>(f) Why do you think a major company failed at such basic controls?</p></div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>The most devastating cyber attacks in history trace back to shockingly simple failures: one missing patch, one absent MFA, one trusted vendor. Basic security hygiene, consistently applied, prevents the majority of all breaches.</p></div>
+  </div>
+</div>
+
+<!-- T14 -->
+<div class="section" id="t14">
+  <div class="section-header"><span class="section-num">14</span><span class="section-emoji">🧠</span><span class="section-title">Security Awareness</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 DEFINITION</div><div class="def-text"><strong>Security Awareness</strong> is the knowledge, attitude, and behavior of individuals regarding the protection of organizational and personal information. An aware workforce transforms humans from cybersecurity's biggest weakness into its strongest first line of defence.</div></div>
+    <h3>📚 Security Awareness Best Practices</h3>
+    <div class="card-grid">
+      <div class="card-item"><div class="ci">🔐</div><div class="ct">Strong Passwords</div><div class="cd">12+ chars, unique per site, use a password manager (Bitwarden/1Password)</div></div>
+      <div class="card-item"><div class="ci">📱</div><div class="ct">Enable MFA</div><div class="cd">Second factor blocks 99.9% of credential-based attacks (Microsoft data)</div></div>
+      <div class="card-item"><div class="ci">🔄</div><div class="ct">Update Everything</div><div class="cd">Patch OS, apps, firmware immediately — delay = open window</div></div>
+      <div class="card-item"><div class="ci">🎣</div><div class="ct">Spot Phishing</div><div class="cd">Check sender email, URL, urgency, attachments before clicking anything</div></div>
+      <div class="card-item"><div class="ci">💾</div><div class="ct">Backup Data</div><div class="cd">3-2-1 Rule: 3 copies, 2 different media types, 1 stored offsite</div></div>
+      <div class="card-item"><div class="ci">🌐</div><div class="ct">Safe Browsing</div><div class="cd">HTTPS only, VPN on public Wi-Fi, verify URLs before entering any data</div></div>
+    </div>
+    <div class="example-box"><div class="example-label">💡 PASSWORD STRENGTH COMPARISON</div>
+      <div class="code-block" data-lang="PASSWORD SECURITY">
+<span class="cm">Password Cracking Time (modern hardware, dictionary attack):</span>
+
+<span class="kw">❌ WEAK:    </span><span class="str">"password"</span>      <span class="cm">→ &lt; 1 second  (in every dictionary)</span>
+<span class="kw">❌ WEAK:    </span><span class="str">"John1990"</span>       <span class="cm">→ &lt; 30 seconds (personal info + common pattern)</span>
+<span class="kw">⚠️  MEDIUM: </span><span class="str">"J0hn@1990!"</span>     <span class="cm">→ ~3 hours     (substitutions help but predictable)</span>
+<span class="str">✅ STRONG:  </span><span class="kw">"Giraffe#Tea$Moon99"</span><span class="cm">→ 34,000+ years (long + random + mixed)</span>
+<span class="str">✅ BEST:    </span><span class="kw">Use password manager</span><span class="cm"> → Unique 20-char random per site</span>
+
+<span class="cm">3-2-1 BACKUP RULE:
+  3 → Keep 3 copies of important data
+  2 → Store on 2 different types of media (HDD + cloud)
+  1 → Keep 1 copy stored in a different physical location</span>
+      </div>
+    </div>
+    <h3>🎭 Social Engineering Attack Types</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Attack</th><th>How It Works</th><th>Example</th><th>Defence</th></tr></thead>
+        <tbody>
+          <tr><td>🎣 Phishing</td><td>Mass deceptive emails with malicious links/attachments</td><td>Fake Netflix billing email with malware link</td><td>Email filtering, training, hover-to-verify URLs</td></tr>
+          <tr><td>🎯 Spear Phishing</td><td>Targeted phishing using personal details to appear legitimate</td><td>"Hi John, re: your invoice from Monday..." — knows your name</td><td>Verify requests via phone callback, awareness</td></tr>
+          <tr><td>📞 Vishing</td><td>Voice phishing — phone calls pretending to be tech support</td><td>"Hi, I'm from Microsoft, your PC is infected..."</td><td>Never give info to inbound callers; hang up and call back officially</td></tr>
+          <tr><td>💬 Smishing</td><td>SMS-based phishing with malicious links</td><td>"Your package is stuck: click to confirm: [link]"</td><td>Don't click links in unexpected texts; verify via official app</td></tr>
+          <tr><td>🚪 Tailgating</td><td>Physically following authorized person into secure area</td><td>"Could you hold the door? I forgot my badge."</td><td>Strict badge policies, challenge unknown individuals, turnstiles</td></tr>
+          <tr><td>💿 Baiting</td><td>Leave infected USB or device for curious victim to plug in</td><td>USB labelled "Salary Data 2024" left in parking lot</td><td>Policy: never plug unknown USBs, disable AutoRun</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="exercise"><div class="exercise-title">🎯 EXERCISE</div><p>Design a 5-minute security awareness briefing for new employees covering:<br>(a) Password policy (min requirements + why)<br>(b) How to spot phishing (3 specific examples)<br>(c) What to do if they click a suspicious link (incident reporting)<br>Include 2 quiz questions you'd ask at the end to test retention.</p></div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>Technology alone is never sufficient. Trained, aware employees reduce the likelihood of a breach by up to 70% (IBM Security). Security awareness turns every person in an organization into an active participant in cybersecurity defence.</p></div>
+  </div>
+</div>
+
+<!-- T15 -->
+<div class="section" id="t15">
+  <div class="section-header"><span class="section-num">15</span><span class="section-emoji">🚀</span><span class="section-title">Future of Cybersecurity</span></div>
+  <div class="section-body">
+    <div class="def-box"><div class="def-label">📖 OVERVIEW</div><div class="def-text">The future of cybersecurity is shaped by an ongoing arms race between attackers and defenders, accelerated by revolutionary technologies like AI and quantum computing. The organizations that prepare today will be the ones that survive tomorrow's threats.</div></div>
+    <h3>🔮 Key Emerging Trends</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Trend</th><th>Description</th><th>Opportunity/Threat</th><th>Timeline</th></tr></thead>
+        <tbody>
+          <tr><td>🤖 AI/ML in Security</td><td>AI for automated threat detection, response, and hunting</td><td>Detects threats in seconds vs weeks; also powers AI attacks</td><td>NOW</td></tr>
+          <tr><td>⚛️ Quantum Computing</td><td>Quantum computers can break RSA/ECC encryption using Shor's Algorithm</td><td>ALL current encrypted data at risk; post-quantum crypto needed urgently</td><td>5–10 yrs</td></tr>
+          <tr><td>🕸️ Zero Trust Everywhere</td><td>Full "never trust, always verify" replacing perimeter security</td><td>Industry standard emerging across all sectors</td><td>NOW</td></tr>
+          <tr><td>🌐 IoT/OT Security</td><td>30+ billion connected devices by 2030</td><td>Enormous new attack surface; critical infrastructure risk</td><td>NOW+</td></tr>
+          <tr><td>🧬 Passkeys/Biometrics</td><td>Passwordless authentication using hardware keys &amp; biometrics</td><td>Eliminates phishing of passwords entirely</td><td>NOW (Apple/Google/Microsoft)</td></tr>
+          <tr><td>🔗 Blockchain Security</td><td>Immutable audit logs, decentralized identity management</td><td>Tamper-proof records for supply chains and identity</td><td>Emerging</td></tr>
+          <tr><td>🛡️ SASE/SSE</td><td>Security delivered as cloud service alongside SD-WAN</td><td>Replaces traditional on-premise security appliances</td><td>3–5 years</td></tr>
+          <tr><td>🎭 Deepfake Threats</td><td>AI-generated fake video/audio for fraud and social engineering</td><td>CEO fraud, identity impersonation at scale</td><td>NOW (rapidly evolving)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="example-box"><div class="example-label">💡 QUANTUM THREAT — THE ENCRYPTION CRISIS</div>
+      <div class="code-block" data-lang="QUANTUM CRYPTO">
+<span class="cm">Breaking RSA-2048 encryption:</span>
+<span class="kw">Classical computer:</span> <span class="str">~300 trillion years (infeasible)</span>
+<span class="kw">Quantum computer:</span>   <span class="str">~hours to days (using Shor's Algorithm)</span>
+
+<span class="cm">NIST Post-Quantum Cryptography Standards (Released 2024):</span>
+<span class="str">→ CRYSTALS-Kyber   (ML-KEM)  — Key encapsulation mechanism</span>
+<span class="str">→ CRYSTALS-Dilithium (ML-DSA) — Digital signatures</span>
+<span class="str">→ SPHINCS+ (SLH-DSA)          — Hash-based signatures</span>
+
+<span class="kw">"Harvest Now, Decrypt Later" attacks:</span>
+<span class="cm">Adversaries collecting encrypted data TODAY to decrypt it
+when quantum computers become available. Your 2024 secrets
+could be read in 2032. Migrate to post-quantum NOW.</span>
+      </div>
+    </div>
+    <h3>💼 Future Career Paths in Cybersecurity</h3>
+    <div class="card-grid">
+      <div class="card-item"><div class="ci">🤖</div><div class="ct">AI Security Engineer</div><div class="cd">Build and defend AI/ML systems</div></div>
+      <div class="card-item"><div class="ci">⚛️</div><div class="ct">Quantum Cryptographer</div><div class="cd">Design post-quantum algorithms</div></div>
+      <div class="card-item"><div class="ci">🕵️</div><div class="ct">Threat Hunter</div><div class="cd">Proactively find hidden attackers</div></div>
+      <div class="card-item"><div class="ci">☁️</div><div class="ct">Cloud Security Architect</div><div class="cd">Multi-cloud security design</div></div>
+      <div class="card-item"><div class="ci">🔗</div><div class="ct">ICS/OT Security</div><div class="cd">Protect industrial control systems</div></div>
+      <div class="card-item"><div class="ci">📋</div><div class="ct">Privacy Engineer</div><div class="cd">Technical GDPR/CCPA compliance</div></div>
+    </div>
+    <div class="conclusion"><div class="conclusion-label">✅ CONCLUSION</div><p>The future of cybersecurity is both exciting and critical. With $10.5 trillion in projected cybercrime damages by 2025, the world needs cybersecurity professionals now more than ever. Start learning today — your future self will thank you.</p></div>
+  </div>
+</div>
+
+<!-- T16 -->
+<div class="section" id="t16">
+  <div class="section-header"><span class="section-num">16</span><span class="section-emoji">📝</span><span class="section-title">Unit 1 Revision Notes</span></div>
+  <div class="section-body">
+    <h3>🔑 Essential Terms — Quick Reference</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>One-Line Definition</th></tr></thead>
+        <tbody>
+          <tr><td>🛡️ Cybersecurity</td><td>Practice of protecting digital systems, networks, and data from unauthorized access or damage</td></tr>
+          <tr><td>🦠 Malware</td><td>Malicious software designed to harm, steal data, or gain unauthorized access</td></tr>
+          <tr><td>🎣 Phishing</td><td>Deceptive communication designed to trick victims into revealing credentials or installing malware</td></tr>
+          <tr><td>🔺 CIA Triad</td><td>Three core security objectives: Confidentiality + Integrity + Availability</td></tr>
+          <tr><td>🕳️ Vulnerability</td><td>Weakness or flaw in a system that could be exploited by a threat actor</td></tr>
+          <tr><td>🎯 Threat</td><td>Any potential danger or actor that could cause harm to a system or organization</td></tr>
+          <tr><td>📊 Risk</td><td>Likelihood × Impact of a threat successfully exploiting a vulnerability</td></tr>
+          <tr><td>🔄 Zero Trust</td><td>"Never trust, always verify" — no implicit trust for any user, device, or network location</td></tr>
+          <tr><td>⚔️ Kill Chain</td><td>7-stage model of a cyber attack from reconnaissance to final objective</td></tr>
+          <tr><td>🤍 White Hat</td><td>Ethical hacker with written permission to test and improve security</td></tr>
+          <tr><td>🖤 Black Hat</td><td>Malicious, criminal hacker who attacks without authorization for illegal gain</td></tr>
+          <tr><td>⚖️ GDPR</td><td>EU data protection regulation; fines up to 4% of global annual revenue for violations</td></tr>
+          <tr><td>🌊 DDoS</td><td>Distributed Denial of Service — overwhelming a server with traffic from many sources</td></tr>
+          <tr><td>0️⃣ Zero-Day</td><td>Vulnerability unknown to the vendor with no patch available; extremely dangerous</td></tr>
+          <tr><td>📱 MFA</td><td>Multi-Factor Authentication — requires 2+ proof factors to verify identity</td></tr>
+          <tr><td>🔒 Ransomware</td><td>Malware that encrypts victim data and demands payment for the decryption key</td></tr>
+          <tr><td>🎭 Social Engineering</td><td>Psychologically manipulating people to bypass security controls or reveal information</td></tr>
+          <tr><td>🔑 Least Privilege</td><td>Give users only the minimum access permissions required to perform their specific job</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>🧪 Final Exam Practice Questions</h3>
+    <div class="exercise">
+      <div class="exercise-title">🎯 10 EXAM-STYLE QUESTIONS</div>
+      <ol>
+        <li>Define the CIA Triad and give one real-world example of each pillar being violated in a different attack scenario.</li>
+        <li>What is the formula for Risk? Calculate the risk score for: an internet-facing server (value=8), facing a hacker threat (likelihood=7), with an unpatched critical CVE (severity=9).</li>
+        <li>List and explain 5 types of malware. For each, explain how it enters a system and how to detect it.</li>
+        <li>Walk through all 7 stages of the Cyber Kill Chain using a ransomware attack as your example. Include one defender countermeasure at each stage.</li>
+        <li>What makes spear phishing more dangerous than regular phishing? List 5 red flags that indicate an email is a phishing attempt.</li>
+        <li>Compare White Hat, Grey Hat, and Black Hat hackers in terms of: intent, authorization, legality, and typical activities. Give a real-world example of each.</li>
+        <li>Explain "Least Privilege" and "Defence in Depth" principles. Why are both needed together? Give an example of each in a corporate environment.</li>
+        <li>How did WannaCry spread so quickly across organizations? What one technical control would have completely prevented its spread?</li>
+        <li>What is Zero Trust Architecture? How does it differ from traditional perimeter-based security? What are the 5 key pillars of Zero Trust?</li>
+        <li>Why does quantum computing threaten current encryption? What is the "Harvest Now, Decrypt Later" strategy? What post-quantum standards has NIST released?</li>
+      </ol>
+    </div>
+    <div class="conclusion"><div class="conclusion-label">✅ UNIT 1 COMPLETE — CONGRATULATIONS!</div><p>You have now covered all 16 foundational topics of Unit 1: Introduction to Cybersecurity. These concepts — CIA Triad, Risk Management, Kill Chain, Hacker Types, Laws, Principles, and emerging trends — form the vocabulary and mental framework you will use throughout your entire cybersecurity career. Revise regularly, apply practically, and keep learning. Cybersecurity is a lifelong journey, not a destination.</p></div>
+  </div>
+</div>
+
+<!-- MASTER SUMMARY -->
+<div class="summary-section">
+  <div class="summary-title">📊 MASTER SUMMARY TABLE — ALL 16 TOPICS AT A GLANCE</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Topic</th><th>Core Concept</th><th>Key Formula/Model</th><th>Best Real Example</th><th>Remember This</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>🛡️ Cybersecurity</td><td>Protect digital systems, networks, data</td><td>People + Process + Technology</td><td>Bank app login security</td><td>Everyone is a target AND a defender</td></tr>
+        <tr><td>2</td><td>📜 History</td><td>Pranks → Crime → Warfare evolution</td><td>Morris Worm → Stuxnet → WannaCry trend</td><td>WannaCry 2017 — one patch missed</td><td>History shows patterns; patterns repeat</td></tr>
+        <tr><td>3</td><td>⚔️ Threats</td><td>Malware, phishing, DDoS, SQLi, APT...</td><td>Attack Vector × Target × Impact</td><td>Phishing anatomy — fake paypal email</td><td>Know your enemy to choose your weapons</td></tr>
+        <tr><td>4</td><td>🌟 Importance</td><td>Financial, legal, operational necessity</td><td>Cost of breach &gt;&gt; Cost of prevention</td><td>Colonial Pipeline $4.4M ransom</td><td>Security = strategic investment, not cost</td></tr>
+        <tr><td>5</td><td>🗂️ Domains</td><td>Network, Cloud, App, IAM, IR, GRC...</td><td>CISSP 8 domains framework</td><td>SOC Analyst role in enterprise</td><td>Specialize deeply in one domain first</td></tr>
+        <tr><td>6</td><td>🔺 CIA Triad</td><td>C=Private, I=Accurate, A=Available</td><td>Security = C ∩ I ∩ A (all three always)</td><td>Facebook 533M breach = C violated</td><td>If any pillar falls, security has failed</td></tr>
+        <tr><td>7</td><td>⚙️ Principles</td><td>Least Priv, Def-in-Depth, Zero Trust...</td><td>Zero Trust: Never trust, Always verify</td><td>MFA stops 99.9% of account attacks</td><td>Principles outlast technologies</td></tr>
+        <tr><td>8</td><td>⚠️ Risk</td><td>Threat × Vulnerability × Asset Value</td><td>Risk = Likelihood × Impact (matrix)</td><td>Unpatched WinXP server = Critical Risk</td><td>Assess first, then prioritize, then protect</td></tr>
+        <tr><td>9</td><td>🎩 Hackers</td><td>White / Black / Grey hat classification</td><td>Intent + Authorization = Legality</td><td>Bug bounty hunter earns $100K legally</td><td>Same skill, different ethics = different outcome</td></tr>
+        <tr><td>10</td><td>⚖️ Laws</td><td>GDPR, CFAA, IT Act, ethics codes</td><td>Authorization required BEFORE testing</td><td>BA fined £183M under GDPR 2019</td><td>Permission first, always. No exceptions.</td></tr>
+        <tr><td>11</td><td>🔄 Kill Chain</td><td>7 stages: Recon → Objectives</td><td>Defenders need to stop only ONE stage</td><td>Ransomware kill chain — email filter stops it</td><td>Defenders have structural advantage</td></tr>
+        <tr><td>12</td><td>🚧 Challenges</td><td>Human error, AI threats, IoT, talent gap</td><td>95% of breaches = human factor involved</td><td>Mirai botnet — 600K IoT devices weaponized</td><td>Humans are both the problem and solution</td></tr>
+        <tr><td>13</td><td>📰 Case Studies</td><td>WannaCry, Target, Stuxnet, SolarWinds</td><td>Simple failure → Catastrophic consequence</td><td>One MFA = No Colonial Pipeline crisis</td><td>Basics consistently applied prevent most breaches</td></tr>
+        <tr><td>14</td><td>🧠 Awareness</td><td>Training transforms users into defenders</td><td>3-2-1 backup + strong passwords + MFA</td><td>Phishing click rate drops 70% after training</td><td>People + Tech together = real security</td></tr>
+        <tr><td>15</td><td>🚀 Future</td><td>AI, quantum, Zero Trust, passkeys</td><td>Quantum breaks RSA → Post-quantum crypto</td><td>NIST PQC standards released 2024</td><td>Learn continuously — the landscape never stops changing</td></tr>
+        <tr><td>16</td><td>📝 Revision</td><td>18 key terms + 10 exam questions + this table</td><td>All models and formulas consolidated</td><td>Practice all 10 exam questions</td><td>Understand concepts, don't just memorize them</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="footer">
+  <p>🔐 <span>UNIT 1: INTRODUCTION TO CYBERSECURITY</span> — Complete Study Guide</p>
+  <p style="margin-top:8px;font-size:0.7rem">16 Topics · Definitions · Examples · Exercises · Flowcharts · Formulas · Summary Tables</p>
+</div>
+
+</div>
+
+<script>
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+const chars = 'アイウエオABCDEF01234567890アBCD';
+const fontSize = 14;
+const columns = Math.floor(canvas.width / fontSize);
+const drops = Array(columns).fill(1);
+function drawMatrix() {
+  ctx.fillStyle = 'rgba(5,10,20,0.05)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#00ff88';
+  ctx.font = fontSize + 'px monospace';
+  drops.forEach((y, i) => {
+    const text = chars[Math.floor(Math.random() * chars.length)];
+    ctx.fillText(text, i * fontSize, y * fontSize);
+    if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  });
+}
+setInterval(drawMatrix, 60);
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => { e.preventDefault(); document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior:'smooth' }); });
+});
+</script>
+</body>
+</html>
